@@ -1,8 +1,4 @@
 import './style.css'
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 
 /* =========================================================
@@ -12,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     name: 'SOCIAL MEDIA',
-    image: './images/social-media.jpg',
+    image: '/images/social-media.jpg',
     role: 'Photo · Video · Managing',
     timeline: '12 Months',
     year: '2024–2025',
@@ -22,7 +18,7 @@ const projects = [
 
   {
     name: 'PRINT',
-    image: './images/print.jpg',
+    image: '/images/print.jpg',
     role: 'Poster · Menu · Signage',
     timeline: '12 Months',
     year: '2024–2025',
@@ -32,7 +28,7 @@ const projects = [
 
   {
     name: 'LOGO',
-    image: './images/logo.jpg',
+    image: '/images/logo.jpg',
     role: 'Re-Design · Visual Identity',
     timeline: '12 Months',
     year: '2024–2025',
@@ -42,79 +38,19 @@ const projects = [
 
   {
     name: 'VIDEO',
-    image: './images/video.jpg',
+    image: '/images/video.jpg',
     role: 'Digital Content · Campaign',
     timeline: '12 Months',
     year: '2024–2025',
     team: 'Solo',
     href: '#'
   }
-];
-
-
-/* =========================================================
-   SOFTWARE DATA
-========================================================= */
-
-const tools = [
-  {
-    name: 'PHOTOSHOP',
-    image: './images/PHOTOSHOP.png',
-    alt: 'Photoshop'
-  },
-
-  {
-    name: 'ILLUSTRATOR',
-    image: './images/ILLUSTRATOR.png',
-    alt: 'Illustrator'
-  },
-
-  {
-    name: 'AFTER EFFECTS',
-    image: './images/AFTER EFFECT.png',
-    alt: 'After Effects'
-  },
-
-  {
-    name: 'PREMIERE PRO',
-    image: './images/PREMIER PRO.png',
-    alt: 'Premiere Pro'
-  },
-
-  {
-    name: 'LIGHTROOM',
-    image: './images/LIGHTROOM.png',
-    alt: 'Lightroom'
-  }
-];
-
-
-/*
-  Three identical sets for the seamless conveyor loop.
-*/
-
-const toolsMarkup = Array(3)
-  .fill(tools)
-  .flat()
-  .map(tool => `
-    <div class="tool">
-
-      <img
-        src="${tool.image}"
-        alt="${tool.alt}"
-      >
-
-      <span>
-        ${tool.name}
-      </span>
-
-    </div>
-  `)
-  .join('');
+]
 
 
 /* =========================================================
    PORTFOLIO SVG
+   Your original SVG — no background
 ========================================================= */
 
 const portfolioSVG = `
@@ -134,19 +70,9 @@ const portfolioSVG = `
       x2="486"
       spreadMethod="repeat"
     >
-
       <stop stop-color="#fff"/>
-
-      <stop
-        offset=".5"
-        stop-color="#000"
-      />
-
-      <stop
-        offset="1"
-        stop-color="#fff"
-      />
-
+      <stop offset=".5" stop-color="#000"/>
+      <stop offset="1" stop-color="#fff"/>
 
       <animateTransform
         type="translate"
@@ -156,7 +82,6 @@ const portfolioSVG = `
         dur="4.4s"
         repeatCount="indefinite"
       />
-
     </linearGradient>
 
 
@@ -212,10 +137,10 @@ const portfolioSVG = `
 
       <feColorMatrix
         values="
-          1 0 0 0 0
-          1 0 0 0 0
-          1 0 0 0 0
-          0 0 0 0 1"
+        1 0 0 0 0
+        1 0 0 0 0
+        1 0 0 0 0
+        0 0 0 0 1"
         result="n"
       />
 
@@ -234,43 +159,43 @@ const portfolioSVG = `
         <feFuncR
           type="table"
           tableValues="
-            1.000
-            1.000
-            1.000
-            1.000
-            0.310
-            0.122
-            0.039
-            0.020
-            0.008"
+          1.000
+          1.000
+          1.000
+          1.000
+          0.310
+          0.122
+          0.039
+          0.020
+          0.008"
         />
 
         <feFuncG
           type="table"
           tableValues="
-            0.545
-            0.231
-            0.353
-            0.945
-            0.816
-            0.525
-            0.235
-            0.059
-            0.024"
+          0.545
+          0.231
+          0.353
+          0.945
+          0.816
+          0.525
+          0.235
+          0.059
+          0.024"
         />
 
         <feFuncB
           type="table"
           tableValues="
-            0.902
-            0.478
-            0.122
-            0.816
-            1.000
-            1.000
-            0.769
-            0.420
-            0.212"
+          0.902
+          0.478
+          0.122
+          0.816
+          1.000
+          1.000
+          0.769
+          0.420
+          0.212"
         />
 
       </feComponentTransfer>
@@ -294,73 +219,68 @@ const portfolioSVG = `
   </g>
 
 </svg>
-`;
+`
 
 
 /* =========================================================
    PROJECT HTML
 ========================================================= */
 
-const projectItems = projects
-  .map(project => `
-    <article class="project-item">
+const projectItems = projects.map(project => `
+  <article class="project-item">
 
-      <div class="project-row">
+    <div class="project-row">
 
-        <div class="project-name">
-          ${project.name}
-        </div>
-
-        <a
-          href="${project.href}"
-          class="project-button"
-        >
-          <span>Jump To Project</span>
-          <span class="arrow">→</span>
-        </a>
-
+      <div class="project-name">
+        ${project.name}
       </div>
 
+      <a
+        href="${project.href}"
+        class="project-button"
+      >
+        <span>Jump To Project</span>
+        <span class="arrow">→</span>
+      </a>
 
-      <div class="project-panel">
+    </div>
 
-        <div class="panel-inner">
 
-          <div class="panel-content">
+    <div class="project-panel">
 
-            <div class="project-image">
+      <div class="panel-inner">
 
-              <img
-                src="${project.image}"
-                alt="${project.name} project"
-                loading="lazy"
-              >
+        <div class="panel-content">
 
+          <div class="project-image">
+            <img
+              src="${project.image}"
+              alt="${project.name} project"
+              loading="lazy"
+            >
+          </div>
+
+
+          <div class="project-details">
+
+            <div class="detail">
+              <span>ROLE</span>
+              <p>${project.role}</p>
             </div>
 
+            <div class="detail">
+              <span>TIMELINE</span>
+              <p>${project.timeline}</p>
+            </div>
 
-            <div class="project-details">
+            <div class="detail">
+              <span>YEAR</span>
+              <p>${project.year}</p>
+            </div>
 
-              <div class="detail">
-                <span>ROLE</span>
-                <p>${project.role}</p>
-              </div>
-
-              <div class="detail">
-                <span>TIMELINE</span>
-                <p>${project.timeline}</p>
-              </div>
-
-              <div class="detail">
-                <span>YEAR</span>
-                <p>${project.year}</p>
-              </div>
-
-              <div class="detail">
-                <span>TEAM</span>
-                <p>${project.team}</p>
-              </div>
-
+            <div class="detail">
+              <span>TEAM</span>
+              <p>${project.team}</p>
             </div>
 
           </div>
@@ -369,291 +289,10 @@ const projectItems = projects
 
       </div>
 
-    </article>
-  `)
-  .join('');
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-const MARQUEE_TEXT = "Let's work together";
-
-
-const starDefs = `
-  <svg
-    class="star-defs"
-    aria-hidden="true"
-    focusable="false"
-  >
-
-    <defs>
-
-      <linearGradient
-        id="star-stripe"
-        gradientUnits="userSpaceOnUse"
-        x1="0"
-        y1="0"
-        x2="200"
-        y2="200"
-        spreadMethod="repeat"
-      >
-
-        <stop stop-color="#fff"/>
-
-        <stop
-          offset=".5"
-          stop-color="#000"
-        />
-
-        <stop
-          offset="1"
-          stop-color="#fff"
-        />
-
-        <animateTransform
-          attributeName="gradientTransform"
-          type="translate"
-          to="200 200"
-          dur="4s"
-          repeatCount="indefinite"
-        />
-
-      </linearGradient>
-
-
-      <filter
-        id="star-fx"
-        color-interpolation-filters="sRGB"
-        x="-30%"
-        y="-30%"
-        width="160%"
-        height="160%"
-      >
-
-        <feGaussianBlur
-          in="SourceAlpha"
-          stdDeviation="4"
-          result="b"
-        />
-
-        <feComposite
-          in="b"
-          in2="SourceAlpha"
-          operator="arithmetic"
-          k2="-1"
-          k3="1"
-          result="e"
-        />
-
-        <feBlend
-          in="SourceGraphic"
-          in2="e"
-          mode="overlay"
-          result="g"
-        />
-
-        <feGaussianBlur
-          in="g"
-          stdDeviation="4"
-          result="bl"
-        />
-
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="3.5"
-          numOctaves="1"
-          seed="6"
-          result="n"
-        />
-
-        <feColorMatrix
-          in="n"
-          values="
-            1 0 0 0 0
-            1 0 0 0 0
-            1 0 0 0 0
-            0 0 0 0 1"
-          result="nn"
-        />
-
-        <feComposite
-          in="bl"
-          in2="nn"
-          operator="arithmetic"
-          k1=".35"
-          k2="1"
-          k3="0"
-          k4="-.175"
-          result="x"
-        />
-
-        <feComponentTransfer in="x">
-
-          <feFuncR
-            type="table"
-            tableValues="
-              0.169
-              1.000
-              1.000
-              1.000
-              1.000
-              0.624
-              0.239
-              0.478
-              0.169"
-          />
-
-          <feFuncG
-            type="table"
-            tableValues="
-              0.039
-              0.239
-              0.541
-              0.839
-              1.000
-              0.941
-              0.839
-              0.361
-              0.039"
-          />
-
-          <feFuncB
-            type="table"
-            tableValues="
-              0.239
-              0.604
-              0.847
-              0.949
-              1.000
-              1.000
-              1.000
-              1.000
-              0.239"
-          />
-
-          <feFuncA
-            type="table"
-            tableValues="0 1"
-          />
-
-        </feComponentTransfer>
-
-      </filter>
-
-
-      <g id="star-shape">
-
-        <path
-          d="M150 22l20 50 54 4-41 35 13 53-46-29-46 29 13-53-41-35 54-4z"
-          fill="url(#star-stripe)"
-          filter="url(#star-fx)"
-        />
-
-      </g>
-
-    </defs>
-
-  </svg>
-`;
-
-
-const star = `
-  <svg
-    class="mq-star"
-    viewBox="56 2 188 182"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <use href="#star-shape"/>
-  </svg>
-`;
-
-
-const marqueeItem = `
-  <span class="mq-item">
-    ${MARQUEE_TEXT}${star}
-  </span>
-`;
-
-
-const marqueeGroup = marqueeItem.repeat(4);
-
-
-const footerHTML = `
-<footer class="footer" id="contact">
-
-  ${starDefs}
-
-  <div class="mq">
-    <div class="mq-track">
-      <div class="mq-group">
-        ${marqueeGroup}
-      </div>
-
-      <div class="mq-group">
-        ${marqueeGroup}
-      </div>
-    </div>
-  </div>
-
-
-  <div class="footer-content">
-
-    <div class="footer-links">
-
-      <div class="footer-socials">
-
-        <a
-          href="https://www.instagram.com/hfizhad?stkn=MWdrcjgwMTJ1bjdjMw%3D%3D&utm_source=qr"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          INSTAGRAM
-        </a>
-
-        <a
-          href="https://www.linkedin.com/in/hafizh-aditiyo-847a151a2/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          LINKEDIN
-        </a>
-
-        <a
-          href="https://www.behance.net/gallery/254197393/Portfolio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          BEHANCE
-        </a>
-
-      </div>
-
-
-      <a
-        class="footer-email"
-        href="mailto:hafizhaditiyo24@gmail.com"
-      >
-        HAFIZHADITIYO24@GMAIL.COM
-      </a>
-
     </div>
 
-
-    <a
-      href="#top"
-      class="footer-name"
-      aria-label="Back to top"
-    >
-      Hafizh
-    </a>
-
-  </div>
-
-</footer>
-`;
+  </article>
+`).join('')
 
 
 /* =========================================================
@@ -681,10 +320,7 @@ document.querySelector('#app').innerHTML = `
     </div>
 
 
-    <a
-      href="#hero"
-      class="nav-logo"
-    >
+    <a href="#hero" class="nav-logo">
       HAFIZH
     </a>
 
@@ -695,7 +331,6 @@ document.querySelector('#app').innerHTML = `
         SKILLSET
       </a>
 
-      <!-- Connected directly to footer#contact -->
       <a href="#contact">
         CONTACT
       </a>
@@ -706,7 +341,7 @@ document.querySelector('#app').innerHTML = `
 
 
 
-  <main id="top">
+  <main>
 
 
     <!-- =================================================
@@ -726,76 +361,60 @@ document.querySelector('#app').innerHTML = `
 
 
 
-    <!-- =================================================
-         ABOUT
-    ================================================== -->
+    <section id="about" class="about-section">
 
-    <section
-      class="about"
-      id="about"
-    >
+  <div class="about-container">
 
-      <div class="about-container">
+    <div class="about-image">
+      <img src="./assets/profile.png" alt="Hafizh Aditiyo">
+    </div>
 
-        <div class="about-image">
+    <div class="about-text">
+      <p>
+        I’m HAFIZH Brand & Visual Designer with a background in DKV,
+        specializing in hospitality and lifestyle brands. I combine
+        photography, branding, social media design, and motion content
+        to help businesses create a premium and consistent visual identity.
+      </p>
+    </div>
 
-          <img
-            src="./images/about-foto.png"
-            alt="Hafizh Aditiyo"
-          >
+  </div>
 
-        </div>
+  <div class="tools-marquee">
 
+    <div class="tools-label">
+      <span>TOOLS / SOFTWARE</span>
+      <span>2026</span>
+    </div>
 
-        <div class="about-description">
+    <div class="tools-window">
 
-          <p>
-            I’m HAFIZH Brand & Visual Designer with a background in DKV,
-            specializing in hospitality and lifestyle brands. I combine
-            photography, branding, social media design, and motion content
-            to help businesses create a premium and consistent visual identity.
-          </p>
+      <div class="tools-track">
 
-        </div>
+        <div class="tool"><img src="./assets/lightroom.png" alt="Lightroom"><span>LIGHTROOM</span></div>
+        <div class="tool"><img src="./assets/photoshop.png" alt="Photoshop"><span>PHOTOSHOP</span></div>
+        <div class="tool"><img src="./assets/illustrator.png" alt="Illustrator"><span>ILLUSTRATOR</span></div>
+        <div class="tool"><img src="./assets/after-effects.png" alt="After Effects"><span>AFTER EFFECTS</span></div>
+        <div class="tool"><img src="./assets/premiere.png" alt="Premiere Pro"><span>PREMIERE PRO</span></div>
 
-      </div>
-
-
-      <!-- =================================================
-           SOFTWARE CONVEYOR
-      ================================================== -->
-
-      <div class="tools-marquee">
-
-        <div class="tools-label">
-
-          <span>
-            TOOLS / SOFTWARE
-          </span>
-
-          <span>
-            2026
-          </span>
-
-        </div>
-
-
-        <div class="tools-window">
-
-          <div class="tools-track">
-            ${toolsMarkup}
-          </div>
-
-        </div>
+        <div class="tool"><img src="./assets/lightroom.png" alt="Lightroom"><span>LIGHTROOM</span></div>
+        <div class="tool"><img src="./assets/photoshop.png" alt="Photoshop"><span>PHOTOSHOP</span></div>
+        <div class="tool"><img src="./assets/illustrator.png" alt="Illustrator"><span>ILLUSTRATOR</span></div>
+        <div class="tool"><img src="./assets/after-effects.png" alt="After Effects"><span>AFTER EFFECTS</span></div>
+        <div class="tool"><img src="./assets/premiere.png" alt="Premiere Pro"><span>PREMIERE PRO</span></div>
 
       </div>
 
-    </section>
+    </div>
+
+  </div>
+
+</section>
 
 
 
     <!-- =================================================
-         WHAT DID I DO
+         WORK
     ================================================== -->
 
     <section
@@ -837,17 +456,76 @@ document.querySelector('#app').innerHTML = `
       id="skillset"
     >
 
-      <div class="skillset-container">
-
-        <h2>
-          Skillset
-        </h2>
+      <div class="section-label">
+        SKILLSET
+      </div>
 
 
-        <div
-          class="skill-list"
-          id="skill-list"
-        ></div>
+      <div class="skills-grid">
+
+
+        <div class="skill">
+
+          <span>01</span>
+
+          <h3>
+            BRANDING
+          </h3>
+
+          <p>
+            Visual identity, art direction,
+            typography and brand systems.
+          </p>
+
+        </div>
+
+
+        <div class="skill">
+
+          <span>02</span>
+
+          <h3>
+            GRAPHIC DESIGN
+          </h3>
+
+          <p>
+            Social media, campaigns, posters,
+            menus, signage and print.
+          </p>
+
+        </div>
+
+
+        <div class="skill">
+
+          <span>03</span>
+
+          <h3>
+            PHOTOGRAPHY
+          </h3>
+
+          <p>
+            Product, food, lifestyle and
+            hospitality photography.
+          </p>
+
+        </div>
+
+
+        <div class="skill">
+
+          <span>04</span>
+
+          <h3>
+            MOTION
+          </h3>
+
+          <p>
+            Reels, TikTok content, motion graphics
+            and promotional videos.
+          </p>
+
+        </div>
 
       </div>
 
@@ -856,438 +534,402 @@ document.querySelector('#app').innerHTML = `
 
 
     <!-- =================================================
-         CONTACT / FOOTER
+         CONTACT
     ================================================== -->
 
-    ${footerHTML}
+    <section
+      class="contact"
+      id="contact"
+    >
+
+      <div class="section-label">
+        CONTACT
+      </div>
+
+
+      <div class="contact-content">
+
+        <h2>
+          HAVE A PROJECT<br>
+          IN MIND?
+        </h2>
+
+
+        <a
+          href="mailto:your@email.com"
+          class="contact-email"
+        >
+          LET'S TALK →
+        </a>
+
+      </div>
+
+    </section>
 
 
   </main>
 
-`;
-
-
-
-/* =========================================================
-   SKILLSET DATA
-========================================================= */
-
-const skills = [
-
-  [
-    "Graphic Design",
-    "Posters, layouts and visuals that are clear, bold and made to be noticed."
-  ],
-
-  [
-    "Brand Identity",
-    "Logos and visual systems with a point of view, built to be remembered."
-  ],
-
-  [
-    "Content Creation",
-    "Photo and video content planned, shot and edited for social platforms."
-  ],
-
-  [
-    "Motion & Video",
-    "Short-form edits and campaign videos that move with a purpose."
-  ]
-
-];
-
-
-const skillList = document.querySelector(
-  "#skill-list"
-);
+`
 
 
 /* =========================================================
-   SKILLSET RENDER + GSAP
+   ACCORDION
 ========================================================= */
 
-if (skillList) {
-
-  skillList.innerHTML = skills
-    .map(([title, desc], i) => `
-      <div class="skill-row">
-
-        <div class="skill-inner">
-
-          <span class="skill-num">
-            ${String(i + 1).padStart(2, "0")}
-          </span>
-
-          <h3 class="skill-title">
-            ${title}
-          </h3>
-
-          <p class="skill-desc">
-            ${desc}
-          </p>
-
-        </div>
-
-        <span class="skill-line"></span>
-
-      </div>
-    `)
-    .join("");
-
-
-  const inners = gsap.utils.toArray(
-    ".skill-inner"
-  );
-
-  const lines = gsap.utils.toArray(
-    ".skill-line"
-  );
-
-
-  const reduceMotion = window
-    .matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    )
-    .matches;
-
-
-  if (!reduceMotion && inners.length) {
-
-    const dist = () =>
-      window.innerWidth < 700
-        ? 60
-        : 160;
-
-
-    const STEP = 0.35;
-    const DUR = 1;
-    const HOLD = 1.2;
-
-
-    const outAt =
-      (inners.length - 1) * STEP
-      + DUR
-      + HOLD;
-
-
-    /* INITIAL STATE */
-
-    gsap.set(
-      inners,
-      {
-        opacity: 0,
-        x: dist()
-      }
-    );
-
-
-    gsap.set(
-      lines,
-      {
-        scaleX: 0
-      }
-    );
-
-
-    /* TIMELINE */
-
-    const tl = gsap.timeline({
-
-      defaults: {
-        ease: "power2.out"
-      },
-
-
-      scrollTrigger: {
-
-        trigger: "#skillset",
-
-        start: "top top",
-
-        end: () =>
-          "+=" + window.innerHeight * 3,
-
-        pin: true,
-
-        scrub: 0.6,
-
-        invalidateOnRefresh: true
-
-      }
-
-    });
-
-
-    /* SKILL ANIMATIONS */
-
-    inners.forEach(
-      (el, i) => {
-
-        /* IN */
-
-        tl.to(
-          el,
-          {
-            opacity: 1,
-            x: 0,
-            duration: DUR
-          },
-          i * STEP
-        )
-
-
-        .to(
-          lines[i],
-          {
-            scaleX: 1,
-            duration: DUR
-          },
-          i * STEP
-        )
-
-
-        /* OUT */
-
-        .to(
-          el,
-          {
-            opacity: 0,
-            x: () => -dist(),
-            duration: DUR,
-            ease: "power2.in"
-          },
-          outAt + i * STEP
-        )
-
-
-        .to(
-          lines[i],
-          {
-            scaleX: 0,
-            duration: DUR,
-            ease: "power2.in"
-          },
-          outAt + i * STEP
-        );
-
-      }
-    );
-
-  }
-
-}
-
-
-
-/* =========================================================
-   PROJECT ACCORDION
-========================================================= */
-
-const list = document.querySelector(
-  '.project-list'
-);
-
+const list = document.querySelector('.project-list')
 
 const items = [
-  ...document.querySelectorAll(
-    '.project-item'
-  )
-];
+  ...document.querySelectorAll('.project-item')
+]
 
-
-const isMobile = window.matchMedia(
-  '(max-width: 700px)'
-).matches;
 
 const canHover =
-  !isMobile &&
   window.matchMedia(
     '(hover: hover) and (pointer: fine)'
-  ).matches;
+  ).matches
 
 
-
-/* =========================================================
-   ACTIVE PROJECT
-========================================================= */
 
 function setActive(item) {
 
-  items.forEach(
-    current => {
+  items.forEach(current => {
 
-      current.classList.toggle(
-        'is-active',
-        current === item
-      );
+    current.classList.toggle(
+      'is-active',
+      current === item
+    )
 
-    }
-  );
+  })
 
 
-  if (list) {
-
-    list.classList.toggle(
-      'has-active',
-      Boolean(item)
-    );
-
-  }
+  list.classList.toggle(
+    'has-active',
+    Boolean(item)
+  )
 
 }
 
 
 
-/* =========================================================
-   PROJECT EVENTS
-========================================================= */
+items.forEach(item => {
 
-items.forEach(
-  item => {
+  item.addEventListener(
+    'focusin',
+    () => setActive(item)
+  )
 
-    /* Keyboard / focus */
+
+  if (canHover) {
 
     item.addEventListener(
-      'focusin',
+      'mouseenter',
       () => setActive(item)
-    );
+    )
 
+  } else {
 
-    /* Desktop hover */
-
-    if (canHover) {
-
-      item.addEventListener(
-        'mouseenter',
-        () => setActive(item)
-      );
-
-    }
-
-
-    /* Mobile tap */
-
-    else {
-
-      const row = item.querySelector(
-        '.project-row'
-      );
-
-
-      row?.addEventListener(
+    item
+      .querySelector('.project-row')
+      .addEventListener(
         'click',
         event => {
 
           if (
-            event.target.closest(
-              '.project-button'
-            )
+            event.target.closest('.project-button')
           ) {
-            return;
+            return
           }
 
 
           setActive(
-
-            item.classList.contains(
-              'is-active'
-            )
+            item.classList.contains('is-active')
               ? null
               : item
-
-          );
+          )
 
         }
-      );
-
-    }
+      )
 
   }
-);
+
+})
 
 
-
-/* =========================================================
-   RESET ACTIVE STATE
-========================================================= */
-
-if (canHover && list) {
+if (canHover) {
 
   list.addEventListener(
     'mouseleave',
     () => setActive(null)
-  );
+  )
 
 }
 /* =========================================================
-   MOBILE-ONLY FIXES
-   Desktop behavior above remains unchanged.
+   MOBILE + SVG FALLBACK FIX
+   Added without changing the existing desktop structure.
 ========================================================= */
 
-function initMobileFixes() {
+const mobileFixStyle = document.createElement('style')
+mobileFixStyle.textContent = `
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 
-  const mobile =
-    window.matchMedia(
-      '(max-width: 700px)'
-    ).matches;
+  @media (max-width: 768px) {
 
-  if (!mobile) return;
-
-
-  /* -------------------------------------------------------
-     PORTFOLIO SVG
-     Fallback animation for mobile browsers.
-  ------------------------------------------------------- */
-
-  const stripe = document.querySelector(
-    '.portfolio-svg #stripe'
-  );
-
-  const reduceMotion =
-    window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
-
-  if (stripe && !reduceMotion) {
-
-    const svgAnimation =
-      stripe.querySelector(
-        'animateTransform'
-      );
-
-    if (svgAnimation) {
-      svgAnimation.remove();
+    /* ---------- NAVBAR ---------- */
+    .navbar {
+      width: calc(100vw - 24px) !important;
+      max-width: calc(100vw - 24px) !important;
+      height: 54px !important;
+      left: 12px !important;
+      right: 12px !important;
+      top: 12px !important;
+      transform: none !important;
+      padding: 0 10px !important;
+      grid-template-columns: 1fr auto 1fr !important;
+      box-sizing: border-box !important;
+      overflow: hidden !important;
+      border-radius: 14px !important;
     }
 
-    const distance = 486;
-    const duration = 4400;
-    const start = performance.now();
+    .nav-left,
+    .nav-right {
+      display: flex !important;
+      align-items: center !important;
+      min-width: 0 !important;
+      gap: 14px !important;
+    }
 
-    const animateStripe = now => {
+    .nav-right {
+      justify-content: flex-end !important;
+    }
 
-      const elapsed =
-        (now - start) % duration;
+    .navbar a {
+      white-space: nowrap !important;
+      font-size: 14px !important;
+      line-height: 1 !important;
+    }
 
-      const progress =
-        elapsed / duration;
+    .nav-logo {
+      font-size: 18px !important;
+      font-weight: 700 !important;
+      padding: 0 8px !important;
+    }
 
-      const x =
-        progress * distance;
+    /* ---------- HERO / SVG ---------- */
+    .hero,
+    .hero-svg {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
 
-      stripe.setAttribute(
-        'gradientTransform',
-        `translate(${x} 0)`
-      );
+    .portfolio-svg {
+      display: block !important;
+      width: 100% !important;
+      max-width: 866px !important;
+      height: auto !important;
+    }
 
-      requestAnimationFrame(
-        animateStripe
-      );
-    };
+    /* ---------- WHAT DID I DO ---------- */
+    .work,
+    .work-container,
+    .project-list {
+      width: 100% !important;
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+      overflow: visible !important;
+    }
 
-    requestAnimationFrame(
-      animateStripe
-    );
+    .work-container {
+      padding-left: 24px !important;
+      padding-right: 24px !important;
+    }
+
+    .work-heading {
+      width: 100% !important;
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
+
+    .work-heading h2 {
+      font-size: clamp(42px, 13vw, 64px) !important;
+      line-height: .95 !important;
+      white-space: normal !important;
+      word-break: normal !important;
+      margin: 0 !important;
+    }
+
+    .project-list {
+      display: block !important;
+    }
+
+    .project-item {
+      position: relative !important;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    .project-row {
+      position: relative !important;
+      display: flex !important;
+      width: 100% !important;
+      min-height: 90px !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      box-sizing: border-box !important;
+    }
+
+    .project-name {
+      position: relative !important;
+      z-index: 2 !important;
+      font-size: clamp(40px, 12vw, 64px) !important;
+      line-height: .9 !important;
+    }
+
+    .project-button {
+      position: relative !important;
+      z-index: 3 !important;
+      flex: 0 0 auto !important;
+      white-space: nowrap !important;
+    }
+
+    .project-panel {
+      position: relative !important;
+      inset: auto !important;
+      top: auto !important;
+      right: auto !important;
+      bottom: auto !important;
+      left: auto !important;
+      width: 100% !important;
+      height: auto !important;
+      max-height: 0 !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      transform: none !important;
+      pointer-events: none !important;
+      transition: max-height .45s ease, opacity .25s ease, visibility 0s linear .45s !important;
+    }
+
+    .project-item.is-active .project-panel {
+      max-height: 900px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: auto !important;
+      transition: max-height .45s ease, opacity .25s ease, visibility 0s linear 0s !important;
+    }
+
+    .panel-inner,
+    .panel-content {
+      position: relative !important;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      box-sizing: border-box !important;
+    }
+
+    .project-image {
+      position: relative !important;
+      width: 100% !important;
+      height: auto !important;
+      margin: 18px 0 22px !important;
+      overflow: hidden !important;
+    }
+
+    .project-image img {
+      position: relative !important;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100% !important;
+      object-fit: cover !important;
+    }
+
+    .project-details {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 22px 18px !important;
+      width: 100% !important;
+      height: auto !important;
+      box-sizing: border-box !important;
+      padding: 0 0 28px !important;
+    }
+
+    .detail {
+      position: relative !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    .detail span,
+    .detail p {
+      display: block !important;
+      margin: 0 !important;
+    }
+
+    .detail p {
+      margin-top: 7px !important;
+      overflow-wrap: anywhere !important;
+    }
+
+    /* Keep each project separated on phones. */
+    .project-item + .project-item {
+      border-top: 1px solid rgba(0, 0, 0, .16) !important;
+    }
   }
-}
+`
+document.head.appendChild(mobileFixStyle)
 
-initMobileFixes();
+
+/* =========================================================
+   SVG ANIMATION FALLBACK
+   Some mobile browsers do not reliably animate the SVG
+   <animateTransform> used by the original artwork. We drive
+   the gradient with requestAnimationFrame instead.
+========================================================= */
+
+const stripeGradient = document.querySelector(
+  '.portfolio-svg #stripe'
+)
+
+if (stripeGradient) {
+  const originalAnimation = stripeGradient.querySelector(
+    'animateTransform'
+  )
+
+  if (originalAnimation) {
+    originalAnimation.remove()
+  }
+
+  const animationDuration = 4400
+  const animationDistance = 486
+  const animationStart = performance.now()
+
+  function animatePortfolioStripe(now) {
+    const elapsed = (now - animationStart) % animationDuration
+    const progress = elapsed / animationDuration
+    const x = -animationDistance + progress * animationDistance
+
+    stripeGradient.setAttribute(
+      'gradientTransform',
+      `translate(${x} 0)`
+    )
+
+    requestAnimationFrame(animatePortfolioStripe)
+  }
+
+  requestAnimationFrame(animatePortfolioStripe)
+}
