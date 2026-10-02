@@ -740,7 +740,7 @@ document.querySelector('#app').innerHTML = `
         <div class="about-image">
 
           <img
-            src="/images/about-foto.png"
+            src="./images/about-foto.png"
             alt="Hafizh Aditiyo"
           >
 
