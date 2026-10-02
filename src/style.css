@@ -85,17 +85,14 @@ a {
 
   border-radius: 14px;
 
-  background: rgba(220, 216, 216, 0.25);
+  /* Glass background */
+  background: rgba(220, 216, 216, 0.18);
 
   border: 1px solid rgba(255, 255, 255, 0.55);
 
-  backdrop-filter:
-    blur(25px)
-    saturate(120%);
-
-  -webkit-backdrop-filter:
-    blur(25px)
-    saturate(120%);
+  /* Glass blur */
+  -webkit-backdrop-filter: blur(25px) saturate(120%);
+  backdrop-filter: blur(25px) saturate(120%);
 
   box-shadow:
     0 10px 30px rgba(0, 0, 0, 0.04);
@@ -1454,3 +1451,455 @@ line-height: 1.1;
 
 }
 
+
+
+/* =========================================================
+   MOBILE FIX PACK — NAVBAR + WORK ACCORDION
+========================================================= */
+
+@media (max-width: 700px) {
+
+  /* NAVBAR: fit the actual phone viewport */
+  .navbar {
+    width: calc(100vw - 24px);
+    max-width: 500px;
+    height: 52px;
+    top: 12px;
+    padding: 0 10px;
+    border-radius: 14px;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+
+  .nav-left,
+  .nav-right {
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .nav-left {
+    justify-content: flex-start;
+  }
+
+  .nav-right {
+    justify-content: flex-end;
+  }
+
+  .navbar a {
+    font-size: 11px;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-logo {
+    font-size: 16px !important;
+    transform: none;
+  }
+
+  /* Give anchor targets enough room below the fixed navbar. */
+  #hero,
+  #about,
+  #work,
+  #skillset,
+  #contact {
+    scroll-margin-top: 84px;
+  }
+
+  /* WORK heading */
+  .work {
+    padding: 110px 20px 120px;
+  }
+
+  .work-heading {
+    margin-bottom: 38px;
+  }
+
+  .work-heading h2 {
+    font-size: clamp(46px, 13vw, 62px);
+    line-height: .92;
+    letter-spacing: -.065em;
+  }
+
+  /* One-column project row on phones. */
+  .project-item {
+    padding: 22px 0 26px;
+    overflow: visible;
+  }
+
+  .project-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  .project-name {
+    font-size: clamp(38px, 11vw, 52px);
+    line-height: .92;
+  }
+
+  .project-button {
+    width: 150px;
+    height: 36px;
+    font-size: 11px;
+  }
+
+  /* IMPORTANT: on mobile the image must be in normal document flow.
+     The desktop absolute positioning is what caused the overlap. */
+  .panel-content {
+    min-height: 0;
+    padding-top: 28px;
+  }
+
+  .project-image {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    margin: 0 0 24px;
+    opacity: 0;
+    transform: translateY(15px) scale(.97);
+  }
+
+  .project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-details {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 18px;
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  .detail span {
+    margin-bottom: 7px;
+    font-size: 9px;
+  }
+
+  .detail p {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    width: calc(100vw - 16px);
+    padding: 0 7px;
+  }
+
+  .nav-left,
+  .nav-right {
+    gap: 6px;
+  }
+
+  .navbar a {
+    font-size: 10px;
+  }
+
+  .nav-logo {
+    font-size: 15px !important;
+  }
+
+  .work {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* =========================================================
+   MOBILE FINAL FIX
+   Mobile only. Desktop styles above remain unchanged.
+========================================================= */
+
+@media (max-width: 700px) {
+
+  /* 1. NAVBAR */
+
+  .navbar {
+    width: calc(100vw - 24px) !important;
+    max-width: none !important;
+
+    left: 50% !important;
+    right: auto !important;
+    top: 12px !important;
+
+    transform: translateX(-50%) !important;
+
+    box-sizing: border-box !important;
+    padding: 0 10px !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto
+      minmax(0, 1fr) !important;
+
+    gap: 6px !important;
+    overflow: hidden !important;
+  }
+
+  .nav-left,
+  .nav-right {
+    min-width: 0 !important;
+    width: 100% !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    gap: 6px !important;
+  }
+
+  .nav-left {
+    justify-content: flex-start !important;
+  }
+
+  .nav-right {
+    justify-content: flex-end !important;
+  }
+
+  .navbar a {
+    min-width: 0 !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  .nav-logo {
+    min-width: max-content !important;
+    font-size: 14px !important;
+    transform: none !important;
+  }
+
+
+  /* 2. SVG */
+
+  .hero {
+    width: 100% !important;
+    overflow: hidden !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .hero-svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .portfolio-svg {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+
+  /* 3. WHAT DID I DO */
+
+  .work {
+    width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .work-container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .project-list {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .project-item {
+    width: 100% !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  .project-row {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  .project-name {
+    width: 100% !important;
+    font-size: clamp(34px, 10vw, 50px) !important;
+    line-height: .94 !important;
+  }
+
+  .project-button {
+    flex: 0 0 auto !important;
+    width: 150px !important;
+    height: 36px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Panel uses normal flow on mobile. */
+  .project-panel {
+    display: block !important;
+    width: 100% !important;
+
+    max-height: 0 !important;
+    overflow: hidden !important;
+
+    visibility: hidden !important;
+    opacity: 0 !important;
+
+    transition:
+      max-height .6s var(--ease),
+      opacity .25s ease,
+      visibility 0s linear .6s !important;
+  }
+
+  .project-item.is-active .project-panel {
+    max-height: 900px !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    transition:
+      max-height .6s var(--ease),
+      opacity .25s ease,
+      visibility 0s linear 0s !important;
+  }
+
+  .panel-inner {
+    width: 100% !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .panel-content {
+    width: 100% !important;
+    min-height: 0 !important;
+    padding-top: 28px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .project-image {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+
+    width: 100% !important;
+    height: auto !important;
+
+    aspect-ratio: 16 / 10 !important;
+
+    margin: 0 0 24px !important;
+
+    overflow: hidden !important;
+    opacity: 0 !important;
+
+    transform:
+      translateY(15px)
+      scale(.97) !important;
+
+    pointer-events: none !important;
+  }
+
+  .project-item.is-active .project-image {
+    opacity: 1 !important;
+    transform:
+      translateY(0)
+      scale(1) !important;
+  }
+
+  .project-image img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .project-details {
+    width: 100% !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr) !important;
+
+    gap:
+      24px
+      18px !important;
+
+    opacity: 0 !important;
+
+    transform:
+      translateY(15px) !important;
+  }
+
+  .project-item.is-active .project-details {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .detail {
+    min-width: 0 !important;
+  }
+
+  .detail span {
+    margin-bottom: 7px !important;
+    font-size: 9px !important;
+  }
+
+  .detail p {
+    margin: 0 !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+
+
+/* VERY SMALL PHONES */
+
+@media (max-width: 380px) {
+
+  .navbar {
+    width: calc(100vw - 16px) !important;
+    padding: 0 7px !important;
+    gap: 4px !important;
+  }
+
+  .nav-left,
+  .nav-right {
+    gap: 5px !important;
+  }
+
+  .navbar a {
+    font-size: 8px !important;
+  }
+
+  .nav-logo {
+    font-size: 13px !important;
+  }
+
+  .project-name {
+    font-size: clamp(31px, 10vw, 44px) !important;
+  }
+
+  .project-details {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .detail p {
+    font-size: 12px !important;
+  }
+}

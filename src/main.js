@@ -1095,11 +1095,15 @@ const items = [
 ];
 
 
-const canHover = window
-  .matchMedia(
+const isMobile = window.matchMedia(
+  '(max-width: 700px)'
+).matches;
+
+const canHover =
+  !isMobile &&
+  window.matchMedia(
     '(hover: hover) and (pointer: fine)'
-  )
-  .matches;
+  ).matches;
 
 
 
@@ -1215,3 +1219,75 @@ if (canHover && list) {
   );
 
 }
+/* =========================================================
+   MOBILE-ONLY FIXES
+   Desktop behavior above remains unchanged.
+========================================================= */
+
+function initMobileFixes() {
+
+  const mobile =
+    window.matchMedia(
+      '(max-width: 700px)'
+    ).matches;
+
+  if (!mobile) return;
+
+
+  /* -------------------------------------------------------
+     PORTFOLIO SVG
+     Fallback animation for mobile browsers.
+  ------------------------------------------------------- */
+
+  const stripe = document.querySelector(
+    '.portfolio-svg #stripe'
+  );
+
+  const reduceMotion =
+    window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+
+  if (stripe && !reduceMotion) {
+
+    const svgAnimation =
+      stripe.querySelector(
+        'animateTransform'
+      );
+
+    if (svgAnimation) {
+      svgAnimation.remove();
+    }
+
+    const distance = 486;
+    const duration = 4400;
+    const start = performance.now();
+
+    const animateStripe = now => {
+
+      const elapsed =
+        (now - start) % duration;
+
+      const progress =
+        elapsed / duration;
+
+      const x =
+        progress * distance;
+
+      stripe.setAttribute(
+        'gradientTransform',
+        `translate(${x} 0)`
+      );
+
+      requestAnimationFrame(
+        animateStripe
+      );
+    };
+
+    requestAnimationFrame(
+      animateStripe
+    );
+  }
+}
+
+initMobileFixes();
