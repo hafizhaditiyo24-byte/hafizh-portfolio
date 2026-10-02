@@ -606,7 +606,7 @@ const footerHTML = `
       <div class="footer-socials">
 
         <a
-          href="https://www.linkedin.com/in/hafizh-aditiyo-847a151a2/"
+          href="https://www.instagram.com/hfizhad?stkn=MWdrcjgwMTJ1bjdjMw%3D%3D&utm_source=qr"
           target="_blank"
           rel="noopener noreferrer"
         >
