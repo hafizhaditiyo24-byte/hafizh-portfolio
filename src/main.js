@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     name: 'SOCIAL MEDIA',
-    image: '/images/social-media.jpg',
+    image: './images/social-media.jpg',
     role: 'Photo · Video · Managing',
     timeline: '12 Months',
     year: '2024–2025',
@@ -22,7 +22,7 @@ const projects = [
 
   {
     name: 'PRINT',
-    image: '/images/print.jpg',
+    image: './images/print.jpg',
     role: 'Poster · Menu · Signage',
     timeline: '12 Months',
     year: '2024–2025',
@@ -32,7 +32,7 @@ const projects = [
 
   {
     name: 'LOGO',
-    image: '/images/logo.jpg',
+    image: './images/logo.jpg',
     role: 'Re-Design · Visual Identity',
     timeline: '12 Months',
     year: '2024–2025',
@@ -42,7 +42,7 @@ const projects = [
 
   {
     name: 'VIDEO',
-    image: '/images/video.jpg',
+    image: './images/video.jpg',
     role: 'Digital Content · Campaign',
     timeline: '12 Months',
     year: '2024–2025',
@@ -59,31 +59,31 @@ const projects = [
 const tools = [
   {
     name: 'PHOTOSHOP',
-    image: '/images/PHOTOSHOP.png',
+    image: './images/PHOTOSHOP.png',
     alt: 'Photoshop'
   },
 
   {
     name: 'ILLUSTRATOR',
-    image: '/images/ILLUSTRATOR.png',
+    image: './images/ILLUSTRATOR.png',
     alt: 'Illustrator'
   },
 
   {
     name: 'AFTER EFFECTS',
-    image: '/images/AFTER EFFECT.png',
+    image: './images/AFTER EFFECT.png',
     alt: 'After Effects'
   },
 
   {
     name: 'PREMIERE PRO',
-    image: '/images/PREMIER PRO.png',
+    image: './images/PREMIER PRO.png',
     alt: 'Premiere Pro'
   },
 
   {
     name: 'LIGHTROOM',
-    image: '/images/LIGHTROOM.png',
+    image: './images/LIGHTROOM.png',
     alt: 'Lightroom'
   }
 ];
