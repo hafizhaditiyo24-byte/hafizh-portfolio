@@ -1355,6 +1355,7 @@ sectionNavLinks.forEach(link => {
       const previousScrollBehavior = root.style.scrollBehavior;
       root.style.scrollBehavior = 'auto';
       window.scrollTo(0, getSectionNavigationY(target));
+      wheelTargetY = window.scrollY;
       root.style.scrollBehavior = previousScrollBehavior;
       return;
     }
@@ -1362,10 +1363,20 @@ sectionNavLinks.forEach(link => {
     sectionTransition.classList.add('is-active');
 
     sectionNavigationTimer = window.setTimeout(() => {
+      const root = document.documentElement;
+      const previousScrollBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      const restoreScrollBehavior = () => {
+        root.style.scrollBehavior = previousScrollBehavior;
+        wheelTargetY = window.scrollY;
+      };
+
       sectionNavigationTween = gsap.to(window, {
         duration: 1.15,
         ease: 'power3.inOut',
         overwrite: 'auto',
+        onComplete: restoreScrollBehavior,
+        onInterrupt: restoreScrollBehavior,
         scrollTo: {
           y: getSectionNavigationY(target),
           autoKill: true
@@ -1414,6 +1425,11 @@ window.addEventListener('wheel', event => {
       event.target.closest('input, textarea, select, [contenteditable="true"]'))
   ) {
     return;
+  }
+
+  if (sectionNavigationTween?.isActive()) {
+    sectionNavigationTween.kill();
+    wheelTargetY = window.scrollY;
   }
 
   event.preventDefault();
