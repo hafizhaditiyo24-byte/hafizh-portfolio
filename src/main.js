@@ -1,8 +1,9 @@
 import './style.css'
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 
 /* =========================================================
@@ -1292,8 +1293,9 @@ if (canHover && list) {
 ========================================================= */
 
 const sectionNavLinks = document.querySelectorAll(
-  '.nav-left a[href^="#"], .nav-right a[href^="#"]'
+  '.navbar a[href^="#"]'
 );
+const sectionNavBar = document.querySelector('.navbar');
 
 const sectionTransition = document.createElement('div');
 sectionTransition.className = 'section-transition';
@@ -1305,6 +1307,20 @@ const sectionNavReducedMotion = window.matchMedia(
 );
 
 let sectionNavigationTimer;
+let sectionNavigationTween;
+
+const getSectionNavigationY = target => {
+  const navbarBottom = sectionNavBar?.getBoundingClientRect().bottom ?? 0;
+  const scrollMarginTop = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+  const targetTop = target.getBoundingClientRect().top + window.scrollY;
+  const maxScrollY = Math.max(
+    0,
+    document.documentElement.scrollHeight - window.innerHeight
+  );
+  const topOffset = Math.max(navbarBottom + 16, scrollMarginTop);
+
+  return Math.min(maxScrollY, Math.max(0, targetTop - topOffset));
+};
 
 sectionNavLinks.forEach(link => {
   link.addEventListener('click', event => {
@@ -1331,17 +1347,30 @@ sectionNavLinks.forEach(link => {
     }
 
     window.clearTimeout(sectionNavigationTimer);
+    sectionNavigationTween?.kill();
 
     if (sectionNavReducedMotion.matches) {
       sectionTransition.classList.remove('is-active');
-      target.scrollIntoView({ behavior: 'auto', block: 'start' });
+      const root = document.documentElement;
+      const previousScrollBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = 'auto';
+      window.scrollTo(0, getSectionNavigationY(target));
+      root.style.scrollBehavior = previousScrollBehavior;
       return;
     }
 
     sectionTransition.classList.add('is-active');
 
     sectionNavigationTimer = window.setTimeout(() => {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      sectionNavigationTween = gsap.to(window, {
+        duration: 1.15,
+        ease: 'power3.inOut',
+        overwrite: 'auto',
+        scrollTo: {
+          y: getSectionNavigationY(target),
+          autoKill: true
+        }
+      });
       sectionTransition.classList.remove('is-active');
     }, 100);
   });
