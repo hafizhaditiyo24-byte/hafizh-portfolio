@@ -1723,6 +1723,7 @@ a {
 
   .hero {
     width: 100% !important;
+    background-color: #f5f5f0 !important;
     overflow: hidden !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
@@ -1731,6 +1732,7 @@ a {
   .hero-svg {
     width: 100% !important;
     max-width: 100% !important;
+    margin-inline: auto !important;
     overflow: hidden !important;
   }
 
