@@ -190,7 +190,7 @@ a {
 }
 
 
-.portfolio-video {
+.portfolio-art {
 
   display: block;
 
@@ -1736,7 +1736,7 @@ a {
     overflow: hidden !important;
   }
 
-  .portfolio-video {
+  .portfolio-art {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
