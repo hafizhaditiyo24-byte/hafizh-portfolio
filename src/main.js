@@ -1306,6 +1306,104 @@ sectionNavLinks.forEach(link => {
 
 
 /* =========================================================
+   STEALTH MODE EASTER EGG
+========================================================= */
+
+const stealthLogo = document.querySelector('.navbar .nav-logo');
+const stealthOverlay = document.createElement('div');
+stealthOverlay.className = 'stealth-overlay';
+stealthOverlay.setAttribute('role', 'dialog');
+stealthOverlay.setAttribute('aria-modal', 'true');
+stealthOverlay.setAttribute('aria-label', 'Stealth transmission');
+stealthOverlay.setAttribute('aria-hidden', 'true');
+stealthOverlay.innerHTML = `
+  <div class="stealth-content">
+    <p class="stealth-label">TRANSMISSION_01</p>
+    <p class="stealth-morse">
+      .. / ... - .. .-.. .-.. / .-.. --- ...- . / -.-- --- ..- / -.. .. ... - .-
+    </p>
+    <button class="stealth-close" type="button" aria-label="Close transmission">
+      ESC / CLOSE
+    </button>
+  </div>
+`;
+document.body.appendChild(stealthOverlay);
+
+const stealthCloseButton = stealthOverlay.querySelector('.stealth-close');
+let stealthClickCount = 0;
+let stealthClickTimer;
+let stealthPreviousFocus = null;
+
+const openStealthMode = () => {
+  stealthPreviousFocus = document.activeElement;
+  stealthOverlay.setAttribute('aria-hidden', 'false');
+  stealthOverlay.classList.add('is-active');
+
+  try {
+    stealthCloseButton.focus({ preventScroll: true });
+  } catch {
+    stealthCloseButton.focus();
+  }
+};
+
+const closeStealthMode = () => {
+  stealthOverlay.classList.remove('is-active');
+  stealthOverlay.setAttribute('aria-hidden', 'true');
+
+  if (stealthPreviousFocus instanceof HTMLElement) {
+    try {
+      stealthPreviousFocus.focus({ preventScroll: true });
+    } catch {
+      stealthPreviousFocus.focus();
+    }
+  }
+
+  stealthPreviousFocus = null;
+  stealthClickCount = 0;
+  window.clearTimeout(stealthClickTimer);
+};
+
+stealthLogo?.addEventListener('click', event => {
+  if (
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return;
+  }
+
+  window.clearTimeout(stealthClickTimer);
+  stealthClickCount += 1;
+
+  if (stealthClickCount === 5) {
+    stealthClickCount = 0;
+    openStealthMode();
+    return;
+  }
+
+  stealthClickTimer = window.setTimeout(() => {
+    stealthClickCount = 0;
+  }, 1800);
+});
+
+stealthCloseButton.addEventListener('click', closeStealthMode);
+
+document.addEventListener('keydown', event => {
+  if (!stealthOverlay.classList.contains('is-active')) return;
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeStealthMode();
+  } else if (event.key === 'Tab') {
+    event.preventDefault();
+    stealthCloseButton.focus();
+  }
+});
+
+
+/* =========================================================
    DESKTOP WHEEL INERTIA
 ========================================================= */
 
