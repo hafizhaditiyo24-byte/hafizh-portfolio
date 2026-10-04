@@ -1004,12 +1004,8 @@ if (skillList) {
     .join("");
 
 
-  const inners = gsap.utils.toArray(
-    ".skill-inner"
-  );
-
-  const lines = gsap.utils.toArray(
-    ".skill-line"
+  const rows = gsap.utils.toArray(
+    ".skill-row"
   );
 
 
@@ -1020,127 +1016,48 @@ if (skillList) {
     .matches;
 
 
-  if (!reduceMotion && inners.length) {
+  if (reduceMotion) {
+
+    gsap.set(rows, { autoAlpha: 1, x: 0 });
+
+  } else if (rows.length) {
+
+    const skillSection = rows[0].closest("#skillset");
 
     const dist = () =>
       window.innerWidth < 700
         ? 60
         : 160;
 
-
-    const STEP = 0.35;
     const DUR = 1;
-    const HOLD = 1.2;
 
+    rows.forEach((row) => {
+      const rowTopInSection = () =>
+        row.getBoundingClientRect().top
+        - skillSection.getBoundingClientRect().top;
 
-    const outAt =
-      (inners.length - 1) * STEP
-      + DUR
-      + HOLD;
+      const rowTopFromSectionBottom = () =>
+        skillSection.getBoundingClientRect().bottom
+        - row.getBoundingClientRect().top;
 
-
-    /* INITIAL STATE */
-
-    gsap.set(
-      inners,
-      {
-        opacity: 0,
-        x: dist()
-      }
-    );
-
-
-    gsap.set(
-      lines,
-      {
-        scaleX: 0
-      }
-    );
-
-
-    /* TIMELINE */
-
-    const tl = gsap.timeline({
-
-      defaults: {
-        ease: "power2.out"
-      },
-
-
-      scrollTrigger: {
-
-        trigger: "#skillset",
-
-        start: "top top",
-
-        end: () =>
-          "+=" + window.innerHeight * 3,
-
-        pin: true,
-
-        scrub: 0.6,
-
-        invalidateOnRefresh: true
-
-      }
-
+      gsap.fromTo(
+        row,
+        { autoAlpha: 0, x: dist },
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: DUR,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: skillSection,
+            start: () => `top+=${rowTopInSection()}px 95%`,
+            end: () => `bottom-=${rowTopFromSectionBottom()}px 60%`,
+            scrub: true,
+            invalidateOnRefresh: true
+          }
+        }
+      );
     });
-
-
-    /* SKILL ANIMATIONS */
-
-    inners.forEach(
-      (el, i) => {
-
-        /* IN */
-
-        tl.to(
-          el,
-          {
-            opacity: 1,
-            x: 0,
-            duration: DUR
-          },
-          i * STEP
-        )
-
-
-        .to(
-          lines[i],
-          {
-            scaleX: 1,
-            duration: DUR
-          },
-          i * STEP
-        )
-
-
-        /* OUT */
-
-        .to(
-          el,
-          {
-            opacity: 0,
-            x: () => -dist(),
-            duration: DUR,
-            ease: "power2.in"
-          },
-          outAt + i * STEP
-        )
-
-
-        .to(
-          lines[i],
-          {
-            scaleX: 0,
-            duration: DUR,
-            ease: "power2.in"
-          },
-          outAt + i * STEP
-        );
-
-      }
-    );
 
   }
 
