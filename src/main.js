@@ -577,9 +577,6 @@ document.querySelector('#app').innerHTML = `
 
       </div>
 
-      <div class="about-divider" aria-hidden="true"></div>
-
-
       <!-- =================================================
            SOFTWARE CONVEYOR
       ================================================== -->
@@ -884,6 +881,28 @@ if (skillList) {
         }
       );
     });
+
+    const skillsetContent = skillSection.querySelector(
+      ".skillset-container"
+    );
+
+    gsap.fromTo(
+      skillsetContent,
+      { autoAlpha: 1, y: 0 },
+      {
+        autoAlpha: 0,
+        x: -20,
+        y: -144,
+        ease: "none",
+        scrollTrigger: {
+          trigger: skillSection,
+          start: "bottom 80%",
+          end: "bottom 20%",
+          scrub: true,
+          invalidateOnRefresh: true
+        }
+      }
+    );
 
   }
 

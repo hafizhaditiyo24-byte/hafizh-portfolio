@@ -88,7 +88,7 @@ a {
   /* Glass background */
   background: rgba(220, 216, 216, 0.18);
 
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: 1px solid transparent;
 
   /* Glass blur */
   -webkit-backdrop-filter: blur(25px) saturate(120%);
@@ -1287,9 +1287,11 @@ a {
 .tools-track {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
 
   width: max-content;
   gap: 0;
+  white-space: nowrap;
 
   animation:
     software-conveyor
@@ -1303,9 +1305,11 @@ a {
 .tools-group {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   flex: 0 0 auto;
   gap: 64px;
   padding-right: 64px;
+  white-space: nowrap;
 }
 
 
