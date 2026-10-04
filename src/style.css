@@ -190,7 +190,7 @@ a {
 }
 
 
-.portfolio-svg {
+.portfolio-video {
 
   display: block;
 
@@ -1730,7 +1730,7 @@ a {
     overflow: hidden !important;
   }
 
-  .portfolio-svg {
+  .portfolio-video {
     display: block !important;
     width: 100% !important;
     max-width: 100% !important;
