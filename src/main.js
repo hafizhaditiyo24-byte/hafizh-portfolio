@@ -5,6 +5,14 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+window.__skillDebug = {
+  gsap,
+  ScrollTrigger
+};
+
+console.log("GSAP LOADED:", gsap.version);
+console.log("ScrollTrigger LOADED:", ScrollTrigger);
+
 
 /* =========================================================
    PROJECT DATA
@@ -44,7 +52,6 @@ const projects = [
   {
     name: 'VIDEO',
     category: 'Video',
-    image: './images/video.PNG',
     video: './images/Video.mp4',
     role: 'Digital Content · Campaign',
     timeline: '12 Months',
@@ -819,6 +826,7 @@ const skillList = document.querySelector(
 ========================================================= */
 
 if (skillList) {
+  console.log("SKILLSET INIT");
 
   skillList.innerHTML = skills
     .map(([title, desc], i) => `
@@ -850,91 +858,88 @@ if (skillList) {
   const rows = gsap.utils.toArray(
     ".skill-row"
   );
+console.log("SKILL ROWS:", rows.length);
 
+if (rows.length) {
+  const skillSection = rows[0].closest("#skillset");
+  const skillsetContent = skillSection.querySelector(
+    ".skillset-container"
+  );
 
-  if (rows.length) {
-    const skillSection = rows[0].closest("#skillset");
-    const skillsetContent = skillSection.querySelector(
-      ".skillset-container"
+  const isMobile = window.matchMedia(
+    "(max-width: 699px)"
+  ).matches;
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  console.log("🔥 SKILLSET CONDITIONS:", {
+    isMobile,
+    reduceMotion
+  });
+
+  if (reduceMotion) {
+    gsap.set(rows, {
+      autoAlpha: 1,
+      x: 0
+    });
+  } else if (isMobile) {
+
+    const revealTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: skillSection,
+        start: "top 95%",
+        end: "bottom 40%",
+        scrub: true
+      }
+    });
+
+    revealTimeline.fromTo(
+      rows,
+      {
+        autoAlpha: 0,
+        x: 30
+      },
+      {
+        autoAlpha: 1,
+        x: 0,
+        duration: 0.45,
+        ease: "none",
+        stagger: 0.12
+      },
+      0
     );
-    const skillAnimationMedia = gsap.matchMedia();
 
-    skillAnimationMedia.add({
-      isMobile: "(max-width: 699px)",
-      reduceMotion: "(prefers-reduced-motion: reduce)"
-    }, ({ conditions }) => {
-      if (conditions.reduceMotion) {
-        gsap.set(rows, { autoAlpha: 1, x: 0 });
-        return;
-      }
+  } else {
 
-      if (conditions.isMobile) {
-        const revealTimeline = gsap.timeline({
-          scrollTrigger: {
-            trigger: skillSection,
-            start: "top 95%",
-            end: "bottom 40%",
-            scrub: true
-          }
-        });
+    const dist = () => 160;
+    const DUR = 1;
 
-        revealTimeline.fromTo(
-          rows,
-          { autoAlpha: 0, x: 30 },
-          {
-            autoAlpha: 1,
-            x: 0,
-            duration: 0.45,
-            ease: "none",
-            stagger: 0.12
-          },
-          0
-        );
-      } else {
-        const dist = () => 160;
-        const DUR = 1;
+    rows.forEach((row) => {
+      const rowTopInSection = () =>
+        row.getBoundingClientRect().top -
+        skillSection.getBoundingClientRect().top;
 
-        rows.forEach((row) => {
-          const rowTopInSection = () =>
-            row.getBoundingClientRect().top
-            - skillSection.getBoundingClientRect().top;
-
-          const rowTopFromSectionBottom = () =>
-            skillSection.getBoundingClientRect().bottom
-            - row.getBoundingClientRect().top;
-
-          gsap.fromTo(
-            row,
-            { autoAlpha: 0, x: dist },
-            {
-              autoAlpha: 1,
-              x: 0,
-              duration: DUR,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: skillSection,
-                start: () => `top+=${rowTopInSection()}px 95%`,
-                end: () => `bottom-=${rowTopFromSectionBottom()}px 60%`,
-                scrub: true,
-                invalidateOnRefresh: true
-              }
-            }
-          );
-        });
-      }
+      const rowTopFromSectionBottom = () =>
+        skillSection.getBoundingClientRect().bottom -
+        row.getBoundingClientRect().top;
 
       gsap.fromTo(
-        skillsetContent,
-        { autoAlpha: 1, y: 0 },
+        row,
         {
           autoAlpha: 0,
-          x: -20,
-          y: -144,
-          ease: "none",
+          x: dist
+        },
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: DUR,
+          ease: "power2.out",
           scrollTrigger: {
             trigger: skillSection,
-            start: "bottom 80%",
-            end: "bottom 20%",
+            start: () => `top+=${rowTopInSection()}px 95%`,
+            end: () => `bottom-=${rowTopFromSectionBottom()}px 60%`,
             scrub: true,
             invalidateOnRefresh: true
           }
@@ -942,6 +947,28 @@ if (skillList) {
       );
     });
   }
+
+  gsap.fromTo(
+    skillsetContent,
+    {
+      autoAlpha: 1,
+      y: 0
+    },
+    {
+      autoAlpha: 0,
+      x: -20,
+      y: -144,
+      ease: "none",
+      scrollTrigger: {
+        trigger: skillSection,
+        start: "bottom 80%",
+        end: "bottom 20%",
+        scrub: true,
+        invalidateOnRefresh: true
+      }
+    }
+  );
+}
 
 }
 
@@ -975,16 +1002,45 @@ const setWorkActive = item => {
 
 if (workList && workItems.length) {
   if (workIsMobile) {
-    workItems.forEach(item => {
-      item.addEventListener('focusin', () => setWorkActive(item));
+  workItems.forEach(item => {
+    const button = item.querySelector('.work-category-button');
 
-      const row = item.querySelector('.project-row');
-      row?.addEventListener('click', event => {
-        if (event.target.closest('.project-button')) return;
+    button?.addEventListener('click', () => {
+      const isActive = item.classList.contains('is-active');
 
-        setWorkActive(item.classList.contains('is-active') ? null : item);
-      });
+      setWorkActive(isActive ? null : item);
+
+      if (isActive || !workPreviewImage) return;
+
+      const image = button.dataset.preview;
+      const label = button.dataset.label;
+      const video = button.dataset.video;
+
+      if (!image) return;
+
+      workPreviewImage.src = image;
+      workPreviewImage.alt = `${label} project`;
+
+      const workPreviewFigure =
+        document.querySelector('.work-preview');
+
+      const workPreviewVideo =
+        document.querySelector('.work-preview-video');
+
+      if (video && workPreviewVideo) {
+        if (!workPreviewVideo.getAttribute('src')) {
+          workPreviewVideo.src = video;
+        }
+
+        workPreviewVideo.poster = image;
+        workPreviewFigure?.classList.add('is-video');
+        workPreviewVideo.play().catch(() => {});
+      } else if (workPreviewVideo) {
+        workPreviewVideo.pause();
+        workPreviewFigure?.classList.remove('is-video');
+      }
     });
+  });
   } else {
     let previewTween;
     let currentPreview = workPreviewImage?.getAttribute('src');
@@ -1356,5 +1412,7 @@ window.addEventListener('wheel', event => {
 }, { passive: false });
 
 window.addEventListener('load', () => {
-  ScrollTrigger.refresh();
+  requestAnimationFrame(() => {
+    ScrollTrigger.refresh();
+  });
 });
