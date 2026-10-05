@@ -13,37 +13,39 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 const projects = [
   {
     name: 'SOCIAL MEDIA',
-    image: './images/social-media.jpg',
+    category: 'Social Media',
+    image: './images/SOCIAL-MEDIA.png',
     role: 'Photo · Video · Managing',
     timeline: '12 Months',
     year: '2024–2025',
     team: 'Solo',
     href: '#'
   },
-
   {
     name: 'PRINT',
-    image: './images/print.jpg',
+    category: 'Print',
+    image: './images/PRINT.png',
     role: 'Poster · Menu · Signage',
     timeline: '12 Months',
     year: '2024–2025',
     team: 'Solo',
     href: '#'
   },
-
   {
     name: 'LOGO',
-    image: './images/logo.jpg',
+    category: 'Logo',
+    image: './images/LOGO.png',
     role: 'Re-Design · Visual Identity',
     timeline: '12 Months',
     year: '2024–2025',
     team: 'Solo',
     href: '#'
   },
-
   {
     name: 'VIDEO',
-    image: './images/video.jpg',
+    category: 'Video',
+    image: './images/video.PNG',
+    video: './images/Video.mp4',
     role: 'Digital Content · Campaign',
     timeline: '12 Months',
     year: '2024–2025',
@@ -116,73 +118,43 @@ const toolsMarkup = Array(2)
 ========================================================= */
 
 const projectItems = projects
-  .map(project => `
+  .map((project, index) => `
     <article class="project-item">
-
       <div class="project-row">
-
-        <div class="project-name">
-          ${project.name}
-        </div>
-
-        <a
-          href="${project.href}"
-          class="project-button"
-        >
+        <div class="project-name">${project.name}</div>
+        <a href="${project.href}" class="project-button">
           <span>Jump To Project</span>
           <span class="arrow">→</span>
         </a>
-
       </div>
 
+      <button
+        class="work-category-button"
+        type="button"
+        aria-pressed="false"
+        data-preview="${project.image}"
+        data-label="${project.category}"
+        data-video="${project.video ?? ''}"
+      >
+        <span class="work-category-number">${String(index + 1).padStart(2, '0')}</span>
+        <span class="work-category-label">${project.category}</span>
+      </button>
 
       <div class="project-panel">
-
         <div class="panel-inner">
-
           <div class="panel-content">
-
             <div class="project-image">
-
-              <img
-                src="${project.image}"
-                alt="${project.name} project"
-                loading="lazy"
-              >
-
+              <img src="${project.image}" alt="${project.name} project" loading="lazy">
             </div>
-
-
             <div class="project-details">
-
-              <div class="detail">
-                <span>ROLE</span>
-                <p>${project.role}</p>
-              </div>
-
-              <div class="detail">
-                <span>TIMELINE</span>
-                <p>${project.timeline}</p>
-              </div>
-
-              <div class="detail">
-                <span>YEAR</span>
-                <p>${project.year}</p>
-              </div>
-
-              <div class="detail">
-                <span>TEAM</span>
-                <p>${project.team}</p>
-              </div>
-
+              <div class="detail"><span>ROLE</span><p>${project.role}</p></div>
+              <div class="detail"><span>TIMELINE</span><p>${project.timeline}</p></div>
+              <div class="detail"><span>YEAR</span><p>${project.year}</p></div>
+              <div class="detail"><span>TEAM</span><p>${project.team}</p></div>
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </article>
   `)
   .join('');
@@ -508,7 +480,7 @@ document.querySelector('#app').innerHTML = `
 
     <div class="nav-left">
 
-      <a href="#work">
+      <a class="nav-work-link" href="#work">
         WORK
       </a>
 
@@ -631,37 +603,42 @@ document.querySelector('#app').innerHTML = `
 
 
     <!-- =================================================
-         WHAT DID I DO
+         SELECTED WORK
     ================================================== -->
 
-    <section
-      class="work"
-      id="work"
-    >
-
+    <section class="work" id="work">
       <div class="work-container">
-
         <div class="work-heading">
-
-          <span>
-            SELECTED WORK
-          </span>
-
-          <h2>
-            WHAT DID I DO?
-          </h2>
-
+          <span>SELECTED WORK</span>
+          <h2 class="work-heading-mobile">WHAT DID I DO?</h2>
+          <h2 class="work-heading-desktop">SELECTED WORK</h2>
         </div>
 
+        <div class="work-layout">
+          <div class="project-list">
+            <span class="work-active-indicator" aria-hidden="true"></span>
+            ${projectItems}
+          </div>
 
-        <div class="project-list">
-          ${projectItems}
+            <figure class="work-preview">
+            <img
+              class="work-preview-image"
+              src="${projects[0].image}"
+              alt="${projects[0].category} project"
+            >
+            <video
+              class="work-preview-video"
+              src="${projects.find(p => p.video)?.video ?? ''}"
+              muted
+              autoplay
+              loop
+              playsinline
+              preload="auto"
+            ></video>
+          </figure>
         </div>
-
       </div>
-
     </section>
-
 
 
     <!-- =================================================
@@ -971,145 +948,151 @@ if (skillList) {
 
 
 /* =========================================================
-   PROJECT ACCORDION
+   SELECTED WORK INTERACTIONS
 ========================================================= */
 
-const list = document.querySelector(
-  '.project-list'
-);
-
-
-const items = [
-  ...document.querySelectorAll(
-    '.project-item'
-  )
-];
-
-
-const isMobile = window.matchMedia(
-  '(max-width: 700px)'
+const workList = document.querySelector('.project-list');
+const workItems = [...document.querySelectorAll('.project-item')];
+const workPreviewImage = document.querySelector('.work-preview-image');
+const workIndicator = document.querySelector('.work-active-indicator');
+const workIsMobile = window.matchMedia('(max-width: 700px)').matches;
+const workReduceMotion = window.matchMedia(
+  '(prefers-reduced-motion: reduce)'
 ).matches;
 
-const canHover =
-  !isMobile &&
-  window.matchMedia(
-    '(hover: hover) and (pointer: fine)'
-  ).matches;
-
-
-
-/* =========================================================
-   ACTIVE PROJECT
-========================================================= */
-
-function setActive(item) {
-
-  items.forEach(
-    current => {
-
-      current.classList.toggle(
-        'is-active',
-        current === item
-      );
-
-    }
-  );
-
-
-  if (list) {
-
-    list.classList.toggle(
-      'has-active',
-      Boolean(item)
+const setWorkActive = item => {
+  workItems.forEach(current => {
+    const isActive = current === item;
+    current.classList.toggle('is-active', isActive);
+    current.querySelector('.work-category-button')?.setAttribute(
+      'aria-pressed',
+      String(isActive)
     );
+  });
 
-  }
+  workList?.classList.toggle('has-active', Boolean(item));
+};
 
-}
+if (workList && workItems.length) {
+  if (workIsMobile) {
+    workItems.forEach(item => {
+      item.addEventListener('focusin', () => setWorkActive(item));
 
+      const row = item.querySelector('.project-row');
+      row?.addEventListener('click', event => {
+        if (event.target.closest('.project-button')) return;
 
+        setWorkActive(item.classList.contains('is-active') ? null : item);
+      });
+    });
+  } else {
+    let previewTween;
+    let currentPreview = workPreviewImage?.getAttribute('src');
 
-/* =========================================================
-   PROJECT EVENTS
-========================================================= */
+    const positionIndicator = (item, animate = true) => {
+      const button = item.querySelector('.work-category-button');
+      if (!button || !workIndicator) return;
 
-items.forEach(
-  item => {
+      const offset = button.getBoundingClientRect().top
+        - workList.getBoundingClientRect().top;
 
-    /* Keyboard / focus */
+      if (workReduceMotion || !animate) {
+        gsap.set(workIndicator, { y: offset });
+      } else {
+        gsap.to(workIndicator, {
+          y: offset,
+          duration: 0.42,
+          ease: 'power3.out',
+          overwrite: true
+        });
+      }
+    };
 
-    item.addEventListener(
-      'focusin',
-      () => setActive(item)
-    );
+        const workPreviewFigure = document.querySelector('.work-preview');
+    const workPreviewVideo = document.querySelector('.work-preview-video');
+    const previewTargets = [workPreviewImage, workPreviewVideo].filter(Boolean);
 
+    const showPreviewMedia = (image, label, video) => {
+      workPreviewImage.src = image;
+      workPreviewImage.alt = `${label} project`;
 
-    /* Desktop hover */
+      if (video && workPreviewVideo) {
+        if (!workPreviewVideo.getAttribute('src')) workPreviewVideo.src = video;
+        workPreviewVideo.poster = image;
+        workPreviewFigure.classList.add('is-video');
+        workPreviewVideo.play().catch(() => {});
+      } else if (workPreviewVideo) {
+        workPreviewVideo.pause();
+        workPreviewFigure.classList.remove('is-video');
+      }
+    };
 
-    if (canHover) {
+    const activateWorkItem = item => {
+      setWorkActive(item);
+      positionIndicator(item);
 
-      item.addEventListener(
-        'mouseenter',
-        () => setActive(item)
-      );
+      const button = item.querySelector('.work-category-button');
+      const image = button?.dataset.preview;
+      const label = button?.dataset.label;
+      const video = button?.dataset.video;
+      if (!image || !workPreviewImage || image === currentPreview) return;
 
-    }
+      currentPreview = image;
+      previewTween?.kill();
 
+      if (workReduceMotion) {
+        showPreviewMedia(image, label, video);
+        return;
+      }
 
-    /* Mobile tap */
-
-    else {
-
-      const row = item.querySelector(
-        '.project-row'
-      );
-
-
-      row?.addEventListener(
-        'click',
-        event => {
-
-          if (
-            event.target.closest(
-              '.project-button'
-            )
-          ) {
-            return;
-          }
-
-
-          setActive(
-
-            item.classList.contains(
-              'is-active'
-            )
-              ? null
-              : item
-
+      previewTween = gsap.to(previewTargets, {
+        autoAlpha: 0,
+        y: 8,
+        duration: 0.2,
+        ease: 'power1.out',
+        onComplete: () => {
+          showPreviewMedia(image, label, video);
+          previewTween = gsap.fromTo(
+            previewTargets,
+            { autoAlpha: 0, y: 8, scale: 0.99 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.42,
+              ease: 'power2.out',
+              overwrite: true
+            }
           );
-
         }
-      );
+      });
+    };
 
-    }
+    workItems.forEach(item => {
+      const button = item.querySelector('.work-category-button');
+      if (!button) return;
 
+      button.addEventListener('mouseenter', () => activateWorkItem(item));
+      button.addEventListener('focus', () => activateWorkItem(item));
+      button.addEventListener('click', () => activateWorkItem(item));
+
+      const previewPreload = new Image();
+      previewPreload.src = button.dataset.preview;
+    });
+
+    const activeItem = workItems[0];
+    setWorkActive(activeItem);
+    positionIndicator(activeItem, false);
+
+    window.addEventListener('resize', () => {
+      const currentItem = workItems.find(item => item.classList.contains('is-active'))
+        ?? workItems[0];
+      positionIndicator(currentItem, false);
+    });
   }
-);
-
-
-
-/* =========================================================
-   RESET ACTIVE STATE
-========================================================= */
-
-if (canHover && list) {
-
-  list.addEventListener(
-    'mouseleave',
-    () => setActive(null)
-  );
-
 }
+
+
 /* =========================================================
    NAVBAR SECTION TRANSITION
 ========================================================= */
@@ -1371,3 +1354,7 @@ window.addEventListener('wheel', event => {
     wheelFrame = window.requestAnimationFrame(easeDesktopWheel);
   }
 }, { passive: false });
+
+window.addEventListener('load', () => {
+  ScrollTrigger.refresh();
+});

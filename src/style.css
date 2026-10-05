@@ -302,411 +302,6 @@ a {
 
 
 
-/* =========================================================
-   WORK
-========================================================= */
-
-.work {
-
-  width: 100%;
-
-  padding:
-    150px
-    40px
-    180px;
-
-}
-
-
-.work-container {
-
-  width: 100%;
-
-  max-width: 1125px;
-
-  margin: 0 auto;
-
-}
-
-
-.work-heading {
-
-  margin-bottom: 55px;
-
-}
-
-
-.work-heading span {
-
-  display: block;
-
-  margin-bottom: 18px;
-
-  font-size: 11px;
-
-  letter-spacing: .08em;
-
-  color: #777;
-
-}
-
-
-.work-heading h2 {
-
-  font-size:
-    clamp(
-      58px,
-      5.2vw,
-      82px
-    );
-
-  line-height: .9;
-
-  font-weight: 500;
-
-  letter-spacing: -.065em;
-
-}
-
-
-/* =========================================================
-   PROJECT LIST
-========================================================= */
-
-.project-list {
-
-  width: 100%;
-
-}
-
-
-.project-item {
-
-  position: relative;
-
-  overflow: hidden;
-
-  border-top:
-    1px solid
-    var(--line);
-
-  padding: 27px 0;
-
-}
-
-
-.project-item:last-child {
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-}
-
-
-.project-row {
-
-  display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    160px
-    285px;
-
-  align-items: start;
-
-  min-height: 45px;
-
-  cursor: pointer;
-
-}
-
-
-.project-name {
-
-  font-size: 48px;
-
-  line-height: .95;
-
-  font-weight: 500;
-
-  letter-spacing: -.055em;
-
-  color: #8b8b8b;
-
-  transition:
-    color .45s ease;
-
-}
-
-
-.project-button {
-
-  justify-self: start;
-
-  width: 150px;
-
-  height: 38px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  padding: 0 13px;
-
-  border:
-    1px solid
-    rgba(17,17,17,.16);
-
-  color: #999;
-
-  font-size: 12px;
-
-  transition:
-    color .4s ease,
-    border-color .4s ease;
-
-}
-
-
-.project-button .arrow {
-
-  font-size: 17px;
-
-  transition:
-    transform .5s var(--ease);
-
-}
-
-
-/* =========================================================
-   PROJECT PANEL
-========================================================= */
-
-.project-panel {
-
-  display: grid;
-
-  grid-template-rows: 0fr;
-
-  transition:
-    grid-template-rows
-    .7s
-    var(--ease);
-
-}
-
-
-.panel-inner {
-
-  min-height: 0;
-
-  overflow: hidden;
-
-}
-
-
-.panel-content {
-
-  min-height: 145px;
-
-  padding-top: 65px;
-
-}
-
-
-.project-details {
-
-  display: grid;
-
-  grid-template-columns:
-    1.9fr
-    .65fr
-    .65fr
-    1fr;
-
-  gap: 35px;
-
-  width:
-    calc(100% - 320px);
-
-  opacity: 0;
-
-  transform:
-    translateY(15px);
-
-  transition:
-    opacity .45s ease,
-    transform .7s var(--ease);
-
-}
-
-
-.detail span {
-
-  display: block;
-
-  margin-bottom: 8px;
-
-  font-size: 10px;
-
-  color: #777;
-
-  letter-spacing: .03em;
-
-}
-
-
-.detail p {
-
-  font-size: 15px;
-
-  line-height: 1.15;
-
-  letter-spacing: -.02em;
-
-}
-
-
-/* =========================================================
-   PROJECT IMAGE
-========================================================= */
-
-.project-image {
-
-  position: absolute;
-
-  top: 27px;
-
-  right: 0;
-
-  width: 285px;
-
-  height: 190px;
-
-  overflow: hidden;
-
-  opacity: 0;
-
-  transform:
-    translateY(15px)
-    scale(.97);
-
-  pointer-events: none;
-
-  transition:
-    opacity .5s ease,
-    transform .75s var(--ease);
-
-}
-
-
-.project-image img {
-
-  display: block;
-
-  width: 100%;
-
-  height: 100%;
-
-  object-fit: cover;
-
-}
-
-
-/* =========================================================
-   ACTIVE PROJECT
-========================================================= */
-
-.project-item.is-active
-.project-name {
-
-  color: #c83a31;
-
-}
-
-
-.project-item.is-active
-.project-button {
-
-  color: #111;
-
-  border-color: #111;
-
-}
-
-
-.project-item.is-active
-.project-button .arrow {
-
-  transform:
-    translateX(4px);
-
-}
-
-
-.project-item.is-active
-.project-panel {
-
-  grid-template-rows: 1fr;
-
-}
-
-
-.project-item.is-active
-.project-details {
-
-  opacity: 1;
-
-  transform:
-    translateY(0);
-
-  transition-delay:
-    .12s;
-
-}
-
-
-.project-item.is-active
-.project-image {
-
-  opacity: 1;
-
-  transform:
-    translateY(0)
-    scale(1);
-
-  transition-delay:
-    .08s;
-
-}
-
-
-/* dim other projects */
-
-.project-list.has-active
-.project-item:not(.is-active)
-.project-name {
-
-  color: #b5b5b5;
-
-}
-
-
-.project-list.has-active
-.project-item:not(.is-active)
-.project-button {
-
-  color: #bbb;
-
-  border-color:
-    rgba(17,17,17,.1);
-
-}
-
-
 /* ========================================
    SKILLSET
 ======================================== */
@@ -1545,87 +1140,7 @@ a {
     scroll-margin-top: 84px;
   }
 
-  /* WORK heading */
-  .work {
-    padding: 110px 20px 120px;
-  }
 
-  .work-heading {
-    margin-bottom: 38px;
-  }
-
-  .work-heading h2 {
-    font-size: clamp(46px, 13vw, 62px);
-    line-height: .92;
-    letter-spacing: -.065em;
-  }
-
-  /* One-column project row on phones. */
-  .project-item {
-    padding: 22px 0 26px;
-    overflow: visible;
-  }
-
-  .project-row {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-height: 0;
-  }
-
-  .project-name {
-    font-size: clamp(38px, 11vw, 52px);
-    line-height: .92;
-  }
-
-  .project-button {
-    width: 150px;
-    height: 36px;
-    font-size: 11px;
-  }
-
-  /* IMPORTANT: on mobile the image must be in normal document flow.
-     The desktop absolute positioning is what caused the overlap. */
-  .panel-content {
-    min-height: 0;
-    padding-top: 28px;
-  }
-
-  .project-image {
-    position: relative;
-    top: auto;
-    right: auto;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 10;
-    margin: 0 0 24px;
-    opacity: 0;
-    transform: translateY(15px) scale(.97);
-  }
-
-  .project-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .project-details {
-    width: 100%;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px 18px;
-    opacity: 0;
-    transform: translateY(15px);
-  }
-
-  .detail span {
-    margin-bottom: 7px;
-    font-size: 9px;
-  }
-
-  .detail p {
-    font-size: 14px;
-    line-height: 1.2;
-  }
 
 }
 
@@ -1648,10 +1163,6 @@ a {
     font-size: 15px !important;
   }
 
-  .work {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
 }
 
 
@@ -1751,171 +1262,7 @@ a {
   }
 
 
-  /* 3. WHAT DID I DO */
 
-  .work {
-    width: 100% !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    overflow: hidden !important;
-  }
-
-  .work-container {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .project-list {
-    width: 100% !important;
-    overflow: visible !important;
-  }
-
-  .project-item {
-    width: 100% !important;
-    overflow: visible !important;
-    box-sizing: border-box !important;
-  }
-
-  .project-row {
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 14px !important;
-  }
-
-  .project-name {
-    width: 100% !important;
-    font-size: clamp(34px, 10vw, 50px) !important;
-    line-height: .94 !important;
-  }
-
-  .project-button {
-    flex: 0 0 auto !important;
-    width: 150px !important;
-    height: 36px !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Panel uses normal flow on mobile. */
-  .project-panel {
-    display: block !important;
-    width: 100% !important;
-
-    max-height: 0 !important;
-    overflow: hidden !important;
-
-    visibility: hidden !important;
-    opacity: 0 !important;
-
-    transition:
-      max-height .6s var(--ease),
-      opacity .25s ease,
-      visibility 0s linear .6s !important;
-  }
-
-  .project-item.is-active .project-panel {
-    max-height: 900px !important;
-
-    visibility: visible !important;
-    opacity: 1 !important;
-
-    transition:
-      max-height .6s var(--ease),
-      opacity .25s ease,
-      visibility 0s linear 0s !important;
-  }
-
-  .panel-inner {
-    width: 100% !important;
-    min-height: 0 !important;
-    overflow: visible !important;
-  }
-
-  .panel-content {
-    width: 100% !important;
-    min-height: 0 !important;
-    padding-top: 28px !important;
-
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  .project-image {
-    position: relative !important;
-    top: auto !important;
-    right: auto !important;
-
-    width: 100% !important;
-    height: auto !important;
-
-    aspect-ratio: 16 / 10 !important;
-
-    margin: 0 0 24px !important;
-
-    overflow: hidden !important;
-    opacity: 0 !important;
-
-    transform:
-      translateY(15px)
-      scale(.97) !important;
-
-    pointer-events: none !important;
-  }
-
-  .project-item.is-active .project-image {
-    opacity: 1 !important;
-    transform:
-      translateY(0)
-      scale(1) !important;
-  }
-
-  .project-image img {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-  }
-
-  .project-details {
-    width: 100% !important;
-
-    display: grid !important;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      minmax(0, 1fr) !important;
-
-    gap:
-      24px
-      18px !important;
-
-    opacity: 0 !important;
-
-    transform:
-      translateY(15px) !important;
-  }
-
-  .project-item.is-active .project-details {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-  }
-
-  .detail {
-    min-width: 0 !important;
-  }
-
-  .detail span {
-    margin-bottom: 7px !important;
-    font-size: 9px !important;
-  }
-
-  .detail p {
-    margin: 0 !important;
-    font-size: 13px !important;
-    line-height: 1.25 !important;
-    overflow-wrap: anywhere !important;
-  }
 }
 
 
@@ -1942,18 +1289,6 @@ a {
     font-size: 13px !important;
   }
 
-  .project-name {
-    font-size: clamp(31px, 10vw, 44px) !important;
-  }
-
-  .project-details {
-    grid-template-columns: 1fr !important;
-    gap: 20px !important;
-  }
-
-  .detail p {
-    font-size: 12px !important;
-  }
 }
 
 
@@ -2176,4 +1511,1007 @@ a {
   .stealth-overlay.is-active .stealth-content {
     transform: none;
   }
+}
+/* =========================================================
+   WORK
+========================================================= */
+
+.work {
+
+  width: 100%;
+
+  padding:
+    150px
+    40px
+    180px;
+
+}
+
+
+.work-container {
+
+  width: 100%;
+
+  max-width: 1125px;
+
+  margin: 0 auto;
+
+}
+
+
+.work-heading {
+
+  margin-bottom: 55px;
+
+}
+
+
+.work-heading span {
+
+  display: block;
+
+  margin-bottom: 18px;
+
+  font-size: 11px;
+
+  letter-spacing: .08em;
+
+  color: #777;
+
+}
+
+
+.work-heading h2 {
+
+  font-size:
+    clamp(
+      29px,
+      2.6vw,
+      41px
+    );
+
+  line-height: .9;
+
+  font-weight: 500;
+
+  letter-spacing: -.065em;
+
+}
+
+
+/* =========================================================
+   PROJECT LIST
+========================================================= */
+
+.project-list {
+
+  width: 100%;
+
+}
+
+
+.project-item {
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-top:
+    1px solid
+    var(--line);
+
+  padding: 27px 0;
+
+}
+
+
+.project-item:last-child {
+
+  border-bottom:
+    1px solid
+    var(--line);
+
+}
+
+
+.project-row {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    160px
+    285px;
+
+  align-items: start;
+
+  min-height: 45px;
+
+  cursor: pointer;
+
+}
+
+
+.project-name {
+
+  font-size: 48px;
+
+  line-height: .95;
+
+  font-weight: 500;
+
+  letter-spacing: -.055em;
+
+  color: #8b8b8b;
+
+  transition:
+    color .45s ease;
+
+}
+
+
+.project-button {
+
+  justify-self: start;
+
+  width: 150px;
+
+  height: 38px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 13px;
+
+  border:
+    1px solid
+    rgba(17,17,17,.16);
+
+  color: #999;
+
+  font-size: 12px;
+
+  transition:
+    color .4s ease,
+    border-color .4s ease;
+
+}
+
+
+.project-button .arrow {
+
+  font-size: 17px;
+
+  transition:
+    transform .5s var(--ease);
+
+}
+
+
+/* =========================================================
+   PROJECT PANEL
+========================================================= */
+
+.project-panel {
+
+  display: grid;
+
+  grid-template-rows: 0fr;
+
+  transition:
+    grid-template-rows
+    .7s
+    var(--ease);
+
+}
+
+
+.panel-inner {
+
+  min-height: 0;
+
+  overflow: hidden;
+
+}
+
+
+.panel-content {
+
+  min-height: 145px;
+
+  padding-top: 65px;
+
+}
+
+
+.project-details {
+
+  display: grid;
+
+  grid-template-columns:
+    1.9fr
+    .65fr
+    .65fr
+    1fr;
+
+  gap: 35px;
+
+  width:
+    calc(100% - 320px);
+
+  opacity: 0;
+
+  transform:
+    translateY(15px);
+
+  transition:
+    opacity .45s ease,
+    transform .7s var(--ease);
+
+}
+
+
+.detail span {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 10px;
+
+  color: #777;
+
+  letter-spacing: .03em;
+
+}
+
+
+.detail p {
+
+  font-size: 15px;
+
+  line-height: 1.15;
+
+  letter-spacing: -.02em;
+
+}
+
+
+/* =========================================================
+   PROJECT IMAGE
+========================================================= */
+
+.project-image {
+
+  position: absolute;
+
+  top: 27px;
+
+  right: 0;
+
+  width: 285px;
+
+  height: 190px;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transform:
+    translateY(15px)
+    scale(.97);
+
+  pointer-events: none;
+
+  transition:
+    opacity .5s ease,
+    transform .75s var(--ease);
+
+}
+
+
+.project-image img {
+
+  display: block;
+
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+}
+
+
+/* =========================================================
+   ACTIVE PROJECT
+========================================================= */
+
+.project-item.is-active
+.project-name {
+
+  color: #c83a31;
+
+}
+
+
+.project-item.is-active
+.project-button {
+
+  color: #111;
+
+  border-color: #111;
+
+}
+
+
+.project-item.is-active
+.project-button .arrow {
+
+  transform:
+    translateX(4px);
+
+}
+
+
+.project-item.is-active
+.project-panel {
+
+  grid-template-rows: 1fr;
+
+}
+
+
+.project-item.is-active
+.project-details {
+
+  opacity: 1;
+
+  transform:
+    translateY(0);
+
+  transition-delay:
+    .12s;
+
+}
+
+
+.project-item.is-active
+.project-image {
+
+  opacity: 1;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+  transition-delay:
+    .08s;
+
+}
+
+
+/* dim other projects */
+
+.project-list.has-active
+.project-item:not(.is-active)
+.project-name {
+
+  color: #b5b5b5;
+
+}
+
+
+.project-list.has-active
+.project-item:not(.is-active)
+.project-button {
+
+  color: #bbb;
+
+  border-color:
+    rgba(17,17,17,.1);
+
+}
+
+
+
+
+@media (max-width: 700px) {
+  /* WORK heading */
+  .work {
+    padding: 110px 20px 120px;
+  }
+
+  .work-heading {
+    margin-bottom: 38px;
+  }
+
+  .work-heading h2 {
+    font-size: clamp(23px, 6.5vw, 31px);
+    line-height: .92;
+    letter-spacing: -.065em;
+  }
+
+  /* One-column project row on phones. */
+  .project-item {
+    padding: 22px 0 26px;
+    overflow: visible;
+  }
+
+  .project-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  .project-name {
+    font-size: clamp(38px, 11vw, 52px);
+    line-height: .92;
+  }
+
+  .project-button {
+    width: 150px;
+    height: 36px;
+    font-size: 11px;
+  }
+
+  /* IMPORTANT: on mobile the image must be in normal document flow.
+     The desktop absolute positioning is what caused the overlap. */
+  .panel-content {
+    min-height: 0;
+    padding-top: 28px;
+  }
+
+  .project-image {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    margin: 0 0 24px;
+    opacity: 0;
+    transform: translateY(15px) scale(.97);
+  }
+
+  .project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-details {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 18px;
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  .detail span {
+    margin-bottom: 7px;
+    font-size: 9px;
+  }
+
+  .detail p {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+}
+
+@media (max-width: 380px) {
+  .work {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  /* 3. WHAT DID I DO */
+
+  .work {
+    width: 100% !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .work-container {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .project-list {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  .project-item {
+    width: 100% !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  .project-row {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  .project-name {
+    width: 100% !important;
+    font-size: clamp(34px, 10vw, 50px) !important;
+    line-height: .94 !important;
+  }
+
+  .project-button {
+    flex: 0 0 auto !important;
+    width: 150px !important;
+    height: 36px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Panel uses normal flow on mobile. */
+  .project-panel {
+    display: block !important;
+    width: 100% !important;
+
+    max-height: 0 !important;
+    overflow: hidden !important;
+
+    visibility: hidden !important;
+    opacity: 0 !important;
+
+    transition:
+      max-height .6s var(--ease),
+      opacity .25s ease,
+      visibility 0s linear .6s !important;
+  }
+
+  .project-item.is-active .project-panel {
+    max-height: 900px !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    transition:
+      max-height .6s var(--ease),
+      opacity .25s ease,
+      visibility 0s linear 0s !important;
+  }
+
+  .panel-inner {
+    width: 100% !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .panel-content {
+    width: 100% !important;
+    min-height: 0 !important;
+    padding-top: 28px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .project-image {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+
+    width: 100% !important;
+    height: auto !important;
+
+    aspect-ratio: 16 / 10 !important;
+
+    margin: 0 0 24px !important;
+
+    overflow: hidden !important;
+    opacity: 0 !important;
+
+    transform:
+      translateY(15px)
+      scale(.97) !important;
+
+    pointer-events: none !important;
+  }
+
+  .project-item.is-active .project-image {
+    opacity: 1 !important;
+    transform:
+      translateY(0)
+      scale(1) !important;
+  }
+
+  .project-image img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .project-details {
+    width: 100% !important;
+
+    display: grid !important;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr) !important;
+
+    gap:
+      24px
+      18px !important;
+
+    opacity: 0 !important;
+
+    transform:
+      translateY(15px) !important;
+  }
+
+  .project-item.is-active .project-details {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+
+  .detail {
+    min-width: 0 !important;
+  }
+
+  .detail span {
+    margin-bottom: 7px !important;
+    font-size: 9px !important;
+  }
+
+  .detail p {
+    margin: 0 !important;
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .project-name {
+    font-size: clamp(31px, 10vw, 44px) !important;
+  }
+
+  .project-details {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .detail p {
+    font-size: 12px !important;
+  }
+}
+
+
+/* =========================================================
+   SELECTED WORK — DESKTOP CATEGORY PREVIEW
+========================================================= */
+
+.work-category-button,
+.work-active-indicator,
+.work-preview,
+.work-heading-desktop {
+  display: none;
+}
+
+@media (min-width: 701px) {
+  .work {
+    padding: 116px 32px 140px;
+  }
+
+  .work-container {
+    width: min(900px, 100%);
+    max-width: none;
+    margin: 0 auto;
+  }
+
+  .work-heading {
+    margin-bottom: 40px;
+  }
+
+  .work-heading span,
+  .work-heading-mobile {
+    display: none;
+  }
+
+  .work-heading-desktop {
+    display: block;
+    margin: 0;
+    font-size: clamp(29px, 2.6vw, 41px);
+    line-height: 0.95;
+    font-weight: 400;
+    letter-spacing: -0.055em;
+  }
+
+  .work-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.78fr) minmax(0, 1.22fr);
+    align-items: stretch;
+    gap: clamp(34px, 5vw, 64px);
+  }
+
+  .project-list {
+    position: relative;
+    display: grid;
+    grid-template-rows: repeat(4, minmax(0, 1fr));
+    align-self: stretch;
+  }
+
+  .project-item,
+  .project-item:last-child {
+    width: 100%;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+  }
+
+  .project-item:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .project-row,
+  .project-panel {
+    display: none;
+  }
+
+  .work-category-button {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    align-items: center;
+    gap: 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #969691;
+    cursor: pointer;
+    text-align: left;
+    transition: color 260ms ease;
+  }
+
+  .project-item.is-active .work-category-button {
+    color: #111;
+  }
+
+  .project-list.has-active .project-item:not(.is-active) .work-category-button {
+    color: #969691;
+  }
+
+  .work-category-number {
+    flex: 0 0 auto;
+    color: #a3a39e;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    transition: color 260ms ease;
+  }
+
+  .project-item.is-active .work-category-number {
+    color: #555550;
+  }
+
+  .work-category-label {
+    font-size: clamp(15px, 1.325vw, 17px);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+  }
+
+  .work-category-button:focus-visible {
+    outline: 1px solid currentColor;
+    outline-offset: 4px;
+  }
+
+  .work-active-indicator {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: -14px;
+    width: 2px;
+    height: 25%;
+    background: #111;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  .work-preview {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    align-self: start;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #e7e7e2;
+  }
+
+  .work-preview-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@media (min-width: 701px) and (prefers-reduced-motion: reduce) {
+  .work-category-button,
+  .work-category-number {
+    transition: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .work-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .work-preview {
+    display: block;
+    position: relative;
+    order: -1;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    align-self: stretch;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    background: #e7e7e2;
+  }
+
+  .work-preview-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .project-list {
+    display: grid;
+    grid-template-rows: repeat(4, clamp(56px, 6vw, 72px));
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 700px) {
+  .work-category-button {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    align-items: center;
+    gap: 16px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #969691;
+    cursor: pointer;
+    text-align: left;
+    transition: color 260ms ease;
+  }
+
+  .project-item.is-active .work-category-button {
+    color: #111;
+  }
+
+  .project-list.has-active .project-item:not(.is-active) .work-category-button {
+    color: #969691;
+  }
+
+  .work-category-number {
+    flex: 0 0 auto;
+    color: #a3a39e;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    transition: color 260ms ease;
+  }
+
+  .project-item.is-active .work-category-number {
+    color: #555550;
+  }
+
+  .work-category-label {
+    font-size: clamp(15px, 1.325vw, 17px);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+  }
+
+  .project-item,
+  .project-item:last-child {
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .project-item:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .project-row,
+  .project-panel,
+  .work-active-indicator {
+    display: none !important;
+  }
+
+  .project-item.is-active::before,
+  .project-list:not(.has-active) .project-item:first-child::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -14px;
+    width: 2px;
+    background: #111;
+    content: "";
+  }
+
+  .project-list:not(.has-active) .project-item:first-child .work-category-button {
+    color: #111;
+  }
+
+  .project-list:not(.has-active) .project-item:first-child .work-category-number {
+    color: #555550;
+  }
+}
+
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .work-category-button,
+  .work-category-number {
+    transition: none;
+  }
+}
+
+/* SELECTED WORK: smaller content block (desktop/tablet) */
+@media (min-width: 701px) {
+  .work-container {
+    width: min(640px, 100%);   /* was 900px, so the side gaps get bigger */
+  }
+
+  .work-layout {
+    gap: clamp(40px, 6vw, 86px);  /* more space between list and square, like picture 1 */
+  }
+
+  .work-category-button {
+    gap: 12px;
+  }
+
+  .work-category-number {
+    font-size: 9px;
+  }
+
+  .work-category-label {
+    font-size: 12px;           /* was 15-17px */
+  }
+
+  .work-active-indicator {
+    left: -10px;
+  }
+}
+
+/* SELECTED WORK: video preview */
+.work-preview-video {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.work-preview.is-video .work-preview-video {
+  display: block;
+}
+
+.work-preview.is-video .work-preview-image {
+  display: none;
 }
