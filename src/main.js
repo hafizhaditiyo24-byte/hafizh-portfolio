@@ -875,78 +875,95 @@ if (skillList) {
   );
 
 
-  const reduceMotion = window
-    .matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    )
-    .matches;
-
-
-  if (reduceMotion) {
-
-    gsap.set(rows, { autoAlpha: 1, x: 0 });
-
-  } else if (rows.length) {
-
+  if (rows.length) {
     const skillSection = rows[0].closest("#skillset");
+    const skillsetContent = skillSection.querySelector(
+      ".skillset-container"
+    );
+    const skillAnimationMedia = gsap.matchMedia();
 
-    const dist = () =>
-      window.innerWidth < 700
-        ? 60
-        : 160;
+    skillAnimationMedia.add({
+      isMobile: "(max-width: 699px)",
+      reduceMotion: "(prefers-reduced-motion: reduce)"
+    }, ({ conditions }) => {
+      if (conditions.reduceMotion) {
+        gsap.set(rows, { autoAlpha: 1, x: 0 });
+        return;
+      }
 
-    const DUR = 1;
-
-    rows.forEach((row) => {
-      const rowTopInSection = () =>
-        row.getBoundingClientRect().top
-        - skillSection.getBoundingClientRect().top;
-
-      const rowTopFromSectionBottom = () =>
-        skillSection.getBoundingClientRect().bottom
-        - row.getBoundingClientRect().top;
-
-      gsap.fromTo(
-        row,
-        { autoAlpha: 0, x: dist },
-        {
-          autoAlpha: 1,
-          x: 0,
-          duration: DUR,
-          ease: "power2.out",
+      if (conditions.isMobile) {
+        const revealTimeline = gsap.timeline({
           scrollTrigger: {
             trigger: skillSection,
-            start: () => `top+=${rowTopInSection()}px 95%`,
-            end: () => `bottom-=${rowTopFromSectionBottom()}px 60%`,
+            start: "top 95%",
+            end: "bottom 40%",
+            scrub: true
+          }
+        });
+
+        revealTimeline.fromTo(
+          rows,
+          { autoAlpha: 0, x: 30 },
+          {
+            autoAlpha: 1,
+            x: 0,
+            duration: 0.45,
+            ease: "none",
+            stagger: 0.12
+          },
+          0
+        );
+      } else {
+        const dist = () => 160;
+        const DUR = 1;
+
+        rows.forEach((row) => {
+          const rowTopInSection = () =>
+            row.getBoundingClientRect().top
+            - skillSection.getBoundingClientRect().top;
+
+          const rowTopFromSectionBottom = () =>
+            skillSection.getBoundingClientRect().bottom
+            - row.getBoundingClientRect().top;
+
+          gsap.fromTo(
+            row,
+            { autoAlpha: 0, x: dist },
+            {
+              autoAlpha: 1,
+              x: 0,
+              duration: DUR,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: skillSection,
+                start: () => `top+=${rowTopInSection()}px 95%`,
+                end: () => `bottom-=${rowTopFromSectionBottom()}px 60%`,
+                scrub: true,
+                invalidateOnRefresh: true
+              }
+            }
+          );
+        });
+      }
+
+      gsap.fromTo(
+        skillsetContent,
+        { autoAlpha: 1, y: 0 },
+        {
+          autoAlpha: 0,
+          x: -20,
+          y: -144,
+          ease: "none",
+          scrollTrigger: {
+            trigger: skillSection,
+            start: "bottom 80%",
+            end: "bottom 20%",
             scrub: true,
             invalidateOnRefresh: true
           }
         }
       );
     });
-
-    const skillsetContent = skillSection.querySelector(
-      ".skillset-container"
-    );
-
-    gsap.fromTo(
-      skillsetContent,
-      { autoAlpha: 1, y: 0 },
-      {
-        autoAlpha: 0,
-        x: -20,
-        y: -144,
-        ease: "none",
-        scrollTrigger: {
-          trigger: skillSection,
-          start: "bottom 80%",
-          end: "bottom 20%",
-          scrub: true,
-          invalidateOnRefresh: true
-        }
-      }
-    );
-
   }
 
 }
