@@ -159,45 +159,222 @@ a {
    HERO
 ========================================================= */
 
+/* =========================================================
+   HERO
+========================================================= */
+
 .hero {
-
   min-height: 100vh;
-
   width: 100%;
-
-  padding:
-    160px
-    40px
-    80px;
+  padding: 220px 40px 80px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
+  box-sizing: border-box;
 }
 
-
-.hero-svg {
-
+.hero-intro {
   width: 100%;
-
   max-width: 1200px;
-
   margin: 0 auto;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.hero-intro-text {
+  display: flex;
+  flex-direction: column;
+
+  font-size: clamp(48px, 7vw, 108px);
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  font-weight: 500;
+
+  text-align: center;
+}
+
+.hero-line-1,
+.hero-line-2,
+.hero-line-3 {
+  margin-left: 0;
 }
 
 
-.portfolio-art {
+/* =========================================================
+   WORK GALLERY BUTTON
+========================================================= */
 
-  display: block;
+.hero-work-button {
+  margin-top: 48px;
+}
 
+.learn-btn {
+  --btn-bg: #111;
+  --btn-size: 48px;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  height: var(--btn-size);
+  padding-right: 35px;
+
+  color: #111;
+  text-decoration: none;
+  isolation: isolate;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.learn-btn::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+
+  top: 0;
+  left: 0;
+
+  width: var(--btn-size);
+  height: 100%;
+
+  border-radius: 999px;
+  background: var(--btn-bg);
+
+  transition: width .6s cubic-bezier(.22, 1, .36, 1);
+}
+
+.learn-btn__icon {
+  position: relative;
+  flex: 0 0 var(--btn-size);
+
+  width: var(--btn-size);
+  height: var(--btn-size);
+
+  color: #fff;
+}
+
+.learn-btn__icon svg {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  transition:
+    opacity .3s ease,
+    transform .6s cubic-bezier(.22, 1, .36, 1);
+}
+
+.learn-btn__chevron {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.learn-btn__arrow {
+  opacity: 0;
+  transform: translateX(-8px);
+}
+
+.learn-btn__label {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  transition: color .35s ease;
+}
+
+.learn-btn:hover::before,
+.learn-btn:focus-visible::before {
   width: 100%;
+}
 
-  height: auto;
+.learn-btn:hover .learn-btn__chevron,
+.learn-btn:focus-visible .learn-btn__chevron {
+  opacity: 0;
+  transform: translateX(10px);
+}
 
+.learn-btn:hover .learn-btn__arrow,
+.learn-btn:focus-visible .learn-btn__arrow {
+  opacity: 1;
+  transform: translateX(6px);
+}
+
+.learn-btn:hover .learn-btn__label,
+.learn-btn:focus-visible .learn-btn__label {
+  color: #fff;
+}
+
+.learn-btn:focus-visible {
+  outline: 1px solid #111;
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+.learn-btn:active::before {
+  filter: brightness(1.25);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 120px 20px 60px;
+  }
+
+  .hero-intro-text {
+    font-size: clamp(42px, 12vw, 72px);
+    line-height: 0.94;
+  }
+
+  .hero-work-button {
+    margin-top: 36px;
+  }
+}
+
+@media (hover: none) {
+  .learn-btn::before {
+    width: 100%;
+  }
+
+  .learn-btn__chevron {
+    opacity: 0;
+  }
+
+  .learn-btn__arrow {
+    opacity: 1;
+    transform: translateX(6px);
+  }
+
+  .learn-btn__label {
+    color: #fff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learn-btn::before,
+  .learn-btn__icon svg,
+  .learn-btn__label {
+    transition: none;
+  }
 }
 
 

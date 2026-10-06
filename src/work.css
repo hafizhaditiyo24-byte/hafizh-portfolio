@@ -1,0 +1,268 @@
+:root {
+  --bg: #f5f5f5;
+  --ink: #17171a;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+
+  overflow: hidden;
+
+  background: var(--bg);
+  color: var(--ink);
+
+  font:
+    500 14px/1.2
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  letter-spacing: -0.01em;
+}
+
+
+/* =========================================================
+   GALLERY FIELD
+========================================================= */
+
+#stage {
+  position: fixed;
+  inset: 0;
+
+  overflow: hidden;
+
+  cursor: grab;
+  touch-action: none;
+
+  -webkit-user-select: none;
+  user-select: none;
+
+  outline: none;
+}
+
+#stage.drag {
+  cursor: grabbing;
+}
+
+
+/* =========================================================
+   TILE
+========================================================= */
+
+.tile {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  overflow: hidden;
+
+  border-radius: 3px;
+
+  will-change: transform;
+
+  background: transparent;
+
+  contain: layout paint;
+}
+
+
+.tile img,
+.tile video {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+
+  display: block;
+
+  pointer-events: none;
+
+  will-change: transform;
+
+  transition:
+    transform
+    0.6s
+    cubic-bezier(.2, .7, .2, 1);
+}
+
+
+.tile:hover img,
+.tile:hover video {
+  transform: scale(1.05);
+}
+
+
+/* =========================================================
+   TILE LABEL
+========================================================= */
+
+.tile span {
+  position: absolute;
+
+  left: 10px;
+  bottom: 8px;
+
+  font-size: 12px;
+
+  color: #fff;
+
+  opacity: 0.85;
+}
+
+.tile.ok span {
+  display: none;
+}
+
+
+/* =========================================================
+   HAFIZH.SPACE
+========================================================= */
+
+.work-home-link {
+  position: fixed;
+
+  top: 20px;
+  left: 20px;
+
+  z-index: 100;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  width: max-content;
+  height: auto;
+
+  padding: 12px 18px;
+
+  background: #000;
+  color: #fff;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  line-height: 1;
+  letter-spacing: -0.02em;
+
+  text-decoration: none;
+  white-space: nowrap;
+
+  pointer-events: auto;
+
+  cursor: pointer;
+
+  mix-blend-mode: normal;
+
+  -webkit-user-select: none;
+  user-select: none;
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s cubic-bezier(.2, .7, .2, 1);
+}
+
+
+.work-home-link:hover {
+  opacity: 0.85;
+}
+
+
+.work-home-link:active {
+  transform: scale(0.97);
+}
+
+
+/* =========================================================
+   HINT
+========================================================= */
+
+#hint {
+  position: fixed;
+
+  left: 50%;
+  bottom: 0;
+
+  z-index: 10;
+
+  transform: translateX(-50%);
+
+  white-space: nowrap;
+
+  color: #fff;
+
+  mix-blend-mode: difference;
+
+  padding-bottom:
+    calc(
+      20px +
+      env(
+        safe-area-inset-bottom,
+        0px
+      )
+    );
+
+  transition:
+    opacity
+    0.6s ease;
+
+  pointer-events: none;
+}
+
+
+#hint.hide {
+  opacity: 0;
+}
+
+
+/* =========================================================
+   FOCUS
+========================================================= */
+
+#stage:focus-visible {
+  box-shadow:
+    inset
+    0 0 0 2px
+    var(--ink);
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .tile img,
+  .tile video,
+  .work-home-link,
+  #hint {
+    transition: none;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+  .work-home-link {
+    top: 16px;
+    left: 16px;
+
+    padding: 10px 14px;
+
+    font-size: 15px;
+  }
+}

@@ -1,0 +1,4770 @@
+diff --git a/src/main.js b/src/main.js
+index dd353fa..658ef97 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -1,4 +1,5 @@
+ import './style.css'
++
+ import gsap from "gsap";
+ import { ScrollTrigger } from "gsap/ScrollTrigger";
+ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+@@ -20,530 +21,274 @@ console.log("ScrollTrigger LOADED:", ScrollTrigger);
+ 
+ const projects = [
+   {
+-    name: 'SOCIAL MEDIA',
+-    category: 'Social Media',
+-    image: './images/SOCIAL-MEDIA.png',
+-    role: 'Photo · Video · Managing',
+-    timeline: '12 Months',
+-    year: '2024–2025',
+-    team: 'Solo',
+-    href: '#'
++    title: "Social Media",
++    category: "Social Media",
++    year: "2025",
++    image: "/images/work/social-media.png",
++    description:
++      "Social media content, promotional campaigns, visual assets, and digital communication."
+   },
+   {
+-    name: 'PRINT',
+-    category: 'Print',
+-    image: './images/PRINT.png',
+-    role: 'Poster · Menu · Signage',
+-    timeline: '12 Months',
+-    year: '2024–2025',
+-    team: 'Solo',
+-    href: '#'
++    title: "Print",
++    category: "Print",
++    year: "2025",
++    image: "/images/work/print.png",
++    description:
++      "Posters, banners, menus, signage, and other printed promotional materials."
+   },
+   {
+-    name: 'LOGO',
+-    category: 'Logo',
+-    image: './images/LOGO.png',
+-    role: 'Re-Design · Visual Identity',
+-    timeline: '12 Months',
+-    year: '2024–2025',
+-    team: 'Solo',
+-    href: '#'
++    title: "Logo",
++    category: "Logo",
++    year: "2025",
++    image: "/images/work/logo.png",
++    description:
++      "Logo design and visual identity development for selected brands."
+   },
+   {
+-    name: 'VIDEO',
+-    category: 'Video',
+-    video: './images/Video.mp4',
+-    role: 'Digital Content · Campaign',
+-    timeline: '12 Months',
+-    year: '2024–2025',
+-    team: 'Solo',
+-    href: '#'
++    title: "Video",
++    category: "Video",
++    year: "2025",
++    image: "/images/work/video.png",
++    description:
++      "Short-form video, motion graphics, promotional video, and social media content."
+   }
+ ];
+ 
+ 
+ /* =========================================================
+-   SOFTWARE DATA
++   TOOLS / SKILLS DATA
+ ========================================================= */
+ 
+-const tools = [
+-  {
+-    name: 'PHOTOSHOP',
+-    image: './images/PHOTOSHOP.png',
+-    alt: 'Photoshop'
+-  },
+-
+-  {
+-    name: 'ILLUSTRATOR',
+-    image: './images/ILLUSTRATOR.png',
+-    alt: 'Illustrator'
+-  },
+-
+-  {
+-    name: 'AFTER EFFECTS',
+-    image: './images/AFTER EFFECT.png',
+-    alt: 'After Effects'
+-  },
+-
+-  {
+-    name: 'PREMIERE PRO',
+-    image: './images/PREMIER PRO.png',
+-    alt: 'Premiere Pro'
+-  },
+-
+-  {
+-    name: 'LIGHTROOM',
+-    image: './images/LIGHTROOM.png',
+-    alt: 'Lightroom'
+-  }
++const skills = [
++  [
++    "Graphic Design",
++    "Visual identity, layout, typography, campaign design, packaging, and promotional materials."
++  ],
++  [
++    "Content Creation",
++    "Social media content, photography, short-form video, and digital campaigns."
++  ],
++  [
++    "Motion Graphics",
++    "2D animation, motion design, transitions, and promotional visual systems."
++  ],
++  [
++    "Branding",
++    "Logo development, visual systems, color direction, typography, and brand applications."
++  ]
+ ];
+ 
++const tools = [
++  "Photoshop",
++  "Illustrator",
++  "After Effects",
++  "Premiere Pro",
++  "Figma",
++  "Blender"
++];
+ 
+-/* Two tool sequences make each marquee group wider than its viewport. */
+-const toolsMarkup = Array(2)
+-  .fill(tools)
+-  .flat()
+-  .map(tool => `
+-    <div class="tool">
+ 
+-      <img
+-        src="${tool.image}"
+-        alt="${tool.alt}"
+-      >
++/* =========================================================
++   DOM
++========================================================= */
+ 
+-      <span>
+-        ${tool.name}
+-      </span>
++const app = document.querySelector("#app");
+ 
+-    </div>
+-  `)
+-  .join('');
++if (!app) {
++  throw new Error("#app was not found.");
++}
+ 
+ 
+ /* =========================================================
+-   PROJECT HTML
++   PROJECT MARKUP
+ ========================================================= */
+ 
+ const projectItems = projects
+-  .map((project, index) => `
+-    <article class="project-item">
+-      <div class="project-row">
+-        <div class="project-name">${project.name}</div>
+-        <a href="${project.href}" class="project-button">
+-          <span>Jump To Project</span>
+-          <span class="arrow">→</span>
+-        </a>
+-      </div>
+-
++  .map(
++    (project, i) => `
+       <button
+-        class="work-category-button"
++        class="project-row"
+         type="button"
+-        aria-pressed="false"
+-        data-preview="${project.image}"
+-        data-label="${project.category}"
+-        data-video="${project.video ?? ''}"
+-      >
+-        <span class="work-category-number">${String(index + 1).padStart(2, '0')}</span>
+-        <span class="work-category-label">${project.category}</span>
+-      </button>
+-
+-      <div class="project-panel">
+-        <div class="panel-inner">
+-          <div class="panel-content">
+-            <div class="project-image">
+-              <img src="${project.image}" alt="${project.name} project" loading="lazy">
+-            </div>
+-            <div class="project-details">
+-              <div class="detail"><span>ROLE</span><p>${project.role}</p></div>
+-              <div class="detail"><span>TIMELINE</span><p>${project.timeline}</p></div>
+-              <div class="detail"><span>YEAR</span><p>${project.year}</p></div>
+-              <div class="detail"><span>TEAM</span><p>${project.team}</p></div>
+-            </div>
+-          </div>
+-        </div>
+-      </div>
+-    </article>
+-  `)
+-  .join('');
+-
+-
+-/* =========================================================
+-   FOOTER
+-========================================================= */
+-
+-const MARQUEE_TEXT = "Let's work together";
+-
+-const heroSVG = `
+-  <svg class="portfolio-art" viewBox="0 0 866 180" role="img" aria-label="PORTFOLIO">
+-    <defs>
+-      <linearGradient id="portfolio-stripe" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="486" y2="0" spreadMethod="repeat">
+-        <stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#000"/><stop offset="1" stop-color="#fff"/>
+-      </linearGradient>
+-      <filter id="portfolio-material" color-interpolation-filters="sRGB" x="-10%" y="-30%" width="120%" height="160%">
+-        <feGaussianBlur in="SourceAlpha" stdDeviation="4.5"/>
+-        <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/>
+-        <feBlend in="SourceGraphic" mode="overlay"/>
+-      </filter>
+-      <filter id="portfolio-color" color-interpolation-filters="sRGB" x="-20%" y="-50%" width="140%" height="200%">
+-        <feGaussianBlur stdDeviation="7.3" result="b"/>
+-        <feTurbulence type="fractalNoise" baseFrequency="4" numOctaves="1" seed="3"/>
+-        <feColorMatrix values="1 0 0 0 0  1 0 0 0 0  1 0 0 0 0  0 0 0 0 1" result="n"/>
+-        <feComposite in="b" in2="n" operator="arithmetic" k1=".35" k2="1" k3="0" k4="-.175"/>
+-        <feComponentTransfer>
+-          <feFuncR type="table" tableValues="1.000 1.000 1.000 1.000 0.310 0.122 0.039 0.020 0.008"/>
+-          <feFuncG type="table" tableValues="0.545 0.231 0.353 0.945 0.816 0.525 0.235 0.059 0.024"/>
+-          <feFuncB type="table" tableValues="0.902 0.478 0.122 0.816 1.000 1.000 0.769 0.420 0.212"/>
+-        </feComponentTransfer>
+-      </filter>
+-    </defs>
+-    <g filter="url(#portfolio-color)"><path d="M119.9 72.2Q119.9 81.6 115.7 89.0Q111.4 96.3 103.4 100.4Q95.4 104.4 84.5 104.4H60.3V138.6H40.0V41.4H83.7Q101.1 41.4 110.5 49.5Q119.9 57.5 119.9 72.2ZM99.4 72.6Q99.4 57.2 81.4 57.2H60.3V88.8H81.9Q90.3 88.8 94.9 84.6Q99.4 80.4 99.4 72.6ZM225.9 89.6Q225.9 104.8 219.9 116.3Q213.9 127.8 202.8 133.9Q191.6 140.0 176.7 140.0Q153.8 140.0 140.8 126.5Q127.8 113.0 127.8 89.6Q127.8 66.2 140.8 53.1Q153.7 40.0 176.8 40.0Q199.9 40.0 212.9 53.2Q225.9 66.5 225.9 89.6ZM205.2 89.6Q205.2 73.9 197.7 64.9Q190.3 56.0 176.8 56.0Q163.2 56.0 155.7 64.9Q148.3 73.7 148.3 89.6Q148.3 105.6 155.9 114.8Q163.5 124.0 176.7 124.0Q190.3 124.0 197.8 115.0Q205.2 106.1 205.2 89.6ZM305.3 138.6 282.8 101.7H258.9V138.6H238.6V41.4H287.1Q304.5 41.4 313.9 48.9Q323.4 56.4 323.4 70.4Q323.4 80.6 317.6 88.0Q311.8 95.4 301.9 97.8L328.2 138.6ZM302.9 71.2Q302.9 57.2 285.0 57.2H258.9V85.9H285.5Q294.1 85.9 298.5 82.1Q302.9 78.2 302.9 71.2ZM381.7 57.2V138.6H361.3V57.2H329.9V41.4H413.1V57.2ZM441.7 57.2V87.2H491.4V103.0H441.7V138.6H421.3V41.4H493.0V57.2ZM599.3 89.6Q599.3 104.8 593.3 116.3Q587.3 127.8 576.1 133.9Q565.0 140.0 550.1 140.0Q527.2 140.0 514.2 126.5Q501.2 113.0 501.2 89.6Q501.2 66.2 514.1 53.1Q527.1 40.0 550.2 40.0Q573.3 40.0 586.3 53.2Q599.3 66.5 599.3 89.6ZM578.6 89.6Q578.6 73.9 571.1 64.9Q563.7 56.0 550.2 56.0Q536.6 56.0 529.1 64.9Q521.7 73.7 521.7 89.6Q521.7 105.6 529.3 114.8Q536.9 124.0 550.1 124.0Q563.7 124.0 571.1 115.0Q578.6 106.1 578.6 89.6ZM611.9 138.6V41.4H632.3V122.9H684.4V138.6ZM695.4 138.6V41.4H715.8V138.6ZM826.4 89.6Q826.4 104.8 820.4 116.3Q814.4 127.8 803.2 133.9Q792.1 140.0 777.2 140.0Q754.3 140.0 741.3 126.5Q728.3 113.0 728.3 89.6Q728.3 66.2 741.2 53.1Q754.2 40.0 777.3 40.0Q800.4 40.0 813.4 53.2Q826.4 66.5 826.4 89.6ZM805.7 89.6Q805.7 73.9 798.2 64.9Q790.8 56.0 777.3 56.0Q763.7 56.0 756.2 64.9Q748.8 73.7 748.8 89.6Q748.8 105.6 756.4 114.8Q764.0 124.0 777.2 124.0Q790.8 124.0 798.2 115.0Q805.7 106.1 805.7 89.6Z" filter="url(#portfolio-material)" fill="url(#portfolio-stripe)" stroke="url(#portfolio-stripe)" stroke-width="5" stroke-linejoin="round"/></g>
+-  </svg>
+-`;
+-
+-const starDefs = `
+-  <svg
+-    class="star-defs"
+-    aria-hidden="true"
+-    focusable="false"
+-  >
+-
+-    <defs>
+-
+-      <linearGradient
+-        id="star-stripe"
+-        gradientUnits="userSpaceOnUse"
+-        x1="0"
+-        y1="0"
+-        x2="200"
+-        y2="200"
+-        spreadMethod="repeat"
+-      >
+-
+-        <stop stop-color="#fff"/>
+-
+-        <stop
+-          offset=".5"
+-          stop-color="#000"
+-        />
+-
+-        <stop
+-          offset="1"
+-          stop-color="#fff"
+-        />
+-
+-        <animateTransform
+-          attributeName="gradientTransform"
+-          type="translate"
+-          to="200 200"
+-          dur="4s"
+-          repeatCount="indefinite"
+-        />
+-      </linearGradient>
+-
+-
+-      <filter
+-        id="star-fx"
+-        color-interpolation-filters="sRGB"
+-        x="-30%"
+-        y="-30%"
+-        width="160%"
+-        height="160%"
++        data-project="${i}"
++        aria-label="${project.title}"
+       >
++        <span class="project-index">
++          ${String(i + 1).padStart(2, "0")}
++        </span>
+ 
+-        <feGaussianBlur
+-          in="SourceAlpha"
+-          stdDeviation="4"
+-          result="b"
+-        />
+-
+-        <feComposite
+-          in="b"
+-          in2="SourceAlpha"
+-          operator="arithmetic"
+-          k2="-1"
+-          k3="1"
+-          result="e"
+-        />
+-
+-        <feBlend
+-          in="SourceGraphic"
+-          in2="e"
+-          mode="overlay"
+-          result="g"
+-        />
+-
+-        <feGaussianBlur
+-          in="g"
+-          stdDeviation="4"
+-          result="bl"
+-        />
+-
+-        <feTurbulence
+-          type="fractalNoise"
+-          baseFrequency="3.5"
+-          numOctaves="1"
+-          seed="6"
+-          result="n"
+-        />
+-
+-        <feColorMatrix
+-          in="n"
+-          values="
+-            1 0 0 0 0
+-            1 0 0 0 0
+-            1 0 0 0 0
+-            0 0 0 0 1"
+-          result="nn"
+-        />
+-
+-        <feComposite
+-          in="bl"
+-          in2="nn"
+-          operator="arithmetic"
+-          k1=".35"
+-          k2="1"
+-          k3="0"
+-          k4="-.175"
+-          result="x"
+-        />
+-
+-        <feComponentTransfer in="x">
+-
+-          <feFuncR
+-            type="table"
+-            tableValues="
+-              0.169
+-              1.000
+-              1.000
+-              1.000
+-              1.000
+-              0.624
+-              0.239
+-              0.478
+-              0.169"
+-          />
+-
+-          <feFuncG
+-            type="table"
+-            tableValues="
+-              0.039
+-              0.239
+-              0.541
+-              0.839
+-              1.000
+-              0.941
+-              0.839
+-              0.361
+-              0.039"
+-          />
+-
+-          <feFuncB
+-            type="table"
+-            tableValues="
+-              0.239
+-              0.604
+-              0.847
+-              0.949
+-              1.000
+-              1.000
+-              1.000
+-              1.000
+-              0.239"
+-          />
+-
+-          <feFuncA
+-            type="table"
+-            tableValues="0 1"
+-          />
+-
+-        </feComponentTransfer>
+-
+-      </filter>
+-
+-
+-      <g id="star-shape">
+-
+-        <path
+-          d="M150 22l20 50 54 4-41 35 13 53-46-29-46 29 13-53-41-35 54-4z"
+-          fill="url(#star-stripe)"
+-          filter="url(#star-fx)"
+-        />
+-
+-      </g>
+-
+-    </defs>
+-
+-  </svg>
+-`;
+-
+-const star = `
+-  <svg
+-    class="mq-star"
+-    viewBox="56 2 188 182"
+-    aria-hidden="true"
+-    focusable="false"
+-  >
+-    <use href="#star-shape"/>
+-  </svg>
+-`;
+-
+-
+-const marqueeItem = `
+-  <span class="mq-item">
+-    ${MARQUEE_TEXT}${star}
+-  </span>
+-`;
+-
++        <span class="project-title">
++          ${project.title}
++        </span>
+ 
+-const marqueeGroup = marqueeItem.repeat(4);
++        <span class="project-category">
++          ${project.category}
++        </span>
+ 
++        <span class="project-year">
++          ${project.year}
++        </span>
++      </button>
++    `
++  )
++  .join("");
+ 
+-const footerHTML = `
+-<footer class="footer" id="contact">
+-
+-  ${starDefs}
+ 
+-  <div class="mq">
+-    <div class="mq-track">
+-      <div class="mq-group">
+-        ${marqueeGroup}
+-      </div>
++/* =========================================================
++   SKILL MARKUP
++========================================================= */
+ 
+-      <div class="mq-group">
+-        ${marqueeGroup}
+-      </div>
+-    </div>
+-  </div>
++const skillList = skills
++  .map(
++    ([title, desc], i) => `
++      <div class="skill-row">
+ 
++        <div class="skill-inner">
+ 
+-  <div class="footer-content">
++          <span class="skill-num">
++            ${String(i + 1).padStart(2, "0")}
++          </span>
+ 
+-    <div class="footer-links">
++          <div class="skill-copy">
+ 
+-      <div class="footer-socials">
++            <h3 class="skill-title">
++              ${title}
++            </h3>
+ 
+-        <a
+-          href="https://www.instagram.com/hfizhad?stkn=MWdrcjgwMTJ1bjdjMw%3D%3D&utm_source=qr"
+-          target="_blank"
+-          rel="noopener noreferrer"
+-        >
+-          INSTAGRAM
+-        </a>
++            <p class="skill-desc">
++              ${desc}
++            </p>
+ 
+-        <a
+-          href="https://www.linkedin.com/in/hafizh-aditiyo-847a151a2/"
+-          target="_blank"
+-          rel="noopener noreferrer"
+-        >
+-          LINKEDIN
+-        </a>
++          </div>
+ 
+-        <a
+-          href="https://www.behance.net/gallery/254197393/Portfolio"
+-          target="_blank"
+-          rel="noopener noreferrer"
+-        >
+-          BEHANCE
+-        </a>
++        </div>
+ 
+       </div>
++    `
++  )
++  .join("");
+ 
+ 
+-      <a
+-        class="footer-email"
+-        href="mailto:hafizhaditiyo24@gmail.com"
+-      >
+-        HAFIZHADITIYO24@GMAIL.COM
+-      </a>
+-
+-    </div>
+-
+-
+-    <a
+-      href="#top"
+-      class="footer-name"
+-      aria-label="Back to top"
+-    >
+-      Hafizh
+-    </a>
+-
+-  </div>
++/* =========================================================
++   TOOLS MARKUP
++========================================================= */
+ 
+-</footer>
+-`;
++const toolsMarkup = tools
++  .map(
++    tool => `
++      <span class="tool-item">
++        ${tool}
++      </span>
++    `
++  )
++  .join("");
+ 
+ 
+ /* =========================================================
+-   PAGE
++   PAGE MARKUP
+ ========================================================= */
+ 
+-document.querySelector('#app').innerHTML = `
++app.innerHTML = `
+ 
+   <!-- =====================================================
+-       NAVBAR
++       NAVIGATION
+   ====================================================== -->
+ 
+   <header class="navbar">
+ 
+-    <div class="nav-left">
+-
+-      <a class="nav-work-link" href="#work">
+-        WORK
+-      </a>
+-
+-      <a href="#about">
+-        ABOUT
+-      </a>
+-
+-    </div>
+-
+-
+     <a
+-      href="#hero"
++      href="#top"
+       class="nav-logo"
++      data-scroll-target="#top"
+     >
+       HAFIZH
+     </a>
+ 
++    <nav class="nav-links">
+ 
+-    <div class="nav-right">
++      <a
++        href="#work"
++        data-scroll-target="#work"
++      >
++        WORK
++      </a>
++
++      <a
++        href="#about"
++        data-scroll-target="#about"
++      >
++        ABOUT
++      </a>
+ 
+-      <a href="#skillset">
++      <a
++        href="#skillset"
++        data-scroll-target="#skillset"
++      >
+         SKILLSET
+       </a>
+ 
+-      <!-- Connected directly to footer#contact -->
+-      <a href="#contact">
++      <a
++        href="#contact"
++        data-scroll-target="#contact"
++      >
+         CONTACT
+       </a>
+ 
+-    </div>
++    </nav>
+ 
+   </header>
+ 
+ 
++  <!-- =====================================================
++       MAIN
++  ====================================================== -->
+ 
+   <main id="top">
+ 
+ 
+-    <!-- =================================================
++    <!-- ===================================================
+          HERO
+-    ================================================== -->
++    ==================================================== -->
+ 
+-    <section
+-      class="hero"
+-      id="hero"
+-    >
++    <section class="hero" id="hero">
+ 
+-      <div class="hero-svg">${heroSVG}</div>
++      <div class="hero-inner">
+ 
+-    </section>
++        <div class="hero-label">
++          GRAPHIC DESIGNER
++        </div>
+ 
++        <div class="hero-title">
++
++          <h1>
++            PORTFOLIO
++          </h1>
++
++        </div>
+ 
++        <div class="hero-bottom">
+ 
+-    <!-- =================================================
++          <span>
++            2026
++          </span>
++
++          <a
++            href="#work"
++            class="hero-work-link"
++            data-scroll-target="#work"
++          >
++            WORK
++          </a>
++
++        </div>
++
++      </div>
++
++    </section>
++
++
++    <!-- ===================================================
+          ABOUT
+-    ================================================== -->
++    ==================================================== -->
+ 
+     <section
+       class="about"
+@@ -552,53 +297,66 @@ document.querySelector('#app').innerHTML = `
+ 
+       <div class="about-container">
+ 
+-        <div class="about-description">
++        <div class="about-heading">
++
++          <span>
++            ABOUT
++          </span>
+ 
+-          <p>
+-            I’m Hafizh, a Brand &amp; Visual Designer focused on hospitality and lifestyle. I combine branding, photography, social media, and motion to build visual identities that feel distinctive, cohesive, and intentional.
+-          </p>
++          <h2>
++            DESIGNER<br>
++            &amp; CREATIVE
++          </h2>
+ 
+         </div>
+ 
+-        <div class="about-image">
+ 
+-          <img
+-            src="./images/about-foto.png"
+-            alt="Hafizh Aditiyo"
+-          >
++        <div class="about-grid">
+ 
+-        </div>
++          <div class="about-image-wrap">
+ 
+-      </div>
++            <img
++              class="about-image"
++              src="/images/about-foto.png"
++              alt="Hafizh"
++            >
+ 
+-      <!-- =================================================
+-           SOFTWARE CONVEYOR
+-      ================================================== -->
++          </div>
+ 
+-      <div class="tools-marquee">
+ 
+-        <div class="tools-label">
++          <div class="about-copy">
+ 
+-          <span>
+-            TOOLS / SOFTWARE
+-          </span>
++            <p class="about-intro">
++              I’m Hafizh, a graphic designer and content creator
++              focused on creating visual experiences that feel
++              clear, expressive, and memorable.
++            </p>
+ 
+-          <span>
+-            2026
+-          </span>
++            <p>
++              My work spans branding, social media, print,
++              photography, motion graphics, and digital design.
++            </p>
++
++          </div>
+ 
+         </div>
+ 
+ 
+-        <div class="tools-window">
++        <div class="tools-marquee">
+ 
+           <div class="tools-track">
++
+             <div class="tools-group">
+               ${toolsMarkup}
+             </div>
+-            <div class="tools-group" aria-hidden="true">
++
++            <div
++              class="tools-group"
++              aria-hidden="true"
++            >
+               ${toolsMarkup}
+             </div>
++
+           </div>
+ 
+         </div>
+@@ -608,49 +366,94 @@ document.querySelector('#app').innerHTML = `
+     </section>
+ 
+ 
+-
+-    <!-- =================================================
++    <!-- ===================================================
+          SELECTED WORK
+-    ================================================== -->
++    ==================================================== -->
++
++    <section
++      class="work"
++      id="work"
++    >
+ 
+-    <section class="work" id="work">
+       <div class="work-container">
++
+         <div class="work-heading">
+-          <span>SELECTED WORK</span>
+-          <h2 class="work-heading-mobile">WHAT DID I DO?</h2>
+-          <h2 class="work-heading-desktop">SELECTED WORK</h2>
++
++          <span>
++            SELECTED WORK
++          </span>
++
++          <h2 class="work-heading-mobile">
++            WHAT DID I DO?
++          </h2>
++
++          <h2 class="work-heading-desktop">
++            SELECTED WORK
++          </h2>
++
++          <!-- VIEW ALL -->
++          <a
++            href="${import.meta.env.BASE_URL}work/"
++            class="work-all-link"
++            aria-label="View all work"
++          >
++            View All
++          </a>
++
+         </div>
+ 
++
+         <div class="work-layout">
++
++
++          <!-- PROJECT LIST -->
++
+           <div class="project-list">
+-            <span class="work-active-indicator" aria-hidden="true"></span>
++
++            <span
++              class="work-active-indicator"
++              aria-hidden="true"
++            ></span>
++
+             ${projectItems}
++
+           </div>
+ 
+-            <figure class="work-preview">
++
++          <!-- PROJECT PREVIEW -->
++
++          <figure class="work-preview">
++
+             <img
+               class="work-preview-image"
+               src="${projects[0].image}"
+-              alt="${projects[0].category} project"
++              alt="${projects[0].title}"
+             >
+-            <video
+-              class="work-preview-video"
+-              src="${projects.find(p => p.video)?.video ?? ''}"
+-              muted
+-              autoplay
+-              loop
+-              playsinline
+-              preload="auto"
+-            ></video>
++
++            <figcaption class="work-preview-caption">
++
++              <span class="preview-category">
++                ${projects[0].category}
++              </span>
++
++              <span class="preview-year">
++                ${projects[0].year}
++              </span>
++
++            </figcaption>
++
+           </figure>
++
+         </div>
++
+       </div>
++
+     </section>
+ 
+ 
+-    <!-- =================================================
++    <!-- ===================================================
+          SKILLSET
+-    ================================================== -->
++    ==================================================== -->
+ 
+     <section
+       class="skillset"
+@@ -659,760 +462,610 @@ document.querySelector('#app').innerHTML = `
+ 
+       <div class="skillset-container">
+ 
+-        <h2>
+-          Skillset
+-        </h2>
++        <div class="skillset-heading">
+ 
++          <span>
++            SKILLSET
++          </span>
+ 
+-        <div
+-          class="skill-list"
+-          id="skill-list"
+-        ></div>
++          <h2>
++            WHAT I<br>
++            CAN DO
++          </h2>
++
++        </div>
++
++
++        <div class="skill-list">
++
++          ${skillList}
++
++        </div>
+ 
+       </div>
+ 
+     </section>
+ 
+ 
++    <!-- ===================================================
++         CONTACT
++    ==================================================== -->
++
++    <section
++      class="contact"
++      id="contact"
++    >
++
++      <div class="contact-container">
++
++        <div class="contact-heading">
++
++          <span>
++            CONTACT
++          </span>
+ 
+-    <!-- =================================================
+-         CONTACT / FOOTER
+-    ================================================== -->
++          <h2>
++            LET'S<br>
++            WORK
++          </h2>
+ 
+-    ${footerHTML}
++        </div>
+ 
+ 
+-  </main>
++        <div class="contact-links">
+ 
++          <a
++            href="mailto:your@email.com"
++            class="contact-link"
++          >
++            EMAIL
++          </a>
++
++          <a
++            href="#"
++            class="contact-link"
++          >
++            INSTAGRAM
++          </a>
++
++          <a
++            href="#"
++            class="contact-link"
++          >
++            LINKEDIN
++          </a>
++
++        </div>
++
++      </div>
++
++    </section>
++
++
++    <!-- ===================================================
++         FOOTER
++    ==================================================== -->
++
++    <footer class="footer">
++
++      <div class="footer-top">
++
++        <span>
++          HAFIZH
++        </span>
++
++        <span>
++          2026
++        </span>
++
++      </div>
++
++      <div class="footer-bottom">
++
++        <span>
++          GRAPHIC DESIGNER
++        </span>
++
++        <span>
++          MALANG / INDONESIA
++        </span>
++
++      </div>
++
++    </footer>
++
++
++  </main>
+ `;
+ 
+-const stripeGradient = document.getElementById('portfolio-stripe');
+-if (stripeGradient) {
+-  const duration = 4400;
+-  const frameInterval = 1000 / 30;
+-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+-  let lastFrame = 0;
+-  let animationFrame;
+-
+-  const drawStripe = time => {
+-    const x = ((time % duration) / duration) * 486;
+-    stripeGradient.setAttribute('x1', x);
+-    stripeGradient.setAttribute('x2', x + 486);
+-  };
+ 
+-  const tick = time => {
+-    animationFrame = requestAnimationFrame(tick);
+-    if (time - lastFrame < frameInterval) return;
+-    lastFrame = time;
+-    drawStripe(time);
+-  };
++/* =========================================================
++   SMOOTH SCROLL
++========================================================= */
++
++const scrollLinks = document.querySelectorAll(
++  "[data-scroll-target]"
++);
++
++scrollLinks.forEach(link => {
++
++  link.addEventListener("click", event => {
++
++    const targetSelector =
++      link.getAttribute("data-scroll-target");
++
++    const target =
++      document.querySelector(targetSelector);
++
++    if (!target) return;
++
++    event.preventDefault();
++
++    gsap.to(window, {
++      duration: 1.15,
++      scrollTo: {
++        y: target,
++        offsetY: 0
++      },
++      ease: "power3.inOut"
++    });
+ 
+-  if (!reducedMotion) animationFrame = requestAnimationFrame(tick);
+-  document.addEventListener('visibilitychange', () => {
+-    if (document.hidden) cancelAnimationFrame(animationFrame);
+-    else if (!reducedMotion) animationFrame = requestAnimationFrame(tick);
+   });
+-}
+ 
++});
+ 
+ 
+ /* =========================================================
+-   SKILLSET DATA
++   NAVBAR CLICK FEEDBACK
+ ========================================================= */
+ 
+-const aboutSection = document.querySelector('#about');
+-const aboutParagraph = aboutSection?.querySelector('.about-description p');
+-
+-if (aboutParagraph) {
+-  const copyCharacters = Array.from(aboutParagraph.textContent
+-    .trim()
+-    .replace(/\s+/g, ' '));
+-  const copyFragment = document.createDocumentFragment();
+-  copyCharacters.forEach(character => {
+-    if (/\s/.test(character)) {
+-      copyFragment.append(document.createTextNode(character));
+-      return;
+-    }
++const navLinks =
++  document.querySelectorAll(".nav-links a");
+ 
+-    const characterSpan = document.createElement('span');
+-    characterSpan.className = 'about-copy-character';
++navLinks.forEach(link => {
+ 
+-    const neutralText = document.createElement('span');
+-    neutralText.className = 'about-copy-neutral';
+-    neutralText.textContent = character;
++  link.addEventListener("pointerdown", () => {
+ 
+-    const revealedText = document.createElement('span');
+-    revealedText.className = 'about-copy-revealed';
+-    revealedText.setAttribute('aria-hidden', 'true');
+-    revealedText.textContent = character;
++    link.classList.add("is-pressed");
+ 
+-    characterSpan.append(neutralText, revealedText);
+-    copyFragment.append(characterSpan);
+   });
+ 
+-  aboutParagraph.replaceChildren(copyFragment);
++  link.addEventListener("pointerup", () => {
+ 
+-  const aboutRevealedCharacters = aboutParagraph.querySelectorAll('.about-copy-revealed');
+-  const aboutReduceMotion = window.matchMedia(
+-    '(prefers-reduced-motion: reduce)'
+-  );
++    link.classList.remove("is-pressed");
+ 
+-  if (aboutRevealedCharacters.length && !aboutReduceMotion.matches) {
+-    const aboutRevealDistance = () => {
+-      const viewportHeight = window.innerHeight;
+-      const isMobileAbout = window.matchMedia('(max-width: 700px)').matches;
+-      const distancePerCharacter = viewportHeight * (isMobileAbout ? 0.0065 : 0.009);
+-      const minDistance = viewportHeight * (isMobileAbout ? 0.75 : 1.1);
+-      const maxDistance = viewportHeight * (isMobileAbout ? 1.5 : 2.4);
+-
+-      return Math.min(
+-        maxDistance,
+-        Math.max(minDistance, aboutRevealedCharacters.length * distancePerCharacter)
+-      );
+-    };
++  });
+ 
+-    gsap.set(aboutRevealedCharacters, { opacity: 0 });
++  link.addEventListener("pointercancel", () => {
++
++    link.classList.remove("is-pressed");
++
++  });
++
++});
++
++
++/* =========================================================
++   PROJECT PREVIEW
++========================================================= */
++
++const projectRows =
++  document.querySelectorAll(".project-row");
++
++const previewImage =
++  document.querySelector(".work-preview-image");
++
++const previewCategory =
++  document.querySelector(".preview-category");
++
++const previewYear =
++  document.querySelector(".preview-year");
++
++const activeIndicator =
++  document.querySelector(".work-active-indicator");
++
++
++function updateProject(index) {
++
++  const project = projects[index];
++
++  if (!project) return;
++
++  if (previewImage) {
++
++    previewImage.src = project.image;
++    previewImage.alt = project.title;
++
++  }
++
++  if (previewCategory) {
++
++    previewCategory.textContent =
++      project.category;
++
++  }
++
++  if (previewYear) {
++
++    previewYear.textContent =
++      project.year;
+ 
+-    gsap.to(aboutRevealedCharacters, {
+-      opacity: 1,
+-      duration: 0.18,
+-      ease: 'none',
+-      stagger: { each: 0.06 },
+-      scrollTrigger: {
+-        trigger: aboutSection,
+-        start: 'top top',
+-        end: () => `+=${aboutRevealDistance()}`,
+-        pin: true,
+-        scrub: true,
+-        invalidateOnRefresh: true
+-      }
+-    });
+   }
++
++  projectRows.forEach((row, i) => {
++
++    row.classList.toggle(
++      "is-active",
++      i === index
++    );
++
++  });
++
+ }
+ 
+ 
+-const skills = [
++projectRows.forEach((row, index) => {
+ 
+-  [
+-    "Graphic Design",
+-    "Posters, layouts and visuals that are clear, bold and made to be noticed."
+-  ],
++  row.addEventListener("mouseenter", () => {
+ 
+-  [
+-    "Brand Identity",
+-    "Logos and visual systems with a point of view, built to be remembered."
+-  ],
++    updateProject(index);
+ 
+-  [
+-    "Content Creation",
+-    "Photo and video content planned, shot and edited for social platforms."
+-  ],
++  });
+ 
+-  [
+-    "Motion & Video",
+-    "Short-form edits and campaign videos that move with a purpose."
+-  ]
++  row.addEventListener("focus", () => {
+ 
+-];
++    updateProject(index);
+ 
++  });
+ 
+-const skillList = document.querySelector(
+-  "#skill-list"
+-);
++  row.addEventListener("click", () => {
++
++    updateProject(index);
++
++  });
++
++});
+ 
+ 
+ /* =========================================================
+-   SKILLSET RENDER + GSAP
++   WORK ACTIVE INDICATOR
+ ========================================================= */
+ 
+-if (skillList) {
+-  console.log("SKILLSET INIT");
++if (activeIndicator && projectRows.length) {
+ 
+-  skillList.innerHTML = skills
+-    .map(([title, desc], i) => `
+-      <div class="skill-row">
++  const moveIndicator = row => {
+ 
+-        <div class="skill-inner">
++    const listRect =
++      row.parentElement.getBoundingClientRect();
+ 
+-          <span class="skill-num">
+-            ${String(i + 1).padStart(2, "0")}
+-          </span>
++    const rowRect =
++      row.getBoundingClientRect();
+ 
+-          <h3 class="skill-title">
+-            ${title}
+-          </h3>
++    activeIndicator.style.transform =
++      `translateY(${rowRect.top - listRect.top}px)`;
+ 
+-          <p class="skill-desc">
+-            ${desc}
+-          </p>
++    activeIndicator.style.height =
++      `${rowRect.height}px`;
+ 
+-        </div>
++  };
+ 
+-        <span class="skill-line"></span>
++  projectRows.forEach(row => {
+ 
+-      </div>
+-    `)
+-    .join("");
++    row.addEventListener("mouseenter", () => {
++      moveIndicator(row);
++    });
+ 
++    row.addEventListener("focus", () => {
++      moveIndicator(row);
++    });
+ 
+-  const rows = gsap.utils.toArray(
+-    ".skill-row"
+-  );
+-console.log("SKILL ROWS:", rows.length);
++  });
+ 
+-if (rows.length) {
+-  const skillSection = rows[0].closest("#skillset");
+-  const skillsetContent = skillSection.querySelector(
+-    ".skillset-container"
+-  );
++  moveIndicator(projectRows[0]);
+ 
+-  const isMobile = window.matchMedia(
+-    "(max-width: 699px)"
+-  ).matches;
++}
+ 
+-  const reduceMotion = window.matchMedia(
+-    "(prefers-reduced-motion: reduce)"
+-  ).matches;
+ 
+-  console.log("🔥 SKILLSET CONDITIONS:", {
+-    isMobile,
+-    reduceMotion
++/* =========================================================
++   TOOLS MARQUEE
++========================================================= */
++
++const toolsTrack =
++  document.querySelector(".tools-track");
++
++if (toolsTrack) {
++
++  const toolsWidth =
++    toolsTrack.scrollWidth / 2;
++
++  gsap.to(toolsTrack, {
++
++    x: -toolsWidth,
++
++    duration: 28,
++
++    ease: "none",
++
++    repeat: -1
++
+   });
+ 
+-  if (reduceMotion) {
+-    gsap.set(rows, {
+-      autoAlpha: 1,
+-      x: 0
+-    });
+-  } else if (isMobile) {
++}
+ 
+-    const revealTimeline = gsap.timeline({
+-      scrollTrigger: {
+-        trigger: skillSection,
+-        start: "top 95%",
+-        end: "bottom 40%",
+-        scrub: true
+-      }
+-    });
+ 
+-    revealTimeline.fromTo(
+-      rows,
+-      {
+-        autoAlpha: 0,
+-        x: 30
+-      },
+-      {
+-        autoAlpha: 1,
+-        x: 0,
+-        duration: 0.45,
+-        ease: "none",
+-        stagger: 0.12
+-      },
+-      0
+-    );
++/* =========================================================
++   SKILLSET ANIMATION
++========================================================= */
+ 
+-  } else {
+-
+-    const dist = () => 160;
+-    const DUR = 1;
+-
+-    rows.forEach((row) => {
+-      const rowTopInSection = () =>
+-        row.getBoundingClientRect().top -
+-        skillSection.getBoundingClientRect().top;
+-
+-      const rowTopFromSectionBottom = () =>
+-        skillSection.getBoundingClientRect().bottom -
+-        row.getBoundingClientRect().top;
+-
+-      gsap.fromTo(
+-        row,
+-        {
+-          autoAlpha: 0,
+-          x: dist
+-        },
+-        {
+-          autoAlpha: 1,
+-          x: 0,
+-          duration: DUR,
+-          ease: "power2.out",
+-          scrollTrigger: {
+-            trigger: skillSection,
+-            start: () => `top+=${rowTopInSection()}px 95%`,
+-            end: () => `bottom-=${rowTopFromSectionBottom()}px 60%`,
+-            scrub: true,
+-            invalidateOnRefresh: true
+-          }
+-        }
+-      );
+-    });
+-  }
++const skillRows =
++  document.querySelectorAll(".skill-row");
++
++if (skillRows.length) {
+ 
+   gsap.fromTo(
+-    skillsetContent,
++    skillRows,
++
+     {
+-      autoAlpha: 1,
+-      y: 0
++      opacity: 0,
++      y: 35
+     },
++
+     {
+-      autoAlpha: 0,
+-      x: -20,
+-      y: -144,
+-      ease: "none",
++      opacity: 1,
++      y: 0,
++      duration: 0.9,
++      stagger: 0.08,
++      ease: "power3.out",
++
+       scrollTrigger: {
+-        trigger: skillSection,
+-        start: "bottom 80%",
+-        end: "bottom 20%",
+-        scrub: true,
+-        invalidateOnRefresh: true
++        trigger: ".skill-list",
++        start: "top 80%",
++        once: true
+       }
++
+     }
+   );
+-}
+ 
+ }
+ 
+ 
+-
+ /* =========================================================
+-   SELECTED WORK INTERACTIONS
++   SECTION REVEALS
+ ========================================================= */
+ 
+-const workList = document.querySelector('.project-list');
+-const workItems = [...document.querySelectorAll('.project-item')];
+-const workPreviewImage = document.querySelector('.work-preview-image');
+-const workIndicator = document.querySelector('.work-active-indicator');
+-const workIsMobile = window.matchMedia('(max-width: 700px)').matches;
+-const workReduceMotion = window.matchMedia(
+-  '(prefers-reduced-motion: reduce)'
+-).matches;
+-
+-const setWorkActive = item => {
+-  workItems.forEach(current => {
+-    const isActive = current === item;
+-    current.classList.toggle('is-active', isActive);
+-    current.querySelector('.work-category-button')?.setAttribute(
+-      'aria-pressed',
+-      String(isActive)
+-    );
+-  });
++const revealSections = document.querySelectorAll(
++  ".about-heading, .work-heading, .skillset-heading, .contact-heading"
++);
+ 
+-  workList?.classList.toggle('has-active', Boolean(item));
+-};
++revealSections.forEach(section => {
+ 
+-if (workList && workItems.length) {
+-  if (workIsMobile) {
+-  workItems.forEach(item => {
+-    const button = item.querySelector('.work-category-button');
++  gsap.fromTo(
+ 
+-    button?.addEventListener('click', () => {
+-      const isActive = item.classList.contains('is-active');
++    section,
+ 
+-      setWorkActive(isActive ? null : item);
++    {
++      opacity: 0,
++      y: 40
++    },
++
++    {
++      opacity: 1,
++      y: 0,
++      duration: 1,
++      ease: "power3.out",
++
++      scrollTrigger: {
++        trigger: section,
++        start: "top 85%",
++        once: true
++      }
+ 
+-      if (isActive || !workPreviewImage) return;
++    }
+ 
+-      const image = button.dataset.preview;
+-      const label = button.dataset.label;
+-      const video = button.dataset.video;
++  );
+ 
+-      if (!image) return;
++});
+ 
+-      workPreviewImage.src = image;
+-      workPreviewImage.alt = `${label} project`;
+ 
+-      const workPreviewFigure =
+-        document.querySelector('.work-preview');
++/* =========================================================
++   WORK PREVIEW REVEAL
++========================================================= */
+ 
+-      const workPreviewVideo =
+-        document.querySelector('.work-preview-video');
++const workPreview =
++  document.querySelector(".work-preview");
+ 
+-      if (video && workPreviewVideo) {
+-        if (!workPreviewVideo.getAttribute('src')) {
+-          workPreviewVideo.src = video;
+-        }
++if (workPreview) {
+ 
+-        workPreviewVideo.poster = image;
+-        workPreviewFigure?.classList.add('is-video');
+-        workPreviewVideo.play().catch(() => {});
+-      } else if (workPreviewVideo) {
+-        workPreviewVideo.pause();
+-        workPreviewFigure?.classList.remove('is-video');
+-      }
+-    });
+-  });
+-  } else {
+-    let previewTween;
+-    let currentPreview = workPreviewImage?.getAttribute('src');
+-
+-    const positionIndicator = (item, animate = true) => {
+-      const button = item.querySelector('.work-category-button');
+-      if (!button || !workIndicator) return;
+-
+-      const offset = button.getBoundingClientRect().top
+-        - workList.getBoundingClientRect().top;
+-
+-      if (workReduceMotion || !animate) {
+-        gsap.set(workIndicator, { y: offset });
+-      } else {
+-        gsap.to(workIndicator, {
+-          y: offset,
+-          duration: 0.42,
+-          ease: 'power3.out',
+-          overwrite: true
+-        });
+-      }
+-    };
+-
+-        const workPreviewFigure = document.querySelector('.work-preview');
+-    const workPreviewVideo = document.querySelector('.work-preview-video');
+-    const previewTargets = [workPreviewImage, workPreviewVideo].filter(Boolean);
+-
+-    const showPreviewMedia = (image, label, video) => {
+-      workPreviewImage.src = image;
+-      workPreviewImage.alt = `${label} project`;
+-
+-      if (video && workPreviewVideo) {
+-        if (!workPreviewVideo.getAttribute('src')) workPreviewVideo.src = video;
+-        workPreviewVideo.poster = image;
+-        workPreviewFigure.classList.add('is-video');
+-        workPreviewVideo.play().catch(() => {});
+-      } else if (workPreviewVideo) {
+-        workPreviewVideo.pause();
+-        workPreviewFigure.classList.remove('is-video');
+-      }
+-    };
++  gsap.fromTo(
+ 
+-    const activateWorkItem = item => {
+-      setWorkActive(item);
+-      positionIndicator(item);
++    workPreview,
+ 
+-      const button = item.querySelector('.work-category-button');
+-      const image = button?.dataset.preview;
+-      const label = button?.dataset.label;
+-      const video = button?.dataset.video;
+-      if (!image || !workPreviewImage || image === currentPreview) return;
++    {
++      opacity: 0,
++      y: 45
++    },
+ 
+-      currentPreview = image;
+-      previewTween?.kill();
++    {
++      opacity: 1,
++      y: 0,
++      duration: 1,
++      ease: "power3.out",
+ 
+-      if (workReduceMotion) {
+-        showPreviewMedia(image, label, video);
+-        return;
++      scrollTrigger: {
++        trigger: workPreview,
++        start: "top 82%",
++        once: true
+       }
+ 
+-      previewTween = gsap.to(previewTargets, {
+-        autoAlpha: 0,
+-        y: 8,
+-        duration: 0.2,
+-        ease: 'power1.out',
+-        onComplete: () => {
+-          showPreviewMedia(image, label, video);
+-          previewTween = gsap.fromTo(
+-            previewTargets,
+-            { autoAlpha: 0, y: 8, scale: 0.99 },
+-            {
+-              autoAlpha: 1,
+-              y: 0,
+-              scale: 1,
+-              duration: 0.42,
+-              ease: 'power2.out',
+-              overwrite: true
+-            }
+-          );
+-        }
+-      });
+-    };
+-
+-    workItems.forEach(item => {
+-      const button = item.querySelector('.work-category-button');
+-      if (!button) return;
+-
+-      button.addEventListener('mouseenter', () => activateWorkItem(item));
+-      button.addEventListener('focus', () => activateWorkItem(item));
+-      button.addEventListener('click', () => activateWorkItem(item));
+-
+-      const previewPreload = new Image();
+-      previewPreload.src = button.dataset.preview;
+-    });
++    }
+ 
+-    const activeItem = workItems[0];
+-    setWorkActive(activeItem);
+-    positionIndicator(activeItem, false);
++  );
+ 
+-    window.addEventListener('resize', () => {
+-      const currentItem = workItems.find(item => item.classList.contains('is-active'))
+-        ?? workItems[0];
+-      positionIndicator(currentItem, false);
+-    });
+-  }
+ }
+ 
+ 
+ /* =========================================================
+-   NAVBAR SECTION TRANSITION
++   CONTACT REVEAL
+ ========================================================= */
+ 
+-const sectionNavLinks = document.querySelectorAll(
+-  '.navbar a[href^="#"]'
+-);
+-const sectionNavBar = document.querySelector('.navbar');
++const contactLinks =
++  document.querySelectorAll(".contact-link");
+ 
+-const sectionTransition = document.createElement('div');
+-sectionTransition.className = 'section-transition';
+-sectionTransition.setAttribute('aria-hidden', 'true');
+-document.body.appendChild(sectionTransition);
++if (contactLinks.length) {
+ 
+-const sectionNavReducedMotion = window.matchMedia(
+-  '(prefers-reduced-motion: reduce)'
+-);
++  gsap.fromTo(
+ 
+-let sectionNavigationTimer;
+-let sectionNavigationTween;
++    contactLinks,
+ 
+-const getSectionNavigationY = target => {
+-  const navbarBottom = sectionNavBar?.getBoundingClientRect().bottom ?? 0;
+-  const scrollMarginTop = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+-  const targetTop = target.getBoundingClientRect().top + window.scrollY;
+-  const maxScrollY = Math.max(
+-    0,
+-    document.documentElement.scrollHeight - window.innerHeight
+-  );
+-  const topOffset = Math.max(navbarBottom + 16, scrollMarginTop);
++    {
++      opacity: 0,
++      y: 30
++    },
+ 
+-  return Math.min(maxScrollY, Math.max(0, targetTop - topOffset));
+-};
++    {
++      opacity: 1,
++      y: 0,
++      duration: 0.8,
++      stagger: 0.1,
++      ease: "power3.out",
++
++      scrollTrigger: {
++        trigger: ".contact-links",
++        start: "top 85%",
++        once: true
++      }
+ 
+-sectionNavLinks.forEach(link => {
+-  link.addEventListener('click', event => {
+-    if (
+-      event.defaultPrevented ||
+-      event.button !== 0 ||
+-      event.metaKey ||
+-      event.ctrlKey ||
+-      event.shiftKey ||
+-      event.altKey
+-    ) {
+-      return;
+     }
+ 
+-    const hash = link.getAttribute('href');
+-    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
++  );
+ 
+-    if (!target) return;
++}
+ 
+-    event.preventDefault();
+ 
+-    if (window.location.hash !== hash) {
+-      window.history.pushState(null, '', hash);
+-    }
++/* =========================================================
++   HERO MOTION
++========================================================= */
++
++const heroTitle =
++  document.querySelector(".hero-title");
++
++if (heroTitle) {
++
++  gsap.fromTo(
+ 
+-    window.clearTimeout(sectionNavigationTimer);
+-    sectionNavigationTween?.kill();
+-
+-    if (sectionNavReducedMotion.matches) {
+-      sectionTransition.classList.remove('is-active');
+-      const root = document.documentElement;
+-      const previousScrollBehavior = root.style.scrollBehavior;
+-      root.style.scrollBehavior = 'auto';
+-      window.scrollTo(0, getSectionNavigationY(target));
+-      wheelTargetY = window.scrollY;
+-      root.style.scrollBehavior = previousScrollBehavior;
+-      return;
++    heroTitle,
++
++    {
++      opacity: 0,
++      y: 30
++    },
++
++    {
++      opacity: 1,
++      y: 0,
++      duration: 1.2,
++      ease: "power3.out"
+     }
+ 
+-    sectionTransition.classList.add('is-active');
+-
+-    sectionNavigationTimer = window.setTimeout(() => {
+-      const root = document.documentElement;
+-      const previousScrollBehavior = root.style.scrollBehavior;
+-      root.style.scrollBehavior = 'auto';
+-      const restoreScrollBehavior = () => {
+-        root.style.scrollBehavior = previousScrollBehavior;
+-        wheelTargetY = window.scrollY;
+-      };
+-
+-      sectionNavigationTween = gsap.to(window, {
+-        duration: 1.15,
+-        ease: 'power3.inOut',
+-        overwrite: 'auto',
+-        onComplete: restoreScrollBehavior,
+-        onInterrupt: restoreScrollBehavior,
+-        scrollTo: {
+-          y: getSectionNavigationY(target),
+-          autoKill: true
+-        }
+-      });
+-      sectionTransition.classList.remove('is-active');
+-    }, 100);
+-  });
+-});
++  );
++
++}
+ 
+ 
+ /* =========================================================
+-   STEALTH MODE EASTER EGG
++   NAVBAR SCROLL STATE
+ ========================================================= */
+ 
+-const stealthLogo = document.querySelector('.navbar .nav-logo');
+-const stealthOverlay = document.createElement('div');
+-stealthOverlay.className = 'stealth-overlay';
+-stealthOverlay.setAttribute('role', 'dialog');
+-stealthOverlay.setAttribute('aria-modal', 'true');
+-stealthOverlay.setAttribute('aria-label', 'Stealth transmission');
+-stealthOverlay.setAttribute('aria-hidden', 'true');
+-stealthOverlay.innerHTML = `
+-  <div class="stealth-content">
+-    <p class="stealth-label">TRANSMISSION_01</p>
+-    <p class="stealth-morse">
+-      .. / ... - .. .-.. .-.. / .-.. --- ...- . / -.-- --- ..- / -.. .. ... - .-
+-    </p>
+-    <button class="stealth-close" type="button" aria-label="Close transmission">
+-      ESC / CLOSE
+-    </button>
+-  </div>
+-`;
+-document.body.appendChild(stealthOverlay);
+-
+-const stealthCloseButton = stealthOverlay.querySelector('.stealth-close');
+-let stealthClickCount = 0;
+-let stealthClickTimer;
+-let stealthPreviousFocus = null;
+-
+-const openStealthMode = () => {
+-  stealthPreviousFocus = document.activeElement;
+-  stealthOverlay.setAttribute('aria-hidden', 'false');
+-  stealthOverlay.classList.add('is-active');
+-
+-  try {
+-    stealthCloseButton.focus({ preventScroll: true });
+-  } catch {
+-    stealthCloseButton.focus();
+-  }
+-};
++const navbar =
++  document.querySelector(".navbar");
++
++if (navbar) {
+ 
+-const closeStealthMode = () => {
+-  stealthOverlay.classList.remove('is-active');
+-  stealthOverlay.setAttribute('aria-hidden', 'true');
++  ScrollTrigger.create({
++
++    start: "top -80",
++
++    onUpdate: self => {
++
++      navbar.classList.toggle(
++        "is-scrolled",
++        self.scroll() > 80
++      );
+ 
+-  if (stealthPreviousFocus instanceof HTMLElement) {
+-    try {
+-      stealthPreviousFocus.focus({ preventScroll: true });
+-    } catch {
+-      stealthPreviousFocus.focus();
+     }
+-  }
+ 
+-  stealthPreviousFocus = null;
+-  stealthClickCount = 0;
+-  window.clearTimeout(stealthClickTimer);
+-};
++  });
+ 
+-stealthLogo?.addEventListener('click', event => {
+-  if (
+-    event.button !== 0 ||
+-    event.metaKey ||
+-    event.ctrlKey ||
+-    event.shiftKey ||
+-    event.altKey
+-  ) {
+-    return;
+-  }
++}
+ 
+-  window.clearTimeout(stealthClickTimer);
+-  stealthClickCount += 1;
+ 
+-  if (stealthClickCount === 5) {
+-    stealthClickCount = 0;
+-    openStealthMode();
+-    return;
+-  }
++/* =========================================================
++   VIEW ALL BUTTON
++========================================================= */
+ 
+-  stealthClickTimer = window.setTimeout(() => {
+-    stealthClickCount = 0;
+-  }, 1800);
+-});
++const workAllLink =
++  document.querySelector(".work-all-link");
+ 
+-stealthCloseButton.addEventListener('click', closeStealthMode);
++if (workAllLink) {
+ 
+-document.addEventListener('keydown', event => {
+-  if (!stealthOverlay.classList.contains('is-active')) return;
++  workAllLink.addEventListener(
++    "pointerdown",
++    () => {
++      workAllLink.classList.add("is-pressed");
++    }
++  );
+ 
+-  if (event.key === 'Escape') {
+-    event.preventDefault();
+-    closeStealthMode();
+-  } else if (event.key === 'Tab') {
+-    event.preventDefault();
+-    stealthCloseButton.focus();
+-  }
+-});
++  workAllLink.addEventListener(
++    "pointerup",
++    () => {
++      workAllLink.classList.remove("is-pressed");
++    }
++  );
++
++  workAllLink.addEventListener(
++    "pointercancel",
++    () => {
++      workAllLink.classList.remove("is-pressed");
++    }
++  );
++
++}
+ 
+ 
+ /* =========================================================
+-   DESKTOP WHEEL INERTIA
++   REDUCED MOTION
+ ========================================================= */
+ 
+-const desktopWheelInertia = window.matchMedia(
+-  '(min-width: 701px) and (hover: hover) and (pointer: fine)'
+-);
++const prefersReducedMotion =
++  window.matchMedia(
++    "(prefers-reduced-motion: reduce)"
++  ).matches;
+ 
+-let wheelTargetY = window.scrollY;
+-let wheelFrame = 0;
++if (prefersReducedMotion) {
+ 
+-function easeDesktopWheel() {
+-  const currentY = window.scrollY;
+-  const distance = wheelTargetY - currentY;
++  gsap.globalTimeline.timeScale(100);
+ 
+-  if (Math.abs(distance) < 0.5) {
+-    window.scrollTo({ top: wheelTargetY, behavior: 'instant' });
+-    wheelFrame = 0;
+-    return;
+-  }
+-
+-  window.scrollTo({
+-    top: currentY + distance * 0.18,
+-    behavior: 'instant'
+-  });
+-  wheelFrame = window.requestAnimationFrame(easeDesktopWheel);
+ }
+ 
+-window.addEventListener('wheel', event => {
+-  if (
+-    !desktopWheelInertia.matches ||
+-    event.ctrlKey ||
+-    event.defaultPrevented ||
+-    (event.target instanceof Element &&
+-      event.target.closest('input, textarea, select, [contenteditable="true"]'))
+-  ) {
+-    return;
+-  }
+ 
+-  if (sectionNavigationTween?.isActive()) {
+-    sectionNavigationTween.kill();
+-    wheelTargetY = window.scrollY;
+-  }
+-
+-  event.preventDefault();
++/* =========================================================
++   REFRESH SCROLLTRIGGER
++========================================================= */
+ 
+-  const deltaScale = event.deltaMode === WheelEvent.DOM_DELTA_LINE
+-    ? 16
+-    : event.deltaMode === WheelEvent.DOM_DELTA_PAGE
+-      ? window.innerHeight
+-      : 1;
+-  const pageHeight = document.documentElement.scrollHeight;
+-  const maxScrollY = Math.max(0, pageHeight - window.innerHeight);
++window.addEventListener(
++  "load",
++  () => {
+ 
+-  wheelTargetY = Math.min(
+-    maxScrollY,
+-    Math.max(0, wheelTargetY + event.deltaY * deltaScale)
+-  );
++    ScrollTrigger.refresh();
+ 
+-  if (!wheelFrame) {
+-    wheelFrame = window.requestAnimationFrame(easeDesktopWheel);
+   }
+-}, { passive: false });
++);
++
++window.addEventListener(
++  "resize",
++  () => {
+ 
+-window.addEventListener('load', () => {
+-  requestAnimationFrame(() => {
+     ScrollTrigger.refresh();
+-  });
+-});
+\ No newline at end of file
++
++  }
++);
+\ No newline at end of file
+diff --git a/src/style.css b/src/style.css
+index 5380787..1392274 100644
+--- a/src/style.css
++++ b/src/style.css
+@@ -1545,6 +1545,2571 @@ a {
+ 
+ }
+ 
++/* =========================================================
++   RESET
++========================================================= */
++
++* {
++  margin: 0;
++  padding: 0;
++  box-sizing: border-box;
++}
++
++
++html {
++  scroll-behavior: smooth;
++}
++
++
++body {
++  font-family:
++    Arial,
++    Helvetica,
++    sans-serif;
++
++  background: #f5f5f0;
++  color: #111;
++
++  overflow-x: hidden;
++}
++
++#hero,
++#about,
++#work,
++#skillset,
++#contact {
++  scroll-margin-top: 110px;
++}
++
++a {
++  color: inherit;
++  text-decoration: none;
++}
++
++
++/* =========================================================
++   VARIABLES
++========================================================= */
++
++:root {
++
++  --bg: #f5f5f0;
++  --text: #111;
++
++  --line: rgba(17, 17, 17, 0.16);
++
++  --ease:
++    cubic-bezier(.16, 1, .3, 1);
++
++}
++
++
++/* =========================================================
++   NAVBAR
++========================================================= */
++
++.navbar {
++  position: fixed;
++
++  top: 28px;
++  left: 50%;
++
++  transform: translateX(-50%);
++
++  z-index: 1000;
++
++  width: 500px;
++
++  height: 58px;
++
++  padding: 0 18px;
++
++  display: grid;
++
++  grid-template-columns: 1fr auto 1fr;
++
++  align-items: center;
++
++  border-radius: 14px;
++
++  /* Glass background */
++  background: rgba(220, 216, 216, 0.18);
++
++  border: 1px solid transparent;
++
++  /* Glass blur */
++  -webkit-backdrop-filter: blur(25px) saturate(120%);
++  backdrop-filter: blur(25px) saturate(120%);
++
++  box-shadow:
++    0 10px 30px rgba(0, 0, 0, 0.04);
++}
++
++
++/* LEFT + RIGHT */
++
++.nav-left,
++.nav-right {
++  display: flex;
++  align-items: center;
++  gap: 18px;
++}
++
++.nav-left {
++  justify-content: flex-start;
++}
++
++.nav-right {
++  justify-content: flex-end;
++}
++
++
++/* LINKS */
++
++.navbar a {
++  font-size: 14px;
++
++  font-weight: 500;
++
++  letter-spacing: 0;
++
++  white-space: nowrap;
++
++  transition: opacity .3s ease;
++}
++
++.navbar a:hover {
++  opacity: .5;
++}
++
++
++/* NAME */
++
++.nav-logo {
++  justify-self: center;
++
++  font-size: 18px !important;
++
++
++
++  font-weight: 700 !important;
++
++  letter-spacing: -0.035em !important;
++
++  white-space: nowrap;
++
++  transform: translateX(-8px);
++}
++
++
++/* =========================================================
++   HERO
++========================================================= */
++
++.hero {
++
++  min-height: 100vh;
++
++  width: 100%;
++
++  padding:
++    160px
++    40px
++    80px;
++
++  display: flex;
++
++  align-items: center;
++
++  justify-content: center;
++
++}
++
++
++.hero-svg {
++
++  width: 100%;
++
++  max-width: 1200px;
++
++  margin: 0 auto;
++
++}
++
++
++.portfolio-art {
++
++  display: block;
++
++  width: 100%;
++
++  height: auto;
++
++}
++
++
++/* =====================================================
++   ABOUT
++===================================================== */
++
++.about {
++  position: relative;
++  width: 100%;
++  min-height: 100vh;
++  display: flex;
++  flex-direction: column;
++  justify-content: center;
++  align-items: center;
++  padding: 108px 32px 88px;
++  color: #111;
++  background: #f5f5f0;
++  overflow: hidden;
++}
++
++
++/* ABOUT CONTENT */
++
++.about-container {
++  position: relative;
++  z-index: 1;
++  width: min(900px, 100%);
++  min-height: 370px;
++  margin: 0 auto;
++  display: flex;
++  align-items: center;
++}
++
++
++
++
++/* PHOTO */
++
++.about-image {
++  position: absolute;
++  top: 38px;
++  right: 0;
++  z-index: 2;
++  width: clamp(150px, 12vw, 170px);
++  aspect-ratio: 1;
++  overflow: hidden;
++  background: #ddd;
++  transform: translateY(24px) rotate(4deg);
++  box-shadow: 0 12px 28px rgba(17, 17, 17, .12);
++}
++
++.about-image img {
++  display: block;
++  width: 100%;
++  height: 100%;
++  object-fit: cover;
++}
++
++
++/* TEXT */
++
++.about-description {
++  width: 100%;
++  max-width: min(630px, calc(100% - 194px));
++}
++
++.about-description p {
++  margin: 0;
++
++  font-size: clamp(30px, 2.35vw, 34px);
++  line-height: 1.13;
++  letter-spacing: -0.04em;
++  font-weight: 400;
++  color: #999;
++}
++
++.about-copy-character {
++  position: relative;
++}
++
++.about-copy-neutral {
++  color: #888;
++  font-weight: 400;
++}
++
++.about-copy-revealed {
++  position: absolute;
++  inset: 0;
++  opacity: 0;
++  color: #111;
++  font-weight: 400;
++  pointer-events: none;
++}
++
++.about-divider {
++  width: min(1125px, 100%);
++  height: 1px;
++  margin: 12px auto 0;
++  background: rgba(17, 17, 17, .18);
++}
++
++
++
++/* ========================================
++   SKILLSET
++======================================== */
++
++.skillset {
++  min-height: 100vh;
++
++  display: flex;
++  align-items: center;
++
++  background: #0c0c0c;
++  color: #eee;
++
++  padding: 100px 40px;
++}
++
++.skillset-container {
++  width: 100%;
++  max-width: 900px;
++
++  margin: 0 auto;
++}
++
++
++/* HEADER */
++
++.skillset h2 {
++  font-size: clamp(46px, 5vw, 64px);
++
++  font-weight: 400;
++  line-height: 1;
++
++  letter-spacing: -0.04em;
++
++  padding-bottom: 28px;
++
++  border-bottom:
++    1px solid rgba(255, 255, 255, 0.22);
++}
++
++
++/* ROW */
++
++.skill-row {
++  position: relative;
++
++  min-height: 110px;
++
++  display: flex;
++  align-items: center;
++}
++
++
++/* CONTENT */
++
++.skill-inner {
++  width: 100%;
++
++  display: grid;
++
++  grid-template-columns:
++    76px
++    1fr
++    270px;
++
++  align-items: center;
++}
++
++
++/* NUMBER */
++
++.skill-num {
++  font-size: 11px;
++
++  color: #777;
++
++  letter-spacing: 0.04em;
++}
++
++
++/* TITLE */
++
++.skill-title {
++  font-size: clamp(22px, 2.2vw, 28px);
++
++  font-weight: 400;
++
++  letter-spacing: -0.03em;
++}
++
++
++/* DESCRIPTION */
++
++.skill-desc {
++  font-size: 13px;
++
++  line-height: 1.35;
++
++  color: #9a9a9a;
++}
++
++
++/* LINE */
++
++.skill-line {
++  position: absolute;
++
++  left: 0;
++  right: 0;
++
++  bottom: 0;
++
++  height: 1px;
++
++  background:
++    rgba(255, 255, 255, 0.22);
++
++  transform-origin: right center;
++}
++
++
++/* MOBILE */
++
++@media (max-width: 700px) {
++
++  .skillset {
++    padding: 80px 20px;
++  }
++
++  .skill-row {
++    min-height: 0;
++
++    padding: 22px 0;
++  }
++
++  .skill-inner {
++    grid-template-columns:
++      40px
++      1fr;
++
++    row-gap: 10px;
++  }
++
++  .skill-desc {
++    grid-column: 2;
++  }
++
++}
++
++
++/* =========================================================
++   FOOTER — matches main.js
++========================================================= */
++
++/* =====================================================
++   FOOTER
++===================================================== */
++
++.footer {
++  position: relative;
++
++  width: 100%;
++  min-height: 100vh;
++
++  background: #111;
++  color: #fff;
++
++  overflow: hidden;
++
++  display: flex;
++  flex-direction: column;
++}
++
++
++/* =====================================================
++   STAR DEFINITION
++===================================================== */
++
++.star-defs {
++  position: absolute;
++
++  width: 0;
++  height: 0;
++
++  overflow: hidden;
++
++  pointer-events: none;
++}
++
++
++/* =====================================================
++   MARQUEE
++===================================================== */
++
++.mq {
++  position: relative;
++
++  width: 100%;
++
++  overflow: hidden;
++
++  padding: 28px 0 34px;
++
++  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
++}
++
++
++.mq-track {
++  display: flex;
++
++  width: max-content;
++
++  animation:
++    mq-scroll
++    24s
++    linear
++    infinite;
++
++  will-change: transform;
++}
++
++
++.mq:hover .mq-track {
++  animation-play-state: paused;
++}
++
++
++.mq-group {
++  display: flex;
++
++  flex-shrink: 0;
++}
++
++
++.mq-item {
++  display: flex;
++  align-items: center;
++
++  gap: 28px;
++
++  padding-right: 28px;
++
++  white-space: nowrap;
++
++  font-size: clamp(
++    40px,
++    6.2vw,
++    76px
++  );
++
++  font-weight: 600;
++
++  line-height: 1;
++
++  letter-spacing: -0.055em;
++}
++
++
++.mq-star {
++  width: auto;
++  height: 0.9em;
++
++  flex-shrink: 0;
++}
++
++
++@keyframes mq-scroll {
++  from {
++    transform: translateX(0);
++  }
++
++  to {
++    transform: translateX(-50%);
++  }
++}
++
++
++/* =====================================================
++   FOOTER CONTENT
++===================================================== */
++
++.footer-content {
++  flex: 1;
++
++  min-height: 0;
++
++  display: flex;
++  flex-direction: column;
++
++  justify-content: space-between;
++
++  padding:
++    165px
++    clamp(24px, 5vw, 95px)
++    0;
++}
++
++
++/* =====================================================
++   SOCIAL + EMAIL
++===================================================== */
++
++.footer-links {
++  width: 100%;
++
++  display: flex;
++  align-items: flex-start;
++  justify-content: space-between;
++
++  gap: 40px;
++}
++
++
++.footer-socials {
++  display: flex;
++  align-items: center;
++
++  gap: clamp(
++    50px,
++    6vw,
++    110px
++  );
++}
++
++
++.footer-socials a,
++.footer-email {
++  display: inline-block;
++
++  color: #fff;
++
++  font-size: clamp(
++    18px,
++    1.9vw,
++    27px
++  );
++
++  font-weight: 400;
++
++  line-height: 1;
++
++  letter-spacing: -0.025em;
++
++  text-decoration: none;
++
++  transition:
++    opacity .3s ease;
++}
++
++
++.footer-socials a:hover,
++.footer-email:hover {
++  opacity: .45;
++}
++
++
++.footer-email {
++  text-align: right;
++
++  white-space: nowrap;
++}
++
++
++/* =====================================================
++   GIANT NAME
++===================================================== */
++
++.footer-name {
++  align-self: flex-start;
++
++  font-size: clamp(
++    180px,
++    27vw,
++    520px
++  );
++
++  font-weight: 600;
++
++  line-height: .68;
++
++  letter-spacing: -0.09em;
++
++  white-space: nowrap;
++
++  margin-left: -0.03em;
++
++  transform: translateY(0.14em);
++
++  user-select: none;
++}
++
++
++/* =====================================================
++   MOBILE
++===================================================== */
++
++@media (max-width: 900px) {
++
++  .mq {
++    padding:
++      24px
++      0
++      28px;
++  }
++
++
++  .mq-item {
++    font-size: clamp(
++      32px,
++      7vw,
++      56px
++    );
++
++    gap: 22px;
++
++    padding-right: 22px;
++  }
++
++
++  .footer-content {
++    padding:
++      110px
++      24px
++      0;
++  }
++
++
++  .footer-links {
++    flex-direction: column;
++
++    gap: 50px;
++  }
++
++
++  .footer-socials {
++    flex-wrap: wrap;
++
++    gap:
++      22px
++      35px;
++  }
++
++
++  .footer-socials a,
++  .footer-email {
++    font-size: 16px;
++  }
++
++
++  .footer-email {
++    text-align: left;
++  }
++
++
++  .footer-name {
++    font-size: clamp(
++      150px,
++      34vw,
++      300px
++    );
++
++    line-height: .7;
++  }
++}
++
++
++/* =====================================================
++   SMALL MOBILE
++===================================================== */
++
++@media (max-width: 550px) {
++
++  .footer-content {
++    padding:
++      90px
++      20px
++      0;
++  }
++
++
++  .footer-socials {
++    gap:
++      18px
++      25px;
++  }
++
++
++  .footer-socials a,
++  .footer-email {
++    font-size: 14px;
++  }
++
++
++  .footer-name {
++    font-size: 42vw;
++  }
++
++
++  .mq-item {
++    font-size: 34px;
++  }
++}
++
++
++/* =====================================================
++   REDUCED MOTION
++===================================================== */
++
++@media (prefers-reduced-motion: reduce) {
++
++  .mq-track {
++    animation: none;
++  }
++
++}
++
++/* =====================================================
++   ABOUT — SOFTWARE CONVEYOR
++===================================================== */
++
++.tools-marquee {
++  position: relative;
++  z-index: 2;
++  width: min(900px, 100%);
++  margin: 12px auto 0;
++}
++
++
++/* LABEL */
++
++.tools-label {
++  width: 100%;
++
++  display: flex;
++  align-items: center;
++  justify-content: space-between;
++
++  padding-bottom: 12px;
++  border-bottom: 1px solid rgba(17, 17, 17, .18);
++  font-size: 9px;
++  line-height: 1;
++  letter-spacing: 0.12em;
++  color: rgba(17, 17, 17, .55);
++}
++
++
++/* CONVEYOR WINDOW */
++
++.tools-window {
++  position: relative;
++
++  width: 100%;
++
++  overflow: hidden;
++
++  padding: 18px 0 21px;
++
++  mask-image: linear-gradient(
++    to right,
++    transparent 0%,
++    black 8%,
++    black 92%,
++    transparent 100%
++  );
++
++  -webkit-mask-image: linear-gradient(
++    to right,
++    transparent 0%,
++    black 8%,
++    black 92%,
++    transparent 100%
++  );
++}
++
++
++/* MOVING TRACK */
++
++.tools-track {
++  display: flex;
++  align-items: center;
++  flex-wrap: nowrap;
++
++  width: max-content;
++  gap: 0;
++  white-space: nowrap;
++
++  animation:
++    software-conveyor
++    20s
++    linear
++    infinite;
++
++  will-change: transform;
++}
++
++.tools-group {
++  display: flex;
++  align-items: center;
++  flex-wrap: nowrap;
++  flex: 0 0 auto;
++  gap: 52px;
++  padding-right: 52px;
++  white-space: nowrap;
++}
++
++
++/* INDIVIDUAL ICON */
++
++.tool {
++  flex: 0 0 auto;
++
++  display: flex;
++  align-items: center;
++}
++
++
++/* ICON */
++
++.tool img {
++  width: 44px;
++  height: 44px;
++
++  display: block;
++
++  object-fit: contain;
++
++  opacity: 0.85;
++
++  transition:
++    opacity 0.3s ease,
++    transform 0.3s ease;
++}
++
++
++/* HIDE SOFTWARE NAME */
++
++.tool span {
++  display: none;
++}
++
++
++/* HOVER */
++
++.tool:hover img {
++  opacity: 1;
++  transform: scale(1.08);
++}
++
++
++/* =====================================================
++   CONVEYOR ANIMATION
++===================================================== */
++
++@keyframes software-conveyor {
++
++  from {
++    transform: translateX(0);
++  }
++
++  to {
++    transform: translateX(-50%);
++  }
++
++}
++
++
++/* =====================================================
++   MOBILE
++===================================================== */
++
++@media (max-width: 900px) {
++  .tools-marquee {
++    margin-top: 12px;
++  }
++
++  .tools-track {
++    animation-duration: 40s;
++  }
++
++  .tools-group {
++    gap: 50px;
++    padding-right: 50px;
++  }
++
++  .tool img {
++    width: 44px;
++    height: 44px;
++  }
++
++}
++
++
++@media (max-width: 700px) {
++
++  .about {
++    min-height: 0;
++    padding: 104px 24px 52px;
++    align-items: stretch;
++  }
++
++  .about-container {
++    width: 100%;
++    min-height: 0;
++    display: flex;
++    flex-direction: column;
++    align-items: stretch;
++    gap: 20px;
++  }
++
++  .about-description {
++    max-width: none;
++  }
++
++  .about-description p {
++    font-size: clamp(30px, 7vw, 40px);
++    line-height: 1.14;
++  }
++
++  .about-image {
++    position: relative;
++    top: auto;
++    right: auto;
++    align-self: flex-end;
++    width: clamp(132px, 34vw, 170px);
++    margin: -40px 8px 8px 0;
++  }
++
++  .about-divider {
++    margin-top: 18px;
++  }
++
++  .tools-marquee {
++    width: 100%;
++    margin-top: 12px;
++  }
++
++  .tools-window {
++    width: 100%;
++    margin-left: 0;
++    padding: 18px 0 20px;
++  }
++
++}
++
++
++@media (max-width: 550px) {
++
++  .tools-window {
++    padding-top: 16px;
++    padding-bottom: 18px;
++  }
++
++  .tools-track {
++    animation-duration: 36s;
++  }
++
++  .tools-group {
++    gap: 32px;
++    padding-right: 32px;
++  }
++
++  .tool img {
++    width: 40px;
++    height: 40px;
++  }
++
++}
++
++
++/* =====================================================
++   REDUCED MOTION
++===================================================== */
++
++@media (prefers-reduced-motion: reduce) {
++
++  html {
++    scroll-behavior: auto;
++  }
++
++  .tools-track,
++  .mq-track {
++    animation: none !important;
++  }
++
++}
++
++
++
++/* =========================================================
++   MOBILE FIX PACK — NAVBAR + WORK ACCORDION
++========================================================= */
++
++@media (max-width: 700px) {
++
++  /* NAVBAR: fit the actual phone viewport */
++  .navbar {
++    width: calc(100vw - 24px);
++    max-width: 500px;
++    height: 52px;
++    top: 12px;
++    padding: 0 10px;
++    border-radius: 14px;
++    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
++  }
++
++  .nav-left,
++  .nav-right {
++    gap: 8px;
++    min-width: 0;
++  }
++
++  .nav-left {
++    justify-content: flex-start;
++  }
++
++  .nav-right {
++    justify-content: flex-end;
++  }
++
++  .navbar a {
++    font-size: 11px;
++    letter-spacing: -0.01em;
++  }
++
++  .nav-logo {
++    font-size: 16px !important;
++    transform: none;
++  }
++
++  /* Give anchor targets enough room below the fixed navbar. */
++  #hero,
++  #about,
++  #work,
++  #skillset,
++  #contact {
++    scroll-margin-top: 84px;
++  }
++
++
++
++}
++
++@media (max-width: 380px) {
++  .navbar {
++    width: calc(100vw - 16px);
++    padding: 0 7px;
++  }
++
++  .nav-left,
++  .nav-right {
++    gap: 6px;
++  }
++
++  .navbar a {
++    font-size: 10px;
++  }
++
++  .nav-logo {
++    font-size: 15px !important;
++  }
++
++}
++
++
++/* =========================================================
++   MOBILE FINAL FIX
++   Mobile only. Desktop styles above remain unchanged.
++========================================================= */
++
++@media (max-width: 700px) {
++
++  html,
++  body,
++  #app {
++    max-width: 100%;
++    overflow-x: clip;
++  }
++
++  /* 1. NAVBAR */
++
++  .navbar {
++    width: calc(100vw - 24px) !important;
++    max-width: none !important;
++
++    left: 50% !important;
++    right: auto !important;
++    top: 12px !important;
++
++    transform: translateX(-50%) !important;
++
++    box-sizing: border-box !important;
++    padding: 0 10px !important;
++
++    grid-template-columns:
++      minmax(0, 1fr)
++      auto
++      minmax(0, 1fr) !important;
++
++    gap: 6px !important;
++    overflow: hidden !important;
++  }
++
++  .nav-left,
++  .nav-right {
++    min-width: 0 !important;
++    width: 100% !important;
++
++    display: flex !important;
++    align-items: center !important;
++
++    gap: 6px !important;
++  }
++
++  .nav-left {
++    justify-content: flex-start !important;
++  }
++
++  .nav-right {
++    justify-content: flex-end !important;
++  }
++
++  .navbar a {
++    min-width: 0 !important;
++    font-size: 10px !important;
++    line-height: 1 !important;
++    white-space: nowrap !important;
++  }
++
++  .nav-logo {
++    min-width: max-content !important;
++    font-size: 14px !important;
++    transform: none !important;
++  }
++
++
++  /* 2. SVG */
++
++  .hero {
++    width: 100% !important;
++    background-color: #f5f5f0 !important;
++    overflow: hidden !important;
++    padding-left: 16px !important;
++    padding-right: 16px !important;
++  }
++
++  .hero-svg {
++    width: 100% !important;
++    max-width: 100% !important;
++    margin-inline: auto !important;
++    overflow: hidden !important;
++  }
++
++  .portfolio-art {
++    display: block !important;
++    width: 100% !important;
++    max-width: 100% !important;
++    height: auto !important;
++  }
++
++
++
++}
++
++
++/* VERY SMALL PHONES */
++
++@media (max-width: 380px) {
++
++  .navbar {
++    width: calc(100vw - 16px) !important;
++    padding: 0 7px !important;
++    gap: 4px !important;
++  }
++
++  .nav-left,
++  .nav-right {
++    gap: 5px !important;
++  }
++
++  .navbar a {
++    font-size: 8px !important;
++  }
++
++  .nav-logo {
++    font-size: 13px !important;
++  }
++
++}
++
++
++/* =========================================================
++   NAVBAR SECTION TRANSITION AND PRESS FEEDBACK
++========================================================= */
++
++.section-transition {
++  position: fixed;
++  z-index: 999;
++  inset: 0;
++  pointer-events: none;
++  opacity: 0;
++  visibility: hidden;
++  background: rgba(245, 245, 240, .1);
++  -webkit-backdrop-filter: blur(0);
++  backdrop-filter: blur(0);
++  transition:
++    opacity 240ms ease,
++    -webkit-backdrop-filter 240ms ease,
++    backdrop-filter 240ms ease,
++    visibility 0s linear 240ms;
++}
++
++.section-transition.is-active {
++  opacity: 1;
++  visibility: visible;
++  background: rgba(245, 245, 240, .16);
++  -webkit-backdrop-filter: blur(2px);
++  backdrop-filter: blur(2px);
++  transition-delay: 0s;
++}
++
++.navbar .nav-left a,
++.navbar .nav-right a {
++  position: relative;
++  z-index: 0;
++  -webkit-tap-highlight-color: transparent;
++  transition:
++    transform 180ms cubic-bezier(.2, .75, .25, 1),
++    opacity 180ms ease;
++}
++
++.navbar .nav-left a::before,
++.navbar .nav-right a::before {
++  content: '';
++  position: absolute;
++  z-index: -1;
++  inset: -6px -8px;
++  border-radius: 8px;
++  background: rgba(255, 255, 255, .0);
++  box-shadow: 0 2px 10px rgba(255, 255, 255, 0);
++  transition:
++    background-color 200ms ease,
++    box-shadow 200ms ease;
++  pointer-events: none;
++}
++
++@media (hover: hover) and (pointer: fine) {
++  .navbar .nav-left a:hover::before,
++  .navbar .nav-right a:hover::before {
++    background: rgba(255, 255, 255, .2);
++    box-shadow: 0 2px 10px rgba(255, 255, 255, .1);
++  }
++}
++
++.navbar .nav-left a:active,
++.navbar .nav-right a:active {
++  opacity: .72;
++  transform: scale(.97);
++}
++
++.navbar .nav-left a:active::before,
++.navbar .nav-right a:active::before {
++  background: rgba(255, 255, 255, .34);
++}
++
++.navbar .nav-left a:focus-visible,
++.navbar .nav-right a:focus-visible {
++  outline: 1px solid rgba(17, 17, 17, .65);
++  outline-offset: 5px;
++  border-radius: 2px;
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .section-transition {
++    display: none;
++    transition: none;
++  }
++
++  .navbar .nav-left a,
++  .navbar .nav-right a,
++  .navbar .nav-left a::before,
++  .navbar .nav-right a::before {
++    transition: none;
++  }
++}
++
++
++/* =========================================================
++   STEALTH MODE EASTER EGG
++========================================================= */
++
++.stealth-overlay {
++  position: fixed;
++  z-index: 3000;
++  inset: 0;
++
++  display: grid;
++  place-items: center;
++  padding: 28px;
++
++  color: #f5f5f0;
++  background: rgba(8, 9, 10, .78);
++  -webkit-backdrop-filter: blur(0);
++  backdrop-filter: blur(0);
++
++  opacity: 0;
++  visibility: hidden;
++  pointer-events: none;
++
++  transition:
++    opacity 520ms cubic-bezier(.16, 1, .3, 1),
++    -webkit-backdrop-filter 520ms ease-out,
++    backdrop-filter 520ms ease-out,
++    visibility 0s linear 520ms;
++}
++
++.stealth-overlay.is-active {
++  opacity: 1;
++  visibility: visible;
++  pointer-events: auto;
++  -webkit-backdrop-filter: blur(4px);
++  backdrop-filter: blur(4px);
++
++  transition-delay: 0s;
++}
++
++.stealth-content {
++  width: min(100%, 820px);
++  text-align: center;
++
++  opacity: 0;
++  transform: translateY(10px);
++
++  transition:
++    opacity 440ms ease-out,
++    transform 520ms cubic-bezier(.16, 1, .3, 1);
++}
++
++.stealth-overlay.is-active .stealth-content {
++  opacity: 1;
++  transform: translateY(0);
++  transition-delay: 220ms;
++}
++
++.stealth-label,
++.stealth-close {
++  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
++  font-size: 10px;
++  font-weight: 400;
++  letter-spacing: .16em;
++}
++
++.stealth-label {
++  margin: 0 0 24px;
++  color: rgba(245, 245, 240, .48);
++}
++
++.stealth-morse {
++  margin: 0;
++
++  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
++  font-size: clamp(14px, 2.4vw, 22px);
++  font-weight: 400;
++  line-height: 2;
++  letter-spacing: .08em;
++  color: rgba(245, 245, 240, .88);
++  overflow-wrap: anywhere;
++}
++
++.stealth-close {
++  margin-top: 34px;
++  padding: 10px 12px;
++
++  border: 0;
++  background: transparent;
++  color: rgba(245, 245, 240, .42);
++  cursor: pointer;
++
++  transition: color 180ms ease;
++}
++
++.stealth-close:hover,
++.stealth-close:focus-visible {
++  color: rgba(245, 245, 240, .88);
++}
++
++.stealth-close:focus-visible {
++  outline: 1px solid rgba(245, 245, 240, .45);
++  outline-offset: 4px;
++}
++
++@media (prefers-reduced-motion: reduce) {
++  .stealth-overlay,
++  .stealth-overlay.is-active,
++  .stealth-content,
++  .stealth-overlay.is-active .stealth-content,
++  .stealth-close {
++    transition: none;
++  }
++
++  .stealth-overlay,
++  .stealth-overlay.is-active {
++    -webkit-backdrop-filter: none;
++    backdrop-filter: none;
++  }
++
++  .stealth-content,
++  .stealth-overlay.is-active .stealth-content {
++    transform: none;
++  }
++}
++/* =========================================================
++   WORK
++========================================================= */
++
++.work {
++
++  width: 100%;
++
++  padding:
++    150px
++    40px
++    180px;
++
++}
++
++
++.work-container {
++
++  width: 100%;
++
++  max-width: 1125px;
++
++  margin: 0 auto;
++
++}
++
++
++.work-heading {
++
++  margin-bottom: 55px;
++
++}
++
++
++.work-heading span {
++
++  display: block;
++
++  margin-bottom: 18px;
++
++  font-size: 11px;
++
++  letter-spacing: .08em;
++
++  color: #777;
++
++}
++
++
++.work-heading h2 {
++
++  font-size:
++    clamp(
++      29px,
++      2.6vw,
++      41px
++    );
++
++  line-height: .9;
++
++  font-weight: 500;
++
++  letter-spacing: -.065em;
++
++}
++
++
++/* =========================================================
++   PROJECT LIST
++========================================================= */
++
++.project-list {
++
++  width: 100%;
++
++}
++
++
++.project-item {
++
++  position: relative;
++
++  overflow: hidden;
++
++  border-top:
++    1px solid
++    var(--line);
++
++  padding: 27px 0;
++
++}
++
++
++.project-item:last-child {
++
++  border-bottom:
++    1px solid
++    var(--line);
++
++}
++
++
++.project-row {
++
++  display: grid;
++
++  grid-template-columns:
++    minmax(0, 1fr)
++    160px
++    285px;
++
++  align-items: start;
++
++  min-height: 45px;
++
++  cursor: pointer;
++
++}
++
++
++.project-name {
++
++  font-size: 48px;
++
++  line-height: .95;
++
++  font-weight: 500;
++
++  letter-spacing: -.055em;
++
++  color: #8b8b8b;
++
++  transition:
++    color .45s ease;
++
++}
++
++
++.project-button {
++
++  justify-self: start;
++
++  width: 150px;
++
++  height: 38px;
++
++  display: flex;
++
++  align-items: center;
++
++  justify-content: space-between;
++
++  padding: 0 13px;
++
++  border:
++    1px solid
++    rgba(17,17,17,.16);
++
++  color: #999;
++
++  font-size: 12px;
++
++  transition:
++    color .4s ease,
++    border-color .4s ease;
++
++}
++
++
++.project-button .arrow {
++
++  font-size: 17px;
++
++  transition:
++    transform .5s var(--ease);
++
++}
++
++
++/* =========================================================
++   PROJECT PANEL
++========================================================= */
++
++.project-panel {
++
++  display: grid;
++
++  grid-template-rows: 0fr;
++
++  transition:
++    grid-template-rows
++    .7s
++    var(--ease);
++
++}
++
++
++.panel-inner {
++
++  min-height: 0;
++
++  overflow: hidden;
++
++}
++
++
++.panel-content {
++
++  min-height: 145px;
++
++  padding-top: 65px;
++
++}
++
++
++.project-details {
++
++  display: grid;
++
++  grid-template-columns:
++    1.9fr
++    .65fr
++    .65fr
++    1fr;
++
++  gap: 35px;
++
++  width:
++    calc(100% - 320px);
++
++  opacity: 0;
++
++  transform:
++    translateY(15px);
++
++  transition:
++    opacity .45s ease,
++    transform .7s var(--ease);
++
++}
++
++
++.detail span {
++
++  display: block;
++
++  margin-bottom: 8px;
++
++  font-size: 10px;
++
++  color: #777;
++
++  letter-spacing: .03em;
++
++}
++
++
++.detail p {
++
++  font-size: 15px;
++
++  line-height: 1.15;
++
++  letter-spacing: -.02em;
++
++}
++
++
++/* =========================================================
++   PROJECT IMAGE
++========================================================= */
++
++.project-image {
++
++  position: absolute;
++
++  top: 27px;
++
++  right: 0;
++
++  width: 285px;
++
++  height: 190px;
++
++  overflow: hidden;
++
++  opacity: 0;
++
++  transform:
++    translateY(15px)
++    scale(.97);
++
++  pointer-events: none;
++
++  transition:
++    opacity .5s ease,
++    transform .75s var(--ease);
++
++}
++
++
++.project-image img {
++
++  display: block;
++
++  width: 100%;
++
++  height: 100%;
++
++  object-fit: cover;
++
++}
++
++
++/* =========================================================
++   ACTIVE PROJECT
++========================================================= */
++
++.project-item.is-active
++.project-name {
++
++  color: #c83a31;
++
++}
++
++
++.project-item.is-active
++.project-button {
++
++  color: #111;
++
++  border-color: #111;
++
++}
++
++
++.project-item.is-active
++.project-button .arrow {
++
++  transform:
++    translateX(4px);
++
++}
++
++
++.project-item.is-active
++.project-panel {
++
++  grid-template-rows: 1fr;
++
++}
++
++
++.project-item.is-active
++.project-details {
++
++  opacity: 1;
++
++  transform:
++    translateY(0);
++
++  transition-delay:
++    .12s;
++
++}
++
++
++.project-item.is-active
++.project-image {
++
++  opacity: 1;
++
++  transform:
++    translateY(0)
++    scale(1);
++
++  transition-delay:
++    .08s;
++
++}
++
++
++/* dim other projects */
++
++.project-list.has-active
++.project-item:not(.is-active)
++.project-name {
++
++  color: #b5b5b5;
++
++}
++
++
++.project-list.has-active
++.project-item:not(.is-active)
++.project-button {
++
++  color: #bbb;
++
++  border-color:
++    rgba(17,17,17,.1);
++
++}
++
++
++
++
++@media (max-width: 700px) {
++  /* WORK heading */
++  .work {
++    padding: 110px 20px 120px;
++  }
++
++  .work-heading {
++    margin-bottom: 38px;
++  }
++
++  .work-heading h2 {
++    font-size: clamp(23px, 6.5vw, 31px);
++    line-height: .92;
++    letter-spacing: -.065em;
++  }
++
++  .work-heading {
++  position: relative;
++}
++
++.work-all-btn {
++  position: absolute;
++  right: 0;
++  bottom: 0;
++
++  width: 40px;
++  height: 40px;
++
++  display: flex;
++  align-items: center;
++
++  border-radius: 999px;
++  background: #111;
++
++  overflow: hidden;
++  text-decoration: none;
++
++  transition: width .6s var(--ease);
++}
++
++.work-all-btn__label {
++  margin-left: 40px;
++  color: #fff;
++  font-size: 12px;
++  font-weight: 700;
++  white-space: nowrap;
++
++  opacity: 0;
++  transform: translateX(-8px);
++
++  transition: .35s ease;
++}
++
++.work-all-btn:hover {
++  width: 125px;
++}
++
++.work-all-btn:hover .work-all-btn__label {
++  opacity: 1;
++  transform: translateX(0);
++}
++
++  /* One-column project row on phones. */
++  .project-item {
++    padding: 22px 0 26px;
++    overflow: visible;
++  }
++
++  .project-row {
++    display: flex;
++    flex-direction: column;
++    gap: 16px;
++    min-height: 0;
++  }
++
++  .project-name {
++    font-size: clamp(38px, 11vw, 52px);
++    line-height: .92;
++  }
++
++  .project-button {
++    width: 150px;
++    height: 36px;
++    font-size: 11px;
++  }
++
++  /* IMPORTANT: on mobile the image must be in normal document flow.
++     The desktop absolute positioning is what caused the overlap. */
++  .panel-content {
++    min-height: 0;
++    padding-top: 28px;
++  }
++
++  .project-image {
++    position: relative;
++    top: auto;
++    right: auto;
++    width: 100%;
++    height: auto;
++    aspect-ratio: 16 / 10;
++    margin: 0 0 24px;
++    opacity: 0;
++    transform: translateY(15px) scale(.97);
++  }
++
++  .project-image img {
++    width: 100%;
++    height: 100%;
++    object-fit: cover;
++  }
++
++  .project-details {
++    width: 100%;
++    grid-template-columns: 1fr 1fr;
++    gap: 24px 18px;
++    opacity: 0;
++    transform: translateY(15px);
++  }
++
++  .detail span {
++    margin-bottom: 7px;
++    font-size: 9px;
++  }
++
++  .detail p {
++    font-size: 14px;
++    line-height: 1.2;
++  }
++
++}
++
++@media (max-width: 380px) {
++  .work {
++    padding-left: 16px;
++    padding-right: 16px;
++  }
++}
++
++@media (max-width: 700px) {
++  /* 3. WHAT DID I DO */
++
++  .work {
++    width: 100% !important;
++    padding-left: 16px !important;
++    padding-right: 16px !important;
++    overflow: hidden !important;
++  }
++
++  .work-container {
++    width: 100% !important;
++    max-width: 100% !important;
++  }
++
++  .project-list {
++    width: 100% !important;
++    overflow: visible !important;
++  }
++
++  .project-item {
++    width: 100% !important;
++    overflow: visible !important;
++    box-sizing: border-box !important;
++  }
++
++  .project-row {
++    width: 100% !important;
++    display: flex !important;
++    flex-direction: column !important;
++    align-items: flex-start !important;
++    gap: 14px !important;
++  }
++
++  .project-name {
++    width: 100% !important;
++    font-size: clamp(34px, 10vw, 50px) !important;
++    line-height: .94 !important;
++  }
++
++  .project-button {
++    flex: 0 0 auto !important;
++    width: 150px !important;
++    height: 36px !important;
++    box-sizing: border-box !important;
++  }
++
++  /* Panel uses normal flow on mobile. */
++  .project-panel {
++    display: block !important;
++    width: 100% !important;
++
++    max-height: 0 !important;
++    overflow: hidden !important;
++
++    visibility: hidden !important;
++    opacity: 0 !important;
++
++    transition:
++      max-height .6s var(--ease),
++      opacity .25s ease,
++      visibility 0s linear .6s !important;
++  }
++
++  .project-item.is-active .project-panel {
++    max-height: 900px !important;
++
++    visibility: visible !important;
++    opacity: 1 !important;
++
++    transition:
++      max-height .6s var(--ease),
++      opacity .25s ease,
++      visibility 0s linear 0s !important;
++  }
++
++  .panel-inner {
++    width: 100% !important;
++    min-height: 0 !important;
++    overflow: visible !important;
++  }
++
++  .panel-content {
++    width: 100% !important;
++    min-height: 0 !important;
++    padding-top: 28px !important;
++
++    display: flex !important;
++    flex-direction: column !important;
++  }
++
++  .project-image {
++    position: relative !important;
++    top: auto !important;
++    right: auto !important;
++
++    width: 100% !important;
++    height: auto !important;
++
++    aspect-ratio: 16 / 10 !important;
++
++    margin: 0 0 24px !important;
++
++    overflow: hidden !important;
++    opacity: 0 !important;
++
++    transform:
++      translateY(15px)
++      scale(.97) !important;
++
++    pointer-events: none !important;
++  }
++
++  .project-item.is-active .project-image {
++    opacity: 1 !important;
++    transform:
++      translateY(0)
++      scale(1) !important;
++  }
++
++  .project-image img {
++    display: block !important;
++    width: 100% !important;
++    height: 100% !important;
++    object-fit: cover !important;
++  }
++
++  .project-details {
++    width: 100% !important;
++
++    display: grid !important;
++
++    grid-template-columns:
++      minmax(0, 1fr)
++      minmax(0, 1fr) !important;
++
++    gap:
++      24px
++      18px !important;
++
++    opacity: 0 !important;
++
++    transform:
++      translateY(15px) !important;
++  }
++
++  .project-item.is-active .project-details {
++    opacity: 1 !important;
++    transform: translateY(0) !important;
++  }
++
++  .detail {
++    min-width: 0 !important;
++  }
++
++  .detail span {
++    margin-bottom: 7px !important;
++    font-size: 9px !important;
++  }
++
++  .detail p {
++    margin: 0 !important;
++    font-size: 13px !important;
++    line-height: 1.25 !important;
++    overflow-wrap: anywhere !important;
++  }
++}
++
++@media (max-width: 380px) {
++  .project-name {
++    font-size: clamp(31px, 10vw, 44px) !important;
++  }
++
++  .project-details {
++    grid-template-columns: 1fr !important;
++    gap: 20px !important;
++  }
++
++  .detail p {
++    font-size: 12px !important;
++  }
++}
++
++
++/* =========================================================
++   SELECTED WORK — DESKTOP CATEGORY PREVIEW
++========================================================= */
++
++.work-category-button,
++.work-active-indicator,
++.work-preview,
++.work-heading-desktop {
++  display: none;
++}
++
++@media (min-width: 701px) {
++  .work {
++    padding: 116px 32px 140px;
++  }
++
++  .work-container {
++    width: min(900px, 100%);
++    max-width: none;
++    margin: 0 auto;
++  }
++
++  .work-heading {
++    margin-bottom: 40px;
++  }
++
++  .work-heading span,
++  .work-heading-mobile {
++    display: none;
++  }
++
++  .work-heading-desktop {
++    display: block;
++    margin: 0;
++    font-size: clamp(29px, 2.6vw, 41px);
++    line-height: 0.95;
++    font-weight: 400;
++    letter-spacing: -0.055em;
++  }
++
++  .work-layout {
++    display: grid;
++    grid-template-columns: minmax(220px, 0.78fr) minmax(0, 1.22fr);
++    align-items: stretch;
++    gap: clamp(34px, 5vw, 64px);
++  }
++
++  .project-list {
++    position: relative;
++    display: grid;
++    grid-template-rows: repeat(4, minmax(0, 1fr));
++    align-self: stretch;
++  }
++
++  .project-item,
++  .project-item:last-child {
++    width: 100%;
++    padding: 0;
++    overflow: visible;
++    border: 0;
++  }
++
++  .project-item:not(:last-child) {
++    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
++  }
++
++  .project-row,
++  .project-panel {
++    display: none;
++  }
++
++  .work-category-button {
++    display: flex;
++    width: 100%;
++    height: 100%;
++    min-height: 0;
++    align-items: center;
++    gap: 16px;
++    padding: 0;
++    border: 0;
++    background: transparent;
++    color: #969691;
++    cursor: pointer;
++    text-align: left;
++    transition: color 260ms ease;
++  }
++
++  .project-item.is-active .work-category-button {
++    color: #111;
++  }
++
++  .project-list.has-active .project-item:not(.is-active) .work-category-button {
++    color: #969691;
++  }
++
++  .work-category-number {
++    flex: 0 0 auto;
++    color: #a3a39e;
++    font-size: 11px;
++    letter-spacing: 0.04em;
++    transition: color 260ms ease;
++  }
++
++  .project-item.is-active .work-category-number {
++    color: #555550;
++  }
++
++  .work-category-label {
++    font-size: clamp(15px, 1.325vw, 17px);
++    line-height: 1.05;
++    letter-spacing: -0.045em;
++  }
++
++  .work-category-button:focus-visible {
++    outline: 1px solid currentColor;
++    outline-offset: 4px;
++  }
++
++  .work-active-indicator {
++    display: block;
++    position: absolute;
++    z-index: 1;
++    top: 0;
++    left: -14px;
++    width: 2px;
++    height: 25%;
++    background: #111;
++    pointer-events: none;
++    will-change: transform;
++  }
++
++  .work-preview {
++    display: block;
++    position: relative;
++    width: 100%;
++    aspect-ratio: 1 / 1;
++    align-self: start;
++    margin: 0;
++    overflow: hidden;
++    border-radius: 24px;
++    background: #e7e7e2;
++  }
++
++  .work-preview-image {
++    display: block;
++    width: 100%;
++    height: 100%;
++    object-fit: cover;
++  }
++}
++
++@media (min-width: 701px) and (prefers-reduced-motion: reduce) {
++  .work-category-button,
++  .work-category-number {
++    transition: none;
++  }
++}
++
++@media (max-width: 1023px) {
++  .work-layout {
++    display: flex;
++    flex-direction: column;
++    gap: 32px;
++  }
++
++  .work-preview {
++    display: block;
++    position: relative;
++    order: -1;
++    width: 100%;
++    aspect-ratio: 1 / 1;
++    align-self: stretch;
++    margin: 0;
++    overflow: hidden;
++    border-radius: 24px;
++    background: #e7e7e2;
++  }
++
++  .work-preview-image {
++    display: block;
++    width: 100%;
++    height: 100%;
++    object-fit: cover;
++  }
++
++  .project-list {
++    display: grid;
++    grid-template-rows: repeat(4, clamp(56px, 6vw, 72px));
++    align-self: stretch;
++  }
++}
++
++@media (max-width: 700px) {
++  .work-category-button {
++    display: flex;
++    width: 100%;
++    height: 100%;
++    min-height: 0;
++    align-items: center;
++    gap: 16px;
++    padding: 0;
++    border: 0;
++    background: transparent;
++    color: #969691;
++    cursor: pointer;
++    text-align: left;
++    transition: color 260ms ease;
++  }
++
++  .project-item.is-active .work-category-button {
++    color: #111;
++  }
++
++  .project-list.has-active .project-item:not(.is-active) .work-category-button {
++    color: #969691;
++  }
++
++  .work-category-number {
++    flex: 0 0 auto;
++    color: #a3a39e;
++    font-size: 11px;
++    letter-spacing: 0.04em;
++    transition: color 260ms ease;
++  }
++
++  .project-item.is-active .work-category-number {
++    color: #555550;
++  }
++
++  .work-category-label {
++    font-size: clamp(15px, 1.325vw, 17px);
++    line-height: 1.05;
++    letter-spacing: -0.045em;
++  }
++
++  .project-item,
++  .project-item:last-child {
++    padding: 0 !important;
++    border: 0 !important;
++  }
++
++  .project-item:not(:last-child) {
++    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
++  }
++
++  .project-row,
++  .project-panel,
++  .work-active-indicator {
++    display: none !important;
++  }
++
++  .project-item.is-active::before,
++  .project-list:not(.has-active) .project-item:first-child::before {
++    position: absolute;
++    top: 0;
++    bottom: 0;
++    left: -14px;
++    width: 2px;
++    background: #111;
++    content: "";
++  }
++
++  .project-list:not(.has-active) .project-item:first-child .work-category-button {
++    color: #111;
++  }
++
++  .project-list:not(.has-active) .project-item:first-child .work-category-number {
++    color: #555550;
++  }
++}
++
++@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
++  .work-category-button,
++  .work-category-number {
++    transition: none;
++  }
++}
++
++/* SELECTED WORK: smaller content block (desktop/tablet) */
++@media (min-width: 701px) {
++  .work-container {
++    width: min(640px, 100%);   /* was 900px, so the side gaps get bigger */
++  }
++
++  .work-layout {
++    gap: clamp(40px, 6vw, 86px);  /* more space between list and square, like picture 1 */
++  }
++
++  .work-category-button {
++    gap: 12px;
++  }
++
++  .work-category-number {
++    font-size: 9px;
++  }
++
++  .work-category-label {
++    font-size: 12px;           /* was 15-17px */
++  }
++
++  .work-active-indicator {
++    left: -10px;
++  }
++}
++
++/* SELECTED WORK: video preview */
++.work-preview-video {
++  display: none;
++  width: 100%;
++  height: 100%;
++  object-fit: cover;
++}
++
++.work-preview.is-video .work-preview-video {
++  display: block;
++}
++
++.work-preview.is-video .work-preview-image {
++  display: none;
++}
++
++
+ 
+ .work-heading span {
+ 
+@@ -1935,6 +4500,52 @@ a {
+     letter-spacing: -.065em;
+   }
+ 
++  .work-heading {
++  position: relative;
++}
++
++.work-all-btn {
++  position: absolute;
++  right: 0;
++  bottom: 0;
++
++  width: 40px;
++  height: 40px;
++
++  display: flex;
++  align-items: center;
++
++  border-radius: 999px;
++  background: #111;
++
++  overflow: hidden;
++  text-decoration: none;
++
++  transition: width .6s var(--ease);
++}
++
++.work-all-btn__label {
++  margin-left: 40px;
++  color: #fff;
++  font-size: 12px;
++  font-weight: 700;
++  white-space: nowrap;
++
++  opacity: 0;
++  transform: translateX(-8px);
++
++  transition: .35s ease;
++}
++
++.work-all-btn:hover {
++  width: 125px;
++}
++
++.work-all-btn:hover .work-all-btn__label {
++  opacity: 1;
++  transform: translateX(0);
++}
++
+   /* One-column project row on phones. */
+   .project-item {
+     padding: 22px 0 26px;
