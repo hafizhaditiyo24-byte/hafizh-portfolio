@@ -12,10 +12,7 @@
 
 <body>
 
-  <header class="ui">
-    <span>HAFIZH.SPACE</span>
-  </header>
-
+  <canvas id="webgl-gallery" aria-hidden="true"></canvas>
   <main
     id="stage"
     tabindex="0"
@@ -27,4 +24,28 @@
   <script type="module" src="/src/work.js"></script>
 
 </body>
+<svg
+  width="0"
+  height="0"
+  aria-hidden="true"
+  style="position:absolute"
+>
+  <filter id="fisheye">
+    <feTurbulence
+      type="fractalNoise"
+      baseFrequency="0.012"
+      numOctaves="1"
+      seed="2"
+      result="noise"
+    />
+
+    <feDisplacementMap
+      in="SourceGraphic"
+      in2="noise"
+      scale="0"
+      xChannelSelector="R"
+      yChannelSelector="G"
+    />
+  </filter>
+</svg>
 </html>

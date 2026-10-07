@@ -2523,6 +2523,35 @@ a {
   }
 }
 
+.work-preview {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.work-preview-image,
+.work-preview-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.work-preview-image {
+  z-index: 1;
+  display: block;
+}
+
+.work-preview-video {
+  z-index: 2;
+  display: none;
+}
+
 @media (min-width: 701px) and (prefers-reduced-motion: reduce) {
   .work-category-button,
   .work-category-number {

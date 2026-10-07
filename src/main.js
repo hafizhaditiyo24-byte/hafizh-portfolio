@@ -1054,110 +1054,228 @@ if (workList && workItems.length) {
     });
   });
   } else {
-    let previewTween;
-    let currentPreview = workPreviewImage?.getAttribute('src');
+  let previewTween;
+let currentPreviewIndex = 0;
 
-    const positionIndicator = (item, animate = true) => {
-      const button = item.querySelector('.work-category-button');
-      if (!button || !workIndicator) return;
+  const positionIndicator = (item, animate = true) => {
+    const button = item.querySelector('.work-category-button');
+    if (!button || !workIndicator) return;
 
-      const offset = button.getBoundingClientRect().top
-        - workList.getBoundingClientRect().top;
+    const offset =
+      button.getBoundingClientRect().top -
+      workList.getBoundingClientRect().top;
 
-      if (workReduceMotion || !animate) {
-        gsap.set(workIndicator, { y: offset });
-      } else {
-        gsap.to(workIndicator, {
-          y: offset,
-          duration: 0.42,
-          ease: 'power3.out',
-          overwrite: true
-        });
+    if (workReduceMotion || !animate) {
+      gsap.set(workIndicator, { y: offset });
+    } else {
+      gsap.to(workIndicator, {
+        y: offset,
+        duration: 0.42,
+        ease: 'power3.out',
+        overwrite: true
+      });
+    }
+  };
+
+  const workPreviewFigure = document.querySelector('.work-preview');
+  const workPreviewLayers = [];
+
+  /* ---------------------------------------------------------
+     PRELOAD ALL SELECTED WORK PREVIEWS
+  --------------------------------------------------------- */
+
+  const previewCache = new Map();
+
+const preloadPreview = src => {
+  if (!src || previewCache.has(src)) {
+    return previewCache.get(src);
+  }
+  const image = new Image();
+  const promise = new Promise(resolve => {
+    image.onload = () => resolve(image);
+    image.onerror = () => resolve(null);
+  });
+  image.src = src;
+  previewCache.set(src, promise);
+  return promise;
+};
+
+projects.forEach((project, index) => {
+  const layer = document.createElement('div');
+
+  layer.className = 'work-preview-layer';
+  layer.dataset.index = String(index);
+
+  layer.style.position = 'absolute';
+  layer.style.inset = '0';
+  layer.style.width = '100%';
+  layer.style.height = '100%';
+  layer.style.zIndex = String(index + 1);
+  layer.style.overflow = 'hidden';
+
+  if (project.video) {
+    const video = document.createElement('video');
+
+    video.src = project.video;
+    video.muted = true;
+    video.autoplay = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+
+    video.style.width = '100%';
+    video.style.height = '100%';
+    video.style.objectFit = 'cover';
+
+    layer.appendChild(video);
+
+    video.load();
+    video.play().catch(() => {});
+  } else if (project.image) {
+    const image = document.createElement('img');
+
+    image.src = project.image;
+    image.alt = `${project.category} project`;
+    image.loading = 'eager';
+    image.decoding = 'sync';
+
+    image.style.width = '100%';
+    image.style.height = '100%';
+    image.style.objectFit = 'contain';
+
+    layer.appendChild(image);
+  }
+
+  layer.style.visibility = index === 0 ? 'visible' : 'hidden';
+  workPreviewFigure.appendChild(layer);
+  workPreviewLayers.push(layer);
+});
+
+  /* ---------------------------------------------------------
+   SHOW PREVIEW MEDIA
+--------------------------------------------------------- */
+
+const showPreviewMedia = index => {
+  workPreviewLayers.forEach((layer, layerIndex) => {
+    layer.style.visibility = layerIndex === index ? 'visible' : 'hidden';
+  });
+};
+
+
+/* ---------------------------------------------------------
+   ACTIVATE WORK ITEM
+--------------------------------------------------------- */
+
+const activateWorkItem = item => {
+  const nextIndex = workItems.indexOf(item);
+
+  if (
+    nextIndex < 0 ||
+    !workPreviewLayers[nextIndex] ||
+    nextIndex === currentPreviewIndex
+  ) {
+    setWorkActive(item);
+    positionIndicator(item);
+    return;
+  }
+
+  const direction = nextIndex > currentPreviewIndex ? 1 : -1;
+
+  const currentLayer = workPreviewLayers[currentPreviewIndex];
+  const nextLayer = workPreviewLayers[nextIndex];
+
+  setWorkActive(item);
+  positionIndicator(item);
+
+  previewTween?.kill();
+
+  // Incoming layer MUST be above the current layer.
+  workPreviewLayers.forEach((layer, index) => {
+    layer.style.zIndex = index === nextIndex ? '10' : '1';
+  });
+
+  const startY = direction === 1 ? 100 : -100;
+
+  gsap.set(nextLayer, {
+    yPercent: startY,
+    visibility: 'visible'
+  });
+
+  if (workReduceMotion) {
+    gsap.set(nextLayer, {
+      yPercent: 0
+    });
+
+    workPreviewLayers.forEach((layer, index) => {
+      if (index !== nextIndex) {
+        layer.style.visibility = 'hidden';
       }
-    };
+    });
 
-        const workPreviewFigure = document.querySelector('.work-preview');
-    const workPreviewVideo = document.querySelector('.work-preview-video');
-    const previewTargets = [workPreviewImage, workPreviewVideo].filter(Boolean);
+    currentPreviewIndex = nextIndex;
+    return;
+  }
 
-    const showPreviewMedia = (image, label, video) => {
-      workPreviewImage.src = image;
-      workPreviewImage.alt = `${label} project`;
+  previewTween = gsap.to(nextLayer, {
+    yPercent: 0,
+    duration: 0.65,
+    ease: 'power3.inOut',
+    overwrite: true,
 
-      if (video && workPreviewVideo) {
-        if (!workPreviewVideo.getAttribute('src')) workPreviewVideo.src = video;
-        workPreviewVideo.poster = image;
-        workPreviewFigure.classList.add('is-video');
-        workPreviewVideo.play().catch(() => {});
-      } else if (workPreviewVideo) {
-        workPreviewVideo.pause();
-        workPreviewFigure.classList.remove('is-video');
-      }
-    };
+    onComplete: () => {
+      workPreviewLayers.forEach((layer, index) => {
+        if (index !== nextIndex) {
+          layer.style.visibility = 'hidden';
 
-    const activateWorkItem = item => {
-      setWorkActive(item);
-      positionIndicator(item);
-
-      const button = item.querySelector('.work-category-button');
-      const image = button?.dataset.preview;
-      const label = button?.dataset.label;
-      const video = button?.dataset.video;
-      if (!image || !workPreviewImage || image === currentPreview) return;
-
-      currentPreview = image;
-      previewTween?.kill();
-
-      if (workReduceMotion) {
-        showPreviewMedia(image, label, video);
-        return;
-      }
-
-      previewTween = gsap.to(previewTargets, {
-        autoAlpha: 0,
-        y: 8,
-        duration: 0.2,
-        ease: 'power1.out',
-        onComplete: () => {
-          showPreviewMedia(image, label, video);
-          previewTween = gsap.fromTo(
-            previewTargets,
-            { autoAlpha: 0, y: 8, scale: 0.99 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1,
-              duration: 0.42,
-              ease: 'power2.out',
-              overwrite: true
-            }
-          );
+          gsap.set(layer, {
+            yPercent: 0
+          });
         }
       });
-    };
 
-    workItems.forEach(item => {
-      const button = item.querySelector('.work-category-button');
-      if (!button) return;
+      currentPreviewIndex = nextIndex;
+    }
+  });
+};
 
-      button.addEventListener('mouseenter', () => activateWorkItem(item));
-      button.addEventListener('focus', () => activateWorkItem(item));
-      button.addEventListener('click', () => activateWorkItem(item));
+  /* ---------------------------------------------------------
+     EVENTS
+  --------------------------------------------------------- */
 
-      const previewPreload = new Image();
-      previewPreload.src = button.dataset.preview;
+  workItems.forEach(item => {
+    const button = item.querySelector('.work-category-button');
+    if (!button) return;
+
+    button.addEventListener('mouseenter', () => {
+      activateWorkItem(item);
     });
 
-    const activeItem = workItems[0];
-    setWorkActive(activeItem);
-    positionIndicator(activeItem, false);
-
-    window.addEventListener('resize', () => {
-      const currentItem = workItems.find(item => item.classList.contains('is-active'))
-        ?? workItems[0];
-      positionIndicator(currentItem, false);
+    button.addEventListener('focus', () => {
+      activateWorkItem(item);
     });
-  }
+
+    button.addEventListener('click', () => {
+      activateWorkItem(item);
+    });
+  });
+
+  /* ---------------------------------------------------------
+     INITIAL STATE
+  --------------------------------------------------------- */
+
+  const activeItem = workItems[0];
+
+  setWorkActive(activeItem);
+  positionIndicator(activeItem, false);
+
+  window.addEventListener('resize', () => {
+    const currentItem =
+      workItems.find(item => item.classList.contains('is-active')) ??
+      workItems[0];
+
+    positionIndicator(currentItem, false);
+  });
+}
 }
 
 
