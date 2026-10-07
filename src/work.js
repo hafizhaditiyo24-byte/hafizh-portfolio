@@ -2,8 +2,8 @@
    GALLERY SETTINGS
 ========================================================= */
 
-const IMAGES = 23;
-const VIDEOS = 4;
+const IMAGES = 24;
+const VIDEOS = 10;
 const GAP = 10;
 
 // 0 = flat, ~0.3 = nice bulge, 0.6+ = strong fisheye
