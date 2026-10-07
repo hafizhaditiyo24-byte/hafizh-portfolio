@@ -2,12 +2,43 @@
    GALLERY SETTINGS
 ========================================================= */
 
-const IMAGES = 24;
-const VIDEOS = 10;
+const IMAGES = 23;
+const VIDEOS = 4;
 const GAP = 10;
 
 // 0 = flat, ~0.3 = nice bulge, 0.6+ = strong fisheye
 const FISHEYE_STRENGTH = 0.3;
+
+
+/* =========================================================
+   PERFORMANCE PROFILE
+========================================================= */
+
+const IS_MOBILE =
+  window.matchMedia('(pointer: coarse)').matches ||
+  Math.min(window.innerWidth, window.innerHeight) < 700;
+
+// Phones have 3x screens. Rendering the full 3x twice (scene + fisheye)
+// is the biggest GPU cost, so cap it lower on mobile.
+const MAX_DPR = IS_MOBILE ? 1.5 : 2;
+
+// Size textures to what is actually visible on screen instead of
+// uploading full-size photos (23 huge JPGs = hundreds of MB of GPU memory).
+const TILE_CSS_MAX = Math.max(
+  150,
+  Math.min(420, Math.max(window.innerWidth, window.innerHeight) / 4.2)
+);
+
+const MAX_TEX_WIDTH = Math.min(
+  1024,
+  Math.ceil((TILE_CSS_MAX * MAX_DPR * 1.4) / 128) * 128
+);
+
+// Upload video frames at most this often
+const VIDEO_FPS = IS_MOBILE ? 30 : 60;
+
+// Decode only a few images at once so phones don't run out of memory
+const LOAD_CONCURRENCY = IS_MOBILE ? 4 : 8;
 
 
 /* =========================================================
@@ -25,6 +56,9 @@ if (!stage) {
 if (!webglCanvas) {
   throw new Error('Work gallery: #webgl-gallery was not found.');
 }
+
+// Stop the browser from using touch for scrolling / pull-to-refresh / zoom
+stage.style.touchAction = 'none';
 
 // Hide the canvas until every texture is ready (no pop-in)
 webglCanvas.style.opacity = '0';
@@ -61,8 +95,28 @@ for (let i = 1; i <= VIDEOS; i++) {
 
 
 /* =========================================================
-   PRELOAD (one decoded element per unique item)
+   PRELOAD
 ========================================================= */
+
+/* Shrink big images once, on load, so the GPU never sees the originals */
+function toTextureSource(img) {
+  if (img.naturalWidth <= MAX_TEX_WIDTH) return img;
+
+  const scale = MAX_TEX_WIDTH / img.naturalWidth;
+
+  const canvas = document.createElement('canvas');
+
+  canvas.width = MAX_TEX_WIDTH;
+  canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+
+  const ctx = canvas.getContext('2d');
+
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  return canvas;
+}
 
 function preloadImage(item) {
   return new Promise(resolve => {
@@ -82,11 +136,10 @@ function preloadImage(item) {
         return;
       }
 
-      resolve({
-        ...item,
-        media: img,
-        ratio: img.naturalWidth / img.naturalHeight
-      });
+      const ratio = img.naturalWidth / img.naturalHeight;
+      const media = toTextureSource(img);
+
+      resolve({ ...item, media, ratio });
     };
 
     img.onerror = () => {
@@ -112,10 +165,16 @@ function preloadVideo(item) {
     const video = document.createElement('video');
 
     video.muted = true;
+    video.defaultMuted = true;
     video.loop = true;
     video.playsInline = true;
     video.autoplay = true;
     video.preload = 'auto';
+    video.disableRemotePlayback = true;
+
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
 
     let done = false;
 
@@ -138,7 +197,6 @@ function preloadVideo(item) {
       });
     };
 
-    // loadeddata = first frame is available (readyState >= 2)
     video.addEventListener('loadeddata', () => finish(true), { once: true });
     video.addEventListener('error', () => finish(false), { once: true });
 
@@ -151,13 +209,38 @@ function preloadVideo(item) {
   });
 }
 
+/* Load with limited concurrency (memory friendly on phones) */
+async function loadAll() {
+  const results = new Array(items.length).fill(null);
+
+  let next = 0;
+
+  const worker = async () => {
+    while (next < items.length) {
+      const index = next++;
+      const item = items[index];
+
+      results[index] = item.video
+        ? await preloadVideo(item)
+        : await preloadImage(item);
+    }
+  };
+
+  await Promise.all(
+    Array.from({ length: LOAD_CONCURRENCY }, worker)
+  );
+
+  return results;
+}
+
 
 /* =========================================================
    STATE
 ========================================================= */
 
-let base = [];      // unique loaded items (media + ratio + texture)
-let tiles = [];     // lightweight placement data only
+let base = [];        // unique loaded items (media + ratio + texture)
+let videoItems = [];  // subset of base that are videos
+let tiles = [];       // lightweight placement data only
 
 let W = 0;
 let colH = [];
@@ -177,6 +260,9 @@ let lx = 0;
 let ly = 0;
 let lastMove = 0;
 
+let needsRender = true;
+let lastManage = 0;
+
 const keys = new Set();
 
 
@@ -190,14 +276,17 @@ class FisheyeRenderer {
 
     this.gl = canvas.getContext('webgl2', {
       antialias: false,
-      alpha: false
+      alpha: false,
+      depth: false,
+      stencil: false,
+      powerPreference: 'high-performance'
     });
 
     if (!this.gl) {
       throw new Error('WebGL2 is not supported.');
     }
 
-    this.cssW = 0; // viewport size in CSS pixels  (tile coordinates use this)
+    this.cssW = 0; // viewport size in CSS pixels (tile coordinates use this)
     this.cssH = 0;
     this.width = 0; // framebuffer size in device pixels
     this.height = 0;
@@ -360,7 +449,7 @@ class FisheyeRenderer {
   }
 
   resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
 
     this.cssW = window.innerWidth;
     this.cssH = window.innerHeight;
@@ -430,10 +519,17 @@ class FisheyeRenderer {
     item.texture = texture;
     item.uploaded = false;
     item.lastTime = -1;
+    item.lastUpload = 0;
 
     if (item.video) {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      this.updateVideo(item);
+
+      // video state used by the play/pause manager
+      item.onScreen = true;
+      item.offSince = 0;
+      item.lastPlayTry = 0;
+
+      this.updateVideo(item, performance.now(), true);
     } else {
       gl.texImage2D(
         gl.TEXTURE_2D, 0, gl.RGBA,
@@ -449,15 +545,31 @@ class FisheyeRenderer {
       );
 
       item.uploaded = true;
+
+      // The pixels now live on the GPU: free the CPU-side copy
+      if (item.media instanceof HTMLCanvasElement) {
+        item.media.width = 0;
+        item.media.height = 0;
+      }
+
+      item.media = null;
     }
   }
 
-  updateVideo(item) {
+  /* Returns true if a new frame was uploaded */
+  updateVideo(item, now, force = false) {
     const gl = this.gl;
     const video = item.media;
 
-    if (video.readyState < 2) return;
-    if (item.uploaded && video.currentTime === item.lastTime) return;
+    if (!video || video.readyState < 2) return false;
+
+    if (!force && now - item.lastUpload < 1000 / VIDEO_FPS - 8) {
+      return false;
+    }
+
+    if (item.uploaded && video.currentTime === item.lastTime) {
+      return false;
+    }
 
     gl.bindTexture(gl.TEXTURE_2D, item.texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
@@ -476,6 +588,9 @@ class FisheyeRenderer {
     }
 
     item.lastTime = video.currentTime;
+    item.lastUpload = now;
+
+    return true;
   }
 
   render(tileList, view) {
@@ -483,9 +598,9 @@ class FisheyeRenderer {
 
     if (!this.width || !this.height || !view.W) return;
 
-    // keep video textures current
-    for (const item of base) {
-      if (item.video) this.updateVideo(item);
+    // Recomputed every render: which videos are actually on screen?
+    for (const item of videoItems) {
+      item.onScreen = false;
     }
 
     /* ---------- SCENE PASS ---------- */
@@ -505,6 +620,8 @@ class FisheyeRenderer {
     gl.uniform1i(this.tileU.tex, 0);
     gl.activeTexture(gl.TEXTURE0);
 
+    let boundTexture = null;
+
     for (const tile of tileList) {
       const item = base[tile.i];
 
@@ -521,7 +638,13 @@ class FisheyeRenderer {
         continue;
       }
 
-      gl.bindTexture(gl.TEXTURE_2D, item.texture);
+      if (item.video) item.onScreen = true;
+
+      if (boundTexture !== item.texture) {
+        gl.bindTexture(gl.TEXTURE_2D, item.texture);
+        boundTexture = item.texture;
+      }
+
       gl.uniform4f(this.tileU.rect, x, y, tile.w, tile.h);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
@@ -547,17 +670,52 @@ class FisheyeRenderer {
 
 const fisheyeRenderer = new FisheyeRenderer(webglCanvas);
 
+// Phones can drop the GL context when memory is tight
+webglCanvas.addEventListener('webglcontextlost', event => {
+  event.preventDefault();
+});
+
+webglCanvas.addEventListener('webglcontextrestored', () => {
+  window.location.reload();
+});
+
+
+/* =========================================================
+   VIDEO PLAY / PAUSE MANAGER
+   Decoding 4 videos at once is what kills phones.
+   Only videos that are visible keep playing.
+========================================================= */
+
+function manageVideos(now) {
+  for (const item of videoItems) {
+    const video = item.media;
+
+    if (!video) continue;
+
+    if (item.onScreen) {
+      item.offSince = 0;
+
+      if (video.paused && now - item.lastPlayTry > 1000) {
+        item.lastPlayTry = now;
+        video.play().catch(() => {});
+      }
+    } else {
+      if (!item.offSince) {
+        item.offSince = now;
+      } else if (now - item.offSince > 800 && !video.paused) {
+        video.pause();
+      }
+    }
+  }
+}
+
 
 /* =========================================================
    CREATE GALLERY
 ========================================================= */
 
 async function createGallery() {
-  const loaded = await Promise.all(
-    items.map(item =>
-      item.video ? preloadVideo(item) : preloadImage(item)
-    )
-  );
+  const loaded = await loadAll();
 
   base = loaded.filter(Boolean);
 
@@ -569,6 +727,8 @@ async function createGallery() {
 
   // Upload every texture up-front so nothing loads while scrolling
   base.forEach(item => fisheyeRenderer.createItemTexture(item));
+
+  videoItems = base.filter(item => item.video);
 
   layout();
   render();
@@ -619,7 +779,7 @@ function layout() {
     if (Math.min(...ys) >= needed) break;
   }
 
-  /* Tiles are plain data now: same texture shared by every repeat */
+  /* Tiles are plain data: same texture shared by every repeat */
 
   const ys = Array(columns).fill(0);
 
@@ -679,9 +839,13 @@ function render() {
 
 /* =========================================================
    ANIMATION
+   Only draws when something actually changed:
+   - you are moving the gallery, or
+   - a visible video has a new frame, or
+   - the layout / size changed
 ========================================================= */
 
-function tick() {
+function tick(now) {
   if (!dragging) {
     if (keys.has('ArrowLeft')) vx += 1.4;
     if (keys.has('ArrowRight')) vx -= 1.4;
@@ -695,11 +859,36 @@ function tick() {
     vy *= 0.94;
   }
 
-  cx += (tx - cx) * 0.14;
-  cy += (ty - cy) * 0.14;
+  const dx = tx - cx;
+  const dy = ty - cy;
 
-  // Render every frame so videos keep playing while idle
-  render();
+  const moving =
+    dragging ||
+    keys.size > 0 ||
+    Math.abs(dx) + Math.abs(dy) + Math.abs(vx) + Math.abs(vy) > 0.05;
+
+  if (moving) {
+    cx += dx * 0.14;
+    cy += dy * 0.14;
+  }
+
+  let videoChanged = false;
+
+  for (const item of videoItems) {
+    if (item.onScreen && fisheyeRenderer.updateVideo(item, now)) {
+      videoChanged = true;
+    }
+  }
+
+  if (moving || videoChanged || needsRender) {
+    needsRender = false;
+    render();
+  }
+
+  if (now - lastManage > 250) {
+    lastManage = now;
+    manageVideos(now);
+  }
 
   requestAnimationFrame(tick);
 }
@@ -731,6 +920,13 @@ stage.addEventListener('pointerdown', event => {
 
   stage.setPointerCapture(event.pointerId);
   stage.classList.add('drag');
+
+  // iOS (low power mode) can block autoplay until the first touch
+  for (const item of videoItems) {
+    if (item.media && item.onScreen && item.media.paused) {
+      item.media.play().catch(() => {});
+    }
+  }
 
   dismissHint();
 });
@@ -813,13 +1009,21 @@ window.addEventListener('blur', () => {
 
 /* =========================================================
    RESIZE
+   Debounced: phones fire many resize events (address bar,
+   rotation) and rebuilding the framebuffer each time lags.
 ========================================================= */
 
-window.addEventListener('resize', () => {
-  fisheyeRenderer.resize();
+let resizeTimer = 0;
 
-  layout();
-  render();
+window.addEventListener('resize', () => {
+  window.clearTimeout(resizeTimer);
+
+  resizeTimer = window.setTimeout(() => {
+    fisheyeRenderer.resize();
+
+    layout();
+    needsRender = true;
+  }, 150);
 });
 
 

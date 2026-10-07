@@ -2679,26 +2679,26 @@ a {
   }
 }
 
-/* SELECTED WORK: smaller content block (desktop/tablet) */
+/* SELECTED WORK: list text (desktop + tablet) */
 @media (min-width: 701px) {
   .work-container {
-    width: min(640px, 100%);   /* was 900px, so the side gaps get bigger */
+    width: min(640px, 100%);   /* tablet keeps this */
   }
 
   .work-layout {
-    gap: clamp(40px, 6vw, 86px);  /* more space between list and square, like picture 1 */
+    gap: clamp(40px, 6vw, 86px);
   }
 
   .work-category-button {
-    gap: 12px;
+    gap: 14px;
   }
 
   .work-category-number {
-    font-size: 9px;
+    font-size: clamp(10px, 0.8vw, 13px);   /* was 9px */
   }
 
   .work-category-label {
-    font-size: 12px;           /* was 15-17px */
+    font-size: clamp(15px, 1.15vw, 22px);  /* was 12px, now scales up */
   }
 
   .work-active-indicator {
@@ -2706,18 +2706,31 @@ a {
   }
 }
 
-/* SELECTED WORK: video preview */
-.work-preview-video {
-  display: none;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+/* SELECTED WORK: wide desktop layout (picture 2) */
+@media (min-width: 1024px) {
+  .work-container {
+    --work-title: clamp(29px, 2.6vw, 41px);  /* same as the heading, unchanged */
+    width: min(62vw, 1240px);                /* wider block */
+  }
 
-.work-preview.is-video .work-preview-video {
-  display: block;
-}
+  .work-layout {
+    display: flex;
+    justify-content: space-between;   /* list left, image right */
+    align-items: flex-start;
+    gap: 0;
+  }
 
-.work-preview.is-video .work-preview-image {
-  display: none;
+  .project-list {
+    flex: 0 0 clamp(200px, 13.4vw, 300px);
+    align-self: flex-start;
+    grid-template-rows: repeat(4, clamp(60px, 5.1vw, 112px));  /* slightly tighter rows */
+  }
+
+  .work-preview {
+    flex: 0 0 clamp(240px, 23.2vw, 520px);   /* same size relative to the screen as before */
+    width: clamp(240px, 23.2vw, 520px);
+    align-self: flex-start;
+    /* pull the image up to the heading's top edge */
+    margin-top: calc(-1 * (var(--work-title) * 0.95 + 10px));
+  }
 }
