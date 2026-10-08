@@ -2,7 +2,7 @@
    GALLERY SETTINGS
 ========================================================= */
 
-const IMAGES = 24;
+const IMAGES = 32;
 const VIDEOS = 10;
 const GAP = 10;
 
