@@ -11,7 +11,7 @@ import {
   useTransform
 } from 'motion/react';
 
-import './FlipCard.css';
+import './flipcard.css';
 
 const SLOP = { fine: 4, coarse: 8 };
 const TILT_SPRING = { stiffness: 240, damping: 24, mass: 0.6 };
