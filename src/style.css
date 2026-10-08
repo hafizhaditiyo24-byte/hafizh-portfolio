@@ -334,45 +334,56 @@ a {
    MOBILE
 ========================================================= */
 
-@media (max-width: 768px) {
+/* MOBILE HERO FIX ONLY */
+@media (max-width: 700px) {
+
   .hero {
-    padding: 120px 20px 60px;
+    position: relative;
+    min-height: 100vh;
+    padding: 80px 20px 60px;
+    overflow: visible;
+    box-sizing: border-box;
+  }
+
+  .hero-intro {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    transform: none;
+    align-items: center;
+    text-align: center;
   }
 
   .hero-intro-text {
-    font-size: clamp(42px, 12vw, 72px);
-    line-height: 0.94;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    align-self: center;
+    transform: none;
   }
 
   .hero-work-button {
-    margin-top: 36px;
+    margin-left: 0;
   }
-}
 
-@media (hover: none) {
-  .learn-btn::before {
+  #hero-flip-card {
+    position: relative;
+    top: auto;
+    right: auto;
+    transform: none;
+
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 28px auto 0;
   }
 
-  .learn-btn__chevron {
-    opacity: 0;
-  }
-
-  .learn-btn__arrow {
-    opacity: 1;
-    transform: translateX(6px);
-  }
-
-  .learn-btn__label {
-    color: #fff;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .learn-btn::before,
-  .learn-btn__icon svg,
-  .learn-btn__label {
-    transition: none;
+  #hero-flip-card .flip-card {
+    width: 260px !important;
+    height: 347px !important;
+    max-width: calc(100vw - 40px);
   }
 }
 
@@ -2743,4 +2754,14 @@ a {
   right: 25vw;
   top: 40%;
   transform: translateY(-50%);
+}
+
+@media (max-width: 700px) {
+  #hero-flip-card {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    margin: 40px auto 0;
+  }
 }
