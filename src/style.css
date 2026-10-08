@@ -154,11 +154,6 @@ a {
   transform: translateX(-8px);
 }
 
-
-/* =========================================================
-   HERO
-========================================================= */
-
 /* =========================================================
    HERO
 ========================================================= */
@@ -185,23 +180,26 @@ a {
   align-items: center;
 
   text-align: center;
+  transform: translate(-200px, -100px);
 }
 
 .hero-intro-text {
   display: flex;
   flex-direction: column;
 
-  font-size: clamp(48px, 7vw, 108px);
+  font-size: clamp(36px, 7vw, 108px);
   line-height: 0.92;
   letter-spacing: -0.055em;
   font-weight: 500;
 
-  text-align: center;
+  text-align: right;
 }
 
 .hero-line-1,
 .hero-line-2,
-.hero-line-3 {
+.hero-line-3,
+.hero-line-4,
+.hero-line-5 {
   margin-left: 0;
 }
 
@@ -212,6 +210,7 @@ a {
 
 .hero-work-button {
   margin-top: 48px;
+  margin-left: 70px;
 }
 
 .learn-btn {
@@ -2733,4 +2732,15 @@ a {
     /* pull the image up to the heading's top edge */
     margin-top: calc(-1 * (var(--work-title) * 0.95 + 10px));
   }
+}
+
+.hero {
+  position: relative;
+}
+
+#hero-flip-card {
+  position: absolute;
+  right: 25vw;
+  top: 40%;
+  transform: translateY(-50%);
 }

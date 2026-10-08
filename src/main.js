@@ -1,3 +1,7 @@
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import FlipCard from './flipcard.jsx';
+
 import './style.css'
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -177,8 +181,10 @@ const heroSVG = `
   <div class="hero-intro">
     <div class="hero-intro-text">
       <div class="hero-line hero-line-1">I'm Hafizh,</div>
-      <div class="hero-line hero-line-2">a Graphic Designer</div>
-      <div class="hero-line hero-line-3">based in Indonesia</div>
+      <div class="hero-line hero-line-2">a Graphic</div>
+      <div class="hero-line hero-line-2">Designer</div>
+      <div class="hero-line hero-line-3">based in</div>
+      <div class="hero-line hero-line-2">Indonesia</div>
     </div>
 
     <a
@@ -210,6 +216,8 @@ const heroSVG = `
       </span>
     </a>
   </div>
+ 
+  <div id="hero-flip-card"></div>
 `;
 
 const starDefs = `
@@ -697,6 +705,34 @@ document.querySelector('#app').innerHTML = `
   </main>
 
 `;
+
+const flipCardMount = document.getElementById('hero-flip-card');
+
+createRoot(flipCardMount).render(
+  React.createElement(FlipCard, {
+    front: React.createElement('img', {
+      src: `${import.meta.env.BASE_URL}images/flippingcard.jpg`,
+      alt: 'Hafizh',
+      style: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        display: 'block'
+      }
+    }),
+
+    back: React.createElement('img', {
+      src: `${import.meta.env.BASE_URL}images/flippingcard-back.jpg`,
+      alt: 'Flip card back',
+      style: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        display: 'block'
+      }
+    })
+  })
+);
 
 const stripeGradient = document.getElementById('portfolio-stripe');
 if (stripeGradient) {

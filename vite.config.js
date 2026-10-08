@@ -4,6 +4,10 @@ import { resolve } from 'path';
 export default defineConfig({
   base: './',
 
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+  },
+
   build: {
     rollupOptions: {
       input: {
