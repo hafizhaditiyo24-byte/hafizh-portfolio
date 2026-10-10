@@ -2752,13 +2752,6 @@ a {
   position: relative;
 }
 
-#hero-flip-card {
-  position: absolute;
-  right: 25vw;
-  top: 40%;
-  transform: translateY(-50%);
-}
-
 @media (max-width: 700px) {
   #hero-flip-card {
     position: relative;
@@ -2800,5 +2793,82 @@ a {
   .hero .hero-svg .hero-intro {
     grid-row: 2;
     order: unset !important;
+  }
+}
+
+
+/* DESKTOP HERO LAYOUT */
+@media (min-width: 701px) {
+  .hero {
+    align-items: flex-start;
+    padding-top: clamp(112px, calc(86px + 4vh), 132px);
+  }
+
+  .hero .hero-svg {
+    display: grid;
+    grid-template-columns:
+      minmax(0, clamp(280px, 35vw, 480px))
+      clamp(162px, 23.625vw, 324px);
+    grid-template-rows: auto auto;
+    align-items: start;
+    justify-content: center;
+    column-gap: clamp(20px, 2.5vw, 36px);
+    row-gap: 32px;
+    width: min(100%, 1000px);
+    margin-inline: auto;
+  }
+
+  .hero .hero-intro {
+    display: contents;
+  }
+
+  .hero-intro-text {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    max-width: none;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.9;
+    text-align: right;
+    align-self: start;
+  }
+
+  .hero-intro-text .hero-line {
+    white-space: normal;
+  }
+
+  .hero-work-button {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
+    --btn-size: 64px;
+    gap: 24px;
+    margin: 0;
+  }
+
+  .hero-work-button .learn-btn__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .hero-work-button .learn-btn__label {
+    font-size: 18px;
+  }
+
+  .hero #hero-flip-card {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 100%;
+    margin: 0;
+  }
+
+  .hero #hero-flip-card .flip-card {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
   }
 }
