@@ -184,15 +184,18 @@ a {
 }
 
 .hero-intro-text {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  font-size: clamp(18px, 3.1svh, 27px);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  text-align: center;
+  align-self: center;
+  transform: none;
+}
 
-  font-size: clamp(36px, 7vw, 108px);
-  line-height: 0.92;
-  letter-spacing: -0.055em;
-  font-weight: 500;
-
-  text-align: right;
+.hero-intro-text .hero-line {
+  white-space: nowrap;
 }
 
 .hero-line-1,
@@ -2763,5 +2766,39 @@ a {
     top: auto;
     transform: none;
     margin: 40px auto 0;
+  }
+}
+
+/* MOBILE SELECTED WORK VIDEO FIX */
+@media (max-width: 700px) {
+  .work-preview.is-video .work-preview-video {
+    display: block;
+  }
+
+  .work-preview.is-video .work-preview-image {
+    display: none;
+  }
+}
+
+/* MOBILE HERO: FORCE CARD ABOVE TITLE */
+@media (max-width: 700px) {
+  .hero .hero-svg {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    justify-items: center;
+  }
+
+  .hero .hero-svg #hero-flip-card {
+  grid-row: 1;
+  order: unset !important;
+  position: relative;
+  top: -30px;
+}
+
+  .hero .hero-svg .hero-intro {
+    grid-row: 2;
+    order: unset !important;
   }
 }

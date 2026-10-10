@@ -143,7 +143,7 @@ const projectItems = projects
         class="work-category-button"
         type="button"
         aria-pressed="false"
-        data-preview="${project.image}"
+        data-preview="${project.image ?? ''}"
         data-label="${project.category}"
         data-video="${project.video ?? ''}"
       >
@@ -180,11 +180,8 @@ const MARQUEE_TEXT = "Let's work together";
 const heroSVG = `
   <div class="hero-intro">
     <div class="hero-intro-text">
-      <div class="hero-line hero-line-1">I'm Hafizh,</div>
-      <div class="hero-line hero-line-2">a Graphic</div>
-      <div class="hero-line hero-line-2">Designer</div>
-      <div class="hero-line hero-line-3">based in</div>
-      <div class="hero-line hero-line-2">Indonesia</div>
+      <div class="hero-line hero-line-1">I'm Hafizh, a Graphic Designer</div>
+      <div class="hero-line hero-line-1">Based in Indonesia</div>
     </div>
 
     <a
@@ -1048,48 +1045,188 @@ const setWorkActive = item => {
   workList?.classList.toggle('has-active', Boolean(item));
 };
 
-if (workList && workItems.length) {
-  if (workIsMobile) {
+  if (workList && workItems.length) {
+  
+if (workIsMobile) {
+  const workPreviewFigure = document.querySelector('.work-preview');
+  const mobilePreviewLayers = [];
+  let currentMobilePreviewIndex = 0;
+  let mobilePreviewTween;
+
+  if (workPreviewFigure) {
+    // Hide the original image/video.
+    workPreviewFigure.classList.remove('is-video');
+
+    if (workPreviewImage) {
+      workPreviewImage.style.display = 'none';
+    }
+
+    const originalVideo = workPreviewFigure.querySelector(
+      '.work-preview-video'
+    );
+
+    if (originalVideo) {
+      originalVideo.pause();
+      originalVideo.style.display = 'none';
+    }
+
+    // Build a separate preview layer for each project.
+    projects.forEach((project, index) => {
+      const layer = document.createElement('div');
+
+      layer.className = 'work-preview-mobile-layer';
+
+      Object.assign(layer.style, {
+        position: 'absolute',
+        inset: '0',
+        width: '100%',
+        height: '100%',
+        overflow: 'hidden',
+        zIndex: index === 0 ? '2' : '0',
+        visibility: index === 0 ? 'visible' : 'hidden',
+        willChange: 'transform'
+      });
+
+      if (project.video) {
+        const video = document.createElement('video');
+
+        video.src = project.video;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+
+        Object.assign(video.style, {
+          display: 'block',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover'
+        });
+
+        layer.appendChild(video);
+        video.load();
+      } else if (project.image) {
+        const image = document.createElement('img');
+
+        image.src = project.image;
+        image.alt = `${project.category} project`;
+        image.loading = 'eager';
+        image.decoding = 'async';
+
+        Object.assign(image.style, {
+          display: 'block',
+          width: '100%',
+          height: '100%',
+          objectFit: 'contain'
+        });
+
+        layer.appendChild(image);
+      }
+
+      workPreviewFigure.appendChild(layer);
+      mobilePreviewLayers.push(layer);
+    });
+  }
+
+  const activateMobileWorkItem = item => {
+    const nextIndex = workItems.indexOf(item);
+    const nextLayer = mobilePreviewLayers[nextIndex];
+
+    setWorkActive(item);
+
+    if (
+      nextIndex < 0 ||
+      !nextLayer ||
+      nextIndex === currentMobilePreviewIndex
+    ) {
+      return;
+    }
+
+    // Cancel an ongoing transition before starting another.
+    mobilePreviewTween?.kill();
+
+    mobilePreviewLayers.forEach((layer, index) => {
+      layer.style.zIndex =
+        index === currentMobilePreviewIndex ? '1' : '0';
+
+      if (index !== currentMobilePreviewIndex) {
+        layer.style.visibility = 'hidden';
+        gsap.set(layer, { yPercent: 0 });
+      } else {
+        layer.style.visibility = 'visible';
+      }
+    });
+
+    const direction =
+      nextIndex > currentMobilePreviewIndex ? 1 : -1;
+
+    const currentLayer =
+      mobilePreviewLayers[currentMobilePreviewIndex];
+
+    const startY = direction === 1 ? 100 : -100;
+
+    nextLayer.style.zIndex = '10';
+
+    gsap.set(nextLayer, {
+      yPercent: startY,
+      visibility: 'visible'
+    });
+
+    // Start the incoming video when that project is selected.
+    const nextVideo = nextLayer.querySelector('video');
+
+    if (nextVideo) {
+      nextVideo.play().catch(() => {});
+    }
+
+    const finishTransition = () => {
+      mobilePreviewLayers.forEach((layer, index) => {
+        if (index !== nextIndex) {
+          layer.style.visibility = 'hidden';
+          layer.querySelector('video')?.pause();
+
+          gsap.set(layer, { yPercent: 0 });
+        }
+      });
+
+      gsap.set(nextLayer, { yPercent: 0 });
+      currentMobilePreviewIndex = nextIndex;
+    };
+
+    if (workReduceMotion) {
+      finishTransition();
+      return;
+    }
+
+    mobilePreviewTween = gsap.to(nextLayer, {
+      yPercent: 0,
+      duration: 0.65,
+      ease: 'power3.inOut',
+      overwrite: true,
+      onComplete: finishTransition
+    });
+  };
+
   workItems.forEach(item => {
     const button = item.querySelector('.work-category-button');
 
-    button?.addEventListener('click', () => {
+    if (!button) return;
+
+    button.addEventListener('click', () => {
       const isActive = item.classList.contains('is-active');
 
-      setWorkActive(isActive ? null : item);
-
-      if (isActive || !workPreviewImage) return;
-
-      const image = button.dataset.preview;
-      const label = button.dataset.label;
-      const video = button.dataset.video;
-
-      if (!image) return;
-
-      workPreviewImage.src = image;
-      workPreviewImage.alt = `${label} project`;
-
-      const workPreviewFigure =
-        document.querySelector('.work-preview');
-
-      const workPreviewVideo =
-        document.querySelector('.work-preview-video');
-
-      if (video && workPreviewVideo) {
-        if (!workPreviewVideo.getAttribute('src')) {
-          workPreviewVideo.src = video;
-        }
-
-        workPreviewVideo.poster = image;
-        workPreviewFigure?.classList.add('is-video');
-        workPreviewVideo.play().catch(() => {});
-      } else if (workPreviewVideo) {
-        workPreviewVideo.pause();
-        workPreviewFigure?.classList.remove('is-video');
+      // Preserve the existing mobile deselection behavior.
+      if (isActive) {
+        setWorkActive(null);
+        return;
       }
+
+      activateMobileWorkItem(item);
     });
   });
-  } else {
+
+} else {
+
   let previewTween;
 let currentPreviewIndex = 0;
 
