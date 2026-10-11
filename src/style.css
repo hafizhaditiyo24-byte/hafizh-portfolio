@@ -2816,6 +2816,14 @@ a {
     row-gap: 32px;
     width: min(100%, 1000px);
     margin-inline: auto;
+    margin-top: 50px;
+    /* Shift headline and flip card only */
+  .hero-intro-text,
+  .hero #hero-flip-card {
+    position: relative;
+    left: -40px;
+  }
+  
   }
 
   .hero .hero-intro {
